@@ -1,0 +1,12 @@
+package com.hx.edit.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.hx.edit.entity.ViewSxProject;
+
+@Mapper
+public interface ViewSxProjectMapper {
+	List<ViewSxProject> getProj();
+}

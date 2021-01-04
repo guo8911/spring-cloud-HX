@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.edit.mapper.SatelliteMapper">
+    <resultMap type="Satellite" id="satelliteResultMap">
+    	<id column="SAT_ID" property="sat_id" />
+    	<result column="MID" property="mid" />
+    	<result column="SAT_NAME" property="sat_name" />
+    	<result column="SAT_CODE" property="sat_code" />
+    	<result column="STATUS" property="status" />
+    	<result column="SAT_ALIAS" property="sat_alias" />
+    	<result column="MULTICAST_ADDRESS" property="multicast_address" />
+    	<result column="UDP_PORT" property="udp_port" />
+    	<result column="CREATE_USER" property="create_user" />
+    	<result column="CREATE_TIME" property="create_time" />
+    	<result column="RECEIVE_TMDATA_ADDRESS" property="receive_tmdata_address" />
+    	<result column="RECEIVE_TMDATA_PORT" property="receive_tmdata_port" />
+    	<result column="SEND_RESULT_ADDRESS" property="send_result_address" />
+    	<result column="SEND_RESULT_PORT" property="send_result_port" />
+    	<result column="CHANNEL" property="channel" />
+    	<result column="VERSION" property="version" />
+    </resultMap>
+    <select id="getSat" resultMap="satelliteResultMap">
+        SELECT * FROM satellite where status=0 ORDER BY SAT_ID
+    </select>
+</mapper>
