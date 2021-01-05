@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hx.edit.entity.Satellite;
+import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.ViewSxProject;
 
 public interface IProjectService {
@@ -18,7 +19,7 @@ public interface IProjectService {
 //  
 //  boolean delNode(String paramString, LoginUserBean paramLoginUserBean);
 //  
-//  List<Map<String, Object>> getGuding();
+  List<SxGuding> getGuding();
 //  
 //  String addFile(String paramString1, int paramInt1, int paramInt2, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);
 //  

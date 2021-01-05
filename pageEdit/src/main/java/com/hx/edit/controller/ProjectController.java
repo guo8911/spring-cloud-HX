@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hx.edit.entity.Satellite;
+import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.ViewSxProject;
 import com.hx.edit.service.IProjectService;
 
@@ -36,13 +37,13 @@ public class ProjectController {
   public List<ViewSxProject> getProj(String key) {
     return this.projectService.getProj(key);
   }
-//  
-//  @RequestMapping({"getGuding"})
-//  @ResponseBody
-//  public String getGuding() {
-//    return JSONArray.toJSONString(this.projectService.getGuding());
-//  }
-//  
+  
+  @RequestMapping({"getGuding"})
+  @ResponseBody
+  public List<SxGuding> getGuding() {
+    return this.projectService.getGuding();
+  }
+  
 //  @RequestMapping({"addFile"})
 //  @ResponseBody
 //  public String addFile(HttpSession session, String name, int owner, int type, String data, String uid) {
@@ -50,7 +51,7 @@ public class ProjectController {
 //      .getAttribute("LoginUser");
 //    return this.projectService.addFile(name, owner, type, data, uid, loginUser);
 //  }
-//  
+  
 //  @RequestMapping({"copyFile"})
 //  @ResponseBody
 //  public String copyFile(HttpSession session, String srcId, int owner, String name, String uid) {

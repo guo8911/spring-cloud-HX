@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.edit.mapper.TmMapper">
+	<select id="getTm" parameterType="Tm" resultType="Tm">
+		select t.* from(SELECT tm_id,sat_id,tm_num,tm_name,tm_code,data_type FROM tm WHERE sat_id=#{sat_id} AND (TM_NAME LIKE #{tm_name} OR TM_CODE LIKE #{tm_code}) ORDER BY tm_id) t where t.m between #{start} and #{size}
+	</select>
+	<select id="getRawTm" parameterType="Tm" resultType="Tm">
+		SELECT tm_id,sat_id,tm_num,tm_name,tm_code,data_type FROM tm WHERE sat_id=#{sat_id} AND (TM_NAME LIKE #{tm_name} OR TM_CODE LIKE #{tm_code}) ORDER BY tm_id
+	</select>
+	<select id="getTmCount" parameterType="Tm" resultType="int">
+		SELECT COUNT(tm_id) FROM tm WHERE sat_id=#{sat_id} AND (TM_NAME LIKE #{tm_name} OR TM_CODE LIKE #{tm_code})
+	</select>
+</mapper>

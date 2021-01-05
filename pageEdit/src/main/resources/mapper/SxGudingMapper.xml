@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.edit.mapper.SxGudingMapper">
+    <select id="getGuding" resultType="SxGuding">
+        SELECT * FROM sx_guding ORDER BY NAME
+    </select>
+    <select id="getGudingUrl" parameterType="int" resultType="String">
+		SELECT url FROM sx_guding WHERE id=#{id}
+	</select>
+</mapper>

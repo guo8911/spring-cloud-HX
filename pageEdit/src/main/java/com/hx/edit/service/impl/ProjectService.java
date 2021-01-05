@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hx.edit.entity.Satellite;
+import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.ViewSxProject;
 import com.hx.edit.mapper.SatelliteMapper;
+import com.hx.edit.mapper.SxGudingMapper;
 import com.hx.edit.mapper.ViewSxProjectMapper;
 import com.hx.edit.service.IProjectService;
 
@@ -26,6 +28,8 @@ public class ProjectService implements IProjectService {
   private SatelliteMapper satelliteMapper;
   @Autowired
   private ViewSxProjectMapper viewSxProjectMapper;
+  @Autowired
+  private SxGudingMapper sxGudingMapper;
   public List<Satellite> getSat() {
     return satelliteMapper.getSat();
   }
@@ -53,7 +57,7 @@ public class ProjectService implements IProjectService {
     } 
     return rsts1;
   }
-//  
+  
   private void addParents(List<ViewSxProject> maps, ViewSxProject map2, List<ViewSxProject> rsts) {
     String owner = map2.getOwner()+ "";
     if (owner.equals("0"))
@@ -104,10 +108,10 @@ public class ProjectService implements IProjectService {
 //    return ids;
 //  }
 //  
-//  public List<Map<String, Object>> getGuding() {
-//    return this.projectDao.getGuding();
-//  }
-//  
+  public List<SxGuding> getGuding() {
+    return sxGudingMapper.getGuding();
+  }
+  
 //  public String addFile(String name, int owner, int type, String data, String uid, LoginUserBean loginUser) {
 //    return this.projectDao.addFile(name, owner, type, data, uid, loginUser);
 //  }
