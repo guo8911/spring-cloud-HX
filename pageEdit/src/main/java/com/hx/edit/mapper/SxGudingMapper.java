@@ -9,4 +9,5 @@ import com.hx.edit.entity.SxGuding;
 @Mapper
 public interface SxGudingMapper {
 	List<SxGuding> getGuding();
+	String getGudingUrl(int id);
 }

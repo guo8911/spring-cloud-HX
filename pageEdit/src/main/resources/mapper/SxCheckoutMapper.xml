@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hx.edit.mapper.SxCheckoutMapper">
-	<insert id="AddCheckout" parameterType="SxCheckout">
+	<insert id="addCheckout" parameterType="SxCheckout">
 		INSERT INTO sx_checkout(proj_id,user_id,data) values(#{proj_id},#{user_id},#{data})	
 	</insert>
 	<select id="getCheckout" parameterType="int" resultType="SxCheckout">
@@ -10,7 +10,7 @@
 	<delete id="delCheckout" parameterType="int">
 		DELETE FROM sx_checkout WHERE proj_id=#{proId}
 	</delete>
-	<delete id="delUserCheckout" parameterType="int">
+	<delete id="delUserCheckout" parameterType="String">
 		DELETE FROM sx_checkout WHERE user_id=#{uid}
 	</delete>
 </mapper>

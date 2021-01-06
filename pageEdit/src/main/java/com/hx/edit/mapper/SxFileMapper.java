@@ -1,12 +1,13 @@
 package com.hx.edit.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
-import com.hx.edit.entity.ViewSxProject;
+import com.hx.edit.entity.SxFile;
 
 @Mapper
 public interface SxFileMapper {
-	List<ViewSxProject> getProj();
+	void addFile(SxFile sxFile);
+	SxFile getFile(int proj_id);
+	void save(SxFile sxFile);
+	String getDataIntoCheckout(int proj_id);
 }
