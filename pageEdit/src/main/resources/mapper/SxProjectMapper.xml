@@ -10,4 +10,7 @@
 	<update id="editNode" parameterType="SxProject">
 		update sx_project set name=#{name} where id=#{id}
 	</update>
+	<delete id="deleteProject" parameterType="int">
+		delete FROM sx_project WHERE id=#{id}
+	</delete>
 </mapper>

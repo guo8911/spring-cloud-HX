@@ -10,4 +10,5 @@ public interface SxFileMapper {
 	SxFile getFile(int proj_id);
 	void save(SxFile sxFile);
 	String getDataIntoCheckout(int proj_id);
+	void deleteFile(int proj_id);
 }

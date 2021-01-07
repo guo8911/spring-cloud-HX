@@ -13,4 +13,7 @@
 	<select id="getDataIntoCheckout" parameterType="int" resultType="String">
 		select data FROM sx_file WHERE proj_id=#{proId}
 	</select>
+	<delete id="deleteFile" parameterType="int">
+		delete from sx_file where proj_id=#{proId}
+	</delete>
 </mapper>

@@ -14,11 +14,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hx.edit.entity.LoginUserBean;
 import com.hx.edit.entity.Satellite;
 import com.hx.edit.entity.SxGuding;
+import com.hx.edit.entity.SxProject;
 import com.hx.edit.entity.ViewSxProject;
 import com.hx.edit.mapper.SatelliteMapper;
+import com.hx.edit.mapper.SxCheckoutMapper;
+import com.hx.edit.mapper.SxFileMapper;
 import com.hx.edit.mapper.SxGudingMapper;
+import com.hx.edit.mapper.SxProjectMapper;
+import com.hx.edit.mapper.TmMapper;
 import com.hx.edit.mapper.ViewSxProjectMapper;
 import com.hx.edit.service.IProjectService;
 
@@ -30,6 +36,14 @@ public class ProjectService implements IProjectService {
   private ViewSxProjectMapper viewSxProjectMapper;
   @Autowired
   private SxGudingMapper sxGudingMapper;
+  @Autowired
+  private SxProjectMapper sxProjectMapper;
+  @Autowired
+  private SxCheckoutMapper sxCheckoutMapper;
+  @Autowired
+  private SxFileMapper sxFileMapper;
+  @Autowired
+  private TmMapper tmMapper;
   public List<Satellite> getSat() {
     return satelliteMapper.getSat();
   }
@@ -81,35 +95,58 @@ public class ProjectService implements IProjectService {
       } 
     } 
   }
-  
-//  public String addNode(String name, int owner, int type, LoginUserBean loginUser) {
-//    return this.projectDao.addNode(name, owner, type, loginUser);
-//  }
-//  
-//  public String editNode(String id, String name, LoginUserBean loginUser) {
-//    return this.projectDao.editNode(id, name, loginUser);
-//  }
-//  
-//  public boolean delNode(String id, LoginUserBean loginUser) {
-//    for (String el : getChildren(this.projectDao.getProj(), id))
-//      id = String.valueOf(id) + "," + el; 
-//    return this.projectDao.delNode(id, loginUser);
-//  }
-//  
-//  private List<String> getChildren(List<Map<String, Object>> maps, String id) {
-//    List<String> ids = new ArrayList<>();
-//    for (Map<String, Object> map : maps) {
-//      if (map.get("owner").toString().equals(id)) {
-//        String aid = map.get("id").toString();
-//        ids.add(aid);
-//        ids.addAll(getChildren(maps, aid));
-//      } 
-//    } 
-//    return ids;
-//  }
-//  
   public List<SxGuding> getGuding() {
-    return sxGudingMapper.getGuding();
+	    return sxGudingMapper.getGuding();
+	  }
+  
+  public String addNode(String name, int owner, String type, LoginUserBean loginUser) {
+	SxProject sxProject =new SxProject();
+	sxProject.setName(name);
+	sxProject.setOwner(owner);
+	sxProject.setType(type+"");
+	try {
+		int i=sxProjectMapper.addNode(sxProject);
+		if(i!=0) {
+			return sxProject.getId()+"";
+		}
+	}catch (Exception e){
+//		System.out.println(e.getMessage());
+		if(e.getMessage().contains("NameUnique")) {
+			return "R";
+		}
+	}
+	
+	return "";
+  }
+  
+  public String editNode(int id, String name, LoginUserBean loginUser) {
+	SxProject sxProject =new SxProject();
+	sxProject.setId(id);
+	sxProject.setName(name);
+	try {
+		int i=sxProjectMapper.editNode(sxProject);
+		if(i!=0) {
+			return "T";
+		}
+	}catch (Exception e){
+	//			System.out.println(e.getMessage());
+		if(e.getMessage().contains("NameUnique")) {
+			return "R";
+		}
+	}
+	
+	return "F";
+  }
+  
+  public String delNode(int id, LoginUserBean loginUser) {
+	  try {
+		  sxFileMapper.deleteFile(id);
+		  sxProjectMapper.deleteProject(id);
+	  }catch(Exception e) {
+		  return "F";
+	  }
+	  
+    return "T";
   }
   
 //  public String addFile(String name, int owner, int type, String data, String uid, LoginUserBean loginUser) {

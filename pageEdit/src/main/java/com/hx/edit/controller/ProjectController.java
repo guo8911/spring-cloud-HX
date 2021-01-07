@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hx.edit.entity.LoginUserBean;
 import com.hx.edit.entity.Satellite;
 import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.ViewSxProject;
@@ -43,7 +44,31 @@ public class ProjectController {
   public List<SxGuding> getGuding() {
     return this.projectService.getGuding();
   }
-  
+
+@RequestMapping({"addNode"})
+@ResponseBody
+public String addNode(HttpSession session, String name, int owner, String type) {
+  LoginUserBean loginUser = (LoginUserBean)session
+    .getAttribute("LoginUser");
+  return this.projectService.addNode(name, owner, type, loginUser);
+}
+
+@RequestMapping({"editNode"})
+@ResponseBody
+public String editNode(HttpSession session, int id, String name) {
+  LoginUserBean loginUser = (LoginUserBean)session
+    .getAttribute("LoginUser");
+  return this.projectService.editNode(id, name, loginUser);
+}
+
+@RequestMapping({"delNode"})
+@ResponseBody
+public String delNode(HttpSession session, int id) {
+  LoginUserBean loginUser = (LoginUserBean)session
+    .getAttribute("LoginUser");
+  return this.projectService.delNode(id, loginUser);
+}
+
 //  @RequestMapping({"addFile"})
 //  @ResponseBody
 //  public String addFile(HttpSession session, String name, int owner, int type, String data, String uid) {
@@ -59,31 +84,6 @@ public class ProjectController {
 //      .getAttribute("LoginUser");
 //    return this.projectService.copyFile(srcId, owner, name, uid, loginUser);
 //  }
-//  
-//  @RequestMapping({"addNode"})
-//  @ResponseBody
-//  public String addNode(HttpSession session, String name, int owner, int type) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.addNode(name, owner, type, loginUser);
-//  }
-//  
-//  @RequestMapping({"editNode"})
-//  @ResponseBody
-//  public String editNode(HttpSession session, String id, String name) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.editNode(id, name, loginUser);
-//  }
-//  
-//  @RequestMapping({"delNode"})
-//  @ResponseBody
-//  public String delNode(HttpSession session, String id) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.delNode(id, loginUser) ? "T" : "F";
-//  }
-//  
 //  @RequestMapping({"checkout"})
 //  @ResponseBody
 //  public String checkout(String proId, String uid) {
