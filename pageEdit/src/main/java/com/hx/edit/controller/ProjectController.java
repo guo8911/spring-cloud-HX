@@ -20,13 +20,21 @@ import com.hx.edit.entity.Satellite;
 import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.ViewSxProject;
 import com.hx.edit.service.IProjectService;
-
+/**
+ * 类功能: 公共controller类
+ * 
+ * @author Jerome Guo
+ * @date 2021-1-4
+ */
 @Controller
 @RequestMapping({"/project"})
 public class ProjectController {
   @Autowired
   private IProjectService projectService;
-  
+  /**
+   * 
+   * 
+	 */
   @RequestMapping({"getSat"})
   @ResponseBody
   public List<Satellite> getSat() {
@@ -69,45 +77,46 @@ public String delNode(HttpSession session, int id) {
   return this.projectService.delNode(id, loginUser);
 }
 
-//  @RequestMapping({"addFile"})
-//  @ResponseBody
-//  public String addFile(HttpSession session, String name, int owner, int type, String data, String uid) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.addFile(name, owner, type, data, uid, loginUser);
-//  }
+  @RequestMapping({"addFile"})
+  @ResponseBody
+  public String addFile(HttpSession session, String name, int owner, String type, String data, String uid) {
+    LoginUserBean loginUser = (LoginUserBean)session
+      .getAttribute("LoginUser");
+    return this.projectService.addFile(name, owner, type, data, uid, loginUser);
+  }
   
-//  @RequestMapping({"copyFile"})
-//  @ResponseBody
-//  public String copyFile(HttpSession session, String srcId, int owner, String name, String uid) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.copyFile(srcId, owner, name, uid, loginUser);
-//  }
-//  @RequestMapping({"checkout"})
-//  @ResponseBody
-//  public String checkout(String proId, String uid) {
-//    return this.projectService.checkout(proId, uid) ? "T" : "F";
-//  }
-//  
-//  @RequestMapping({"checkin"})
-//  @ResponseBody
-//  public String checkin(HttpSession session, String proId, String data, boolean isSave) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    if (isSave) {
-//      this.projectService.checkin(proId);
-//      return this.projectService.save(proId, data, loginUser) ? "T" : "F";
-//    } 
-//    return this.projectService.checkin(proId) ? "T" : "F";
-//  }
-//  
-//  @RequestMapping({"checkallin"})
-//  @ResponseBody
-//  public String checkallin(String uid) {
-//    return this.projectService.checkallin(uid) ? "T" : "F";
-//  }
-//  
+  @RequestMapping({"copyFile"})
+  @ResponseBody
+  public String copyFile(HttpSession session, int srcId, int owner, String name, String uid) {
+    LoginUserBean loginUser = (LoginUserBean)session
+      .getAttribute("LoginUser");
+    return this.projectService.copyFile(srcId, owner, name, uid, loginUser);
+  }
+  
+  @RequestMapping({"checkout"})
+  @ResponseBody
+  public String checkout(int proId, String uid) {
+    return this.projectService.checkout(proId, uid) ? "T" : "F";
+  }
+  
+  @RequestMapping({"checkin"})
+  @ResponseBody
+  public String checkin(HttpSession session, int proId, String data, boolean isSave) {
+    LoginUserBean loginUser = (LoginUserBean)session
+      .getAttribute("LoginUser");
+    if (isSave) {
+      this.projectService.checkin(proId);
+      return this.projectService.save(proId, data, loginUser) ? "T" : "F";
+    } 
+    return this.projectService.checkin(proId) ? "T" : "F";
+  }
+  
+  @RequestMapping({"checkallin"})
+  @ResponseBody
+  public String checkallin(String uid) {
+    return this.projectService.checkallin(uid) ? "T" : "F";
+  }
+  
 //  @RequestMapping({"getLastFile"})
 //  @ResponseBody
 //  public String getLastFile(String proId, boolean readOnly) {

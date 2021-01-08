@@ -23,21 +23,22 @@ public interface IProjectService {
   String delNode(int paramString, LoginUserBean paramLoginUserBean);
   
   
-//  String addFile(String paramString1, int paramInt1, int paramInt2, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);
-//  
-//  boolean checkout(String paramString1, String paramString2);
-//  
-//  boolean checkin(String paramString);
-//  
-//  boolean checkallin(String paramString);
-//  
+  String addFile(String paramString1, int paramInt1, String paramInt2, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);
+
+  String copyFile(int paramString1, int paramInt, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);
+  
+  boolean checkout(int paramString1, String paramString2);
+  
+  boolean checkin(int paramString);
+  
+  boolean save(int paramString1, String paramString2, LoginUserBean paramLoginUserBean);
+  
+  boolean checkallin(String paramString);
+  
 //  String getLastFile(String paramString, boolean paramBoolean);
-//  
-//  boolean save(String paramString1, String paramString2, LoginUserBean paramLoginUserBean);
-//  
+  
 //  String getTm(String paramString1, String paramString2, int paramInt1, int paramInt2);
 //  
 //  String getGudingUrl(String paramString);
-//  
-//  String copyFile(String paramString1, int paramInt, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);
+
 }

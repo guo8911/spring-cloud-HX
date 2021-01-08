@@ -8,14 +8,18 @@ package com.hx.edit.service.impl;
 //import com.xpoplarsoft.framework.interfaces.bean.LoginUserBean;
 //import com.xpoplarsoft.framework.parameter.SystemParameter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hx.edit.entity.LoginUserBean;
 import com.hx.edit.entity.Satellite;
+import com.hx.edit.entity.SxCheckout;
+import com.hx.edit.entity.SxFile;
 import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.SxProject;
 import com.hx.edit.entity.ViewSxProject;
@@ -137,7 +141,7 @@ public class ProjectService implements IProjectService {
 	
 	return "F";
   }
-  
+  @Transactional
   public String delNode(int id, LoginUserBean loginUser) {
 	  try {
 		  sxFileMapper.deleteFile(id);
@@ -148,44 +152,101 @@ public class ProjectService implements IProjectService {
 	  
     return "T";
   }
+  @Transactional
+  public String addFile(String name, int owner, String type, String data, String uid, LoginUserBean loginUser) {
+	  SxProject sxProject =new SxProject();
+	  sxProject.setName(name);
+	  sxProject.setOwner(owner);
+	  sxProject.setType(type);
+	  SxFile sxFile = new SxFile();
+	  sxFile.setData(data);
+	  sxFile.setDate(new Date());
+	  sxFile.setUser_id(uid);
+	  try {
+			int i=sxProjectMapper.addNode(sxProject);
+			if(i!=0) {
+				sxFile.setProj_id(sxProject.getId());
+				sxFileMapper.addFile(sxFile);
+				return sxProject.getId()+"";
+			}
+		}catch (Exception e){
+//			System.out.println(e.getMessage());
+			if(e.getMessage().contains("NameUnique")) {
+				return "R";
+			}
+		}
+
+	  return "";
+  }
   
-//  public String addFile(String name, int owner, int type, String data, String uid, LoginUserBean loginUser) {
-//    return this.projectDao.addFile(name, owner, type, data, uid, loginUser);
-//  }
-//  
-//  public String copyFile(String srcId, int owner, String name, String uid, LoginUserBean loginUser) {
-//    String data = null;
-//    Map<String, Object> map = this.projectDao.getCheckout(srcId);
-//    if (map != null) {
-//      data = ClobUtil.getClob(map.get("data"));
-//    } else {
-//      map = this.projectDao.getFile(srcId);
-//      if (map != null)
-//        data = ClobUtil.getClob(map.get("data")); 
-//    } 
-//    return this.projectDao.addFile(name, owner, 1, data, uid, loginUser);
-//  }
-//  
-//  public boolean checkout(String proId, String uid) {
-//    String ret = this.projectDao.AddCheckout(proId, uid);
-//    if (ret.equals("T"))
-//      return true; 
-//    if (ret.equals("R")) {
-//      Map<String, Object> map = this.projectDao.getCheckout(proId);
-//      if (map.get("user_id").toString().equals(uid))
-//        return true; 
-//    } 
-//    return false;
-//  }
-//  
-//  public boolean checkin(String proId) {
-//    return this.projectDao.delCheckout(proId);
-//  }
-//  
-//  public boolean checkallin(String uid) {
-//    return this.projectDao.delUserCheckout(uid);
-//  }
-//  
+  public String copyFile(int srcId, int owner, String name, String uid, LoginUserBean loginUser) {
+    String data = null;
+    SxCheckout sxCheckout = sxCheckoutMapper.getCheckout(srcId);
+    if (sxCheckout != null) {
+      data = sxCheckout.getData();
+    } else {
+    	SxFile sxFile = sxFileMapper.getFile(srcId);
+      if (sxFile != null)
+        data = sxFile.getData(); 
+    } 
+    return addFile(name, owner, "1", data, uid, loginUser);
+  }
+  
+  public boolean checkout(int proId, String uid) {
+	  String data=sxFileMapper.getDataIntoCheckout(proId);
+	  if(data !=null) {
+		  try {
+			  SxCheckout sxCheckout =new SxCheckout();
+			  sxCheckout.setProj_id(proId);
+			  sxCheckout.setUser_id(uid);
+			  sxCheckout.setData(data);
+			  sxCheckoutMapper.addCheckout(sxCheckout);
+			  return true;
+		  }catch(Exception e) {
+			  if(e.getMessage().contains("Unique")) {
+				    SxCheckout sxCheckout = sxCheckoutMapper.getCheckout(proId);
+				    if(sxCheckout.getUser_id().equals(uid)) {
+				    	return true;
+				    }
+				}
+		  }
+		  
+	  }
+	  return false;
+  }
+  
+  public boolean checkin(int proId) {
+	  try {
+		  sxCheckoutMapper.delCheckout(proId);
+		  return true;
+	  }catch(Exception e) {
+		  return false;
+	  } 
+	  
+  }
+  
+  public boolean save(int proId, String data, LoginUserBean loginUser) {
+	  SxFile sxFile = new SxFile();
+	  sxFile.setProj_id(proId);
+	  sxFile.setData(data);
+	  sxFile.setDate(new Date());
+	  try {
+		  sxFileMapper.save(sxFile);
+		  return true;
+	  }catch(Exception e) {
+		  return false;
+	  }
+	  }
+	  
+  public boolean checkallin(String uid) {
+	  try {
+		  sxCheckoutMapper.delUserCheckout(uid);
+		  return true;
+	  }catch(Exception e) {
+		  return false;
+	  }
+  }
+  
 //  public String getLastFile(String proId, boolean readOnly) {
 //    Map<String, Object> map = null;
 //    String data = null;
@@ -200,11 +261,7 @@ public class ProjectService implements IProjectService {
 //    } 
 //    return data;
 //  }
-//  
-//  public boolean save(String proId, String data, LoginUserBean loginUser) {
-//    return this.projectDao.save(proId, data, loginUser);
-//  }
-//  
+  
 //  public String getTm(String satId, String key, int page, int pagesize) {
 //    DBResult result = this.projectDao.getRawTm(satId, key, page, pagesize);
 //    int start = pagesize * (page - 1);

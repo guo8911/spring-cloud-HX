@@ -5,12 +5,12 @@
 		INSERT INTO sx_checkout(proj_id,user_id,data) values(#{proj_id},#{user_id},#{data})	
 	</insert>
 	<select id="getCheckout" parameterType="int" resultType="SxCheckout">
-		SELECT * FROM sx_checkout WHERE proj_id=#{proId}
+		SELECT * FROM sx_checkout WHERE proj_id=#{proj_id}
 	</select>
 	<delete id="delCheckout" parameterType="int">
-		DELETE FROM sx_checkout WHERE proj_id=#{proId}
+		DELETE FROM sx_checkout WHERE proj_id=#{proj_id}
 	</delete>
 	<delete id="delUserCheckout" parameterType="String">
-		DELETE FROM sx_checkout WHERE user_id=#{uid}
+		DELETE FROM sx_checkout WHERE user_id=#{user_id}
 	</delete>
 </mapper>
