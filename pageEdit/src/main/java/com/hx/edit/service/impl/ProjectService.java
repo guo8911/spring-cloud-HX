@@ -13,15 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
 import com.hx.edit.entity.LoginUserBean;
 import com.hx.edit.entity.Satellite;
 import com.hx.edit.entity.SxCheckout;
 import com.hx.edit.entity.SxFile;
 import com.hx.edit.entity.SxGuding;
 import com.hx.edit.entity.SxProject;
+import com.hx.edit.entity.Tm;
 import com.hx.edit.entity.ViewSxProject;
 import com.hx.edit.mapper.SatelliteMapper;
 import com.hx.edit.mapper.SxCheckoutMapper;
@@ -48,6 +51,8 @@ public class ProjectService implements IProjectService {
   private SxFileMapper sxFileMapper;
   @Autowired
   private TmMapper tmMapper;
+  @Value("${GudingAddr}")
+  private String gudingAddr;
   public List<Satellite> getSat() {
     return satelliteMapper.getSat();
   }
@@ -247,46 +252,36 @@ public class ProjectService implements IProjectService {
 	  }
   }
   
-//  public String getLastFile(String proId, boolean readOnly) {
-//    Map<String, Object> map = null;
-//    String data = null;
-//    if (readOnly) {
-//      map = this.projectDao.getCheckout(proId);
-//      if (map != null)
-//        data = map.get("data").toString(); 
-//    } else {
-//      map = this.projectDao.getFile(proId);
-//      if (map != null)
-//        data = map.get("data").toString(); 
-//    } 
-//    return data;
-//  }
+  public String getLastFile(int proId, boolean readOnly) {
+	SxCheckout sxCheckout = new SxCheckout();
+	SxFile sxFile = new SxFile();
+	String data = null;
+	if (readOnly) {
+		 sxCheckout = sxCheckoutMapper.getCheckout(proId);
+	  if (sxCheckout != null)
+	    data =sxCheckout.getData(); 
+	} else {
+		sxFile = sxFileMapper.getFile(proId);
+	  if (sxFile != null)
+	    data = sxFile.getData(); 
+	} 
+	return data;
+  }
   
-//  public String getTm(String satId, String key, int page, int pagesize) {
-//    DBResult result = this.projectDao.getRawTm(satId, key, page, pagesize);
-//    int start = pagesize * (page - 1);
-//    int end = pagesize * page;
-//    int total = result.getRows();
-//    List<Map<String, Object>> list = new ArrayList<>();
-//    String[] column_names = result.getColName();
-//    for (int i = start; i < total && i < end; i++) {
-//      Map<String, Object> map = new HashMap<>();
-//      byte b;
-//      int j;
-//      String[] arrayOfString;
-//      for (j = (arrayOfString = column_names).length, b = 0; b < j; ) {
-//        String name = arrayOfString[b];
-//        map.put(name.toLowerCase(), result.getObject(i, name));
-//        b++;
-//      } 
-//      list.add(map);
-//    } 
-//    return "{\"Rows\":" + JSONArray.toJSONString(list) + ",\"Total\":" + 
-//      total + "}";
-//  }
-//  
-//  public String getGudingUrl(String id) {
-//    return String.valueOf(SystemParameter.getInstance().getParameter("GudingAddr")) + 
-//      this.projectDao.getGudingUrl(id) + "?read=true";
-//  }
+  public String getTm(int satId, String key, int page, int pagesize) {
+	  Tm tm=new Tm();
+	  tm.setSat_id(satId);
+	  tm.setTm_name("%" + key + "%");
+	  int total =tmMapper.getTmCount(tm);
+	  int start = pagesize * (page - 1);
+	  tm.setStart(start);
+	  tm.setSize(pagesize);
+	  List<Tm> listTm = tmMapper.getTm(tm);
+	  return "{\"Rows\":" +JSONArray.toJSONString(listTm) + ",\"Total\":" + 
+      total + "}";
+  }
+  
+  public String getGudingUrl(int id) {
+    return gudingAddr + sxGudingMapper.getGudingUrl(id) + "?read=true";
+  }
 }

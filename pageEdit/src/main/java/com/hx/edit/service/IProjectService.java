@@ -35,10 +35,10 @@ public interface IProjectService {
   
   boolean checkallin(String paramString);
   
-//  String getLastFile(String paramString, boolean paramBoolean);
+  String getLastFile(int paramString, boolean paramBoolean);
   
-//  String getTm(String paramString1, String paramString2, int paramInt1, int paramInt2);
-//  
-//  String getGudingUrl(String paramString);
+  String getTm(int paramString1, String paramString2, int paramInt1, int paramInt2);
+  
+  String getGudingUrl(int paramString);
 
 }

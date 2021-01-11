@@ -27,7 +27,7 @@ import com.hx.edit.service.IProjectService;
  * @date 2021-1-4
  */
 @Controller
-@RequestMapping({"/project"})
+@RequestMapping({"/rest/project"})
 public class ProjectController {
   @Autowired
   private IProjectService projectService;
@@ -117,34 +117,34 @@ public String delNode(HttpSession session, int id) {
     return this.projectService.checkallin(uid) ? "T" : "F";
   }
   
-//  @RequestMapping({"getLastFile"})
-//  @ResponseBody
-//  public String getLastFile(String proId, boolean readOnly) {
-//    return this.projectService.getLastFile(proId, readOnly);
-//  }
-//  
-//  @RequestMapping({"save"})
-//  @ResponseBody
-//  public String save(HttpSession session, String proId, String data) {
-//    LoginUserBean loginUser = (LoginUserBean)session
-//      .getAttribute("LoginUser");
-//    return this.projectService.save(proId, data, loginUser) ? "T" : "F";
-//  }
-//  
-//  @RequestMapping({"getTm"})
-//  @ResponseBody
-//  public String getTm(String satId, String key, int page, int pagesize) {
-//    if (key == null)
-//      key = ""; 
-//    return this.projectService.getTm(satId, key, page, pagesize);
-//  }
-//  
-//  @RequestMapping({"getGudingUrl"})
-//  @ResponseBody
-//  public String getGudingUrl(String id) {
-//    return this.projectService.getGudingUrl(id);
-//  }
-//  
+  @RequestMapping({"getLastFile"})
+  @ResponseBody
+  public String getLastFile(int proId, boolean readOnly) {
+    return this.projectService.getLastFile(proId, readOnly);
+  }
+  
+  @RequestMapping({"save"})
+  @ResponseBody
+  public String save(HttpSession session, int proId, String data) {
+    LoginUserBean loginUser = (LoginUserBean)session
+      .getAttribute("LoginUser");
+    return this.projectService.save(proId, data, loginUser) ? "T" : "F";
+  }
+  
+  @RequestMapping({"getTm"})
+  @ResponseBody
+  public String getTm(int satId, String key, int page, int pagesize) {
+    if (key == null)
+      key = ""; 
+    return this.projectService.getTm(satId, key, page, pagesize);
+  }
+  
+  @RequestMapping({"getGudingUrl"})
+  @ResponseBody
+  public String getGudingUrl(int id) {
+    return this.projectService.getGudingUrl(id);
+  }
+  
 //  @RequestMapping({"/getSysManagerAddr"})
 //  @ResponseBody
 //  public String getSysManagerAddr(HttpServletRequest request) {
