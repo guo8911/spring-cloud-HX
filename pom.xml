@@ -12,6 +12,7 @@
     <module>microservice-discovery-eureka</module>
     <module>microservice-provider-user</module>
     <module>pageEdit</module>
+    <module>SSXS</module>
     <module>microservice-gateway-zuul</module>
   </modules>
 </project>

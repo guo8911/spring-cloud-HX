@@ -208,7 +208,7 @@ public class ProjectService implements IProjectService {
 			  sxCheckoutMapper.addCheckout(sxCheckout);
 			  return true;
 		  }catch(Exception e) {
-			  if(e.getMessage().contains("Unique")) {
+			  if(e.getMessage().contains("unique")) {
 				    SxCheckout sxCheckout = sxCheckoutMapper.getCheckout(proId);
 				    if(sxCheckout.getUser_id().equals(uid)) {
 				    	return true;
