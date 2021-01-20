@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.SatNetMapper">
+    <select id="getSatTMConnect" resultType="SatNet">
+	SELECT s.sat_id,s.mid,s.sat_name,s.sat_code ,sn.ip,sn.port,sn.type FROM SAT_NET sn 
+	LEFT JOIN satellite s ON s.sat_id=sn.sat_id 
+	WHERE s.status='0' AND sn.type='1'
+	</select>
+	<select id="getOtherConnect" resultType="SatNet">
+	SELECT s.sat_id,s.mid,s.sat_name,s.sat_code ,sn.ip,sn.port,sn.type FROM SAT_NET sn 
+  	LEFT JOIN satellite s ON s.sat_id=sn.sat_id 
+  	WHERE s.status='0' 
+  	AND sn.type='2' 
+	</select>
+	<select id="getSatBackConnect" resultType="SatNet">
+	SELECT s.sat_id,s.mid,s.sat_name,s.sat_code ,sn.ip,sn.port FROM SAT_NET sn 
+	LEFT JOIN satellite s ON s.sat_id=sn.sat_id 
+	WHERE s.status='0' 
+	AND sn.type='3' 
+	</select>
+</mapper>

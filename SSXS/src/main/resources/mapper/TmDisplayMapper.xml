@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.TmDisplayMapper">
+	<select id="queryTMDisplayBySatCode" parameterType="String" resultType="TmDisplay">
+		SELECT d.* from tmdisplay d 
+		left join satellite s on d.sat_id=s.sat_id 
+		where s.sat_code=#{sat_code}
+	</select>
+</mapper>

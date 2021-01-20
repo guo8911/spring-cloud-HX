@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.SxTrackCountMapper">
+	<select id="getTrackCount" parameterType="int" resultType="SxTrackCount">
+		SELECT tc.* FROM SX_TRACKCOUNT tc 
+		LEFT JOIN satellite s ON s.sat_id=tc.sat_id 
+		WHERE s.mid=#{mid} 
+		ORDER BY tc.DATATIME DESC
+	</select>
+</mapper>

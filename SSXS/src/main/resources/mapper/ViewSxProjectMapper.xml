@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.ViewSxProjectMapper">
+    <select id="getProj" resultType="ViewSxProject">
+        SELECT * FROM view_sx_project ORDER BY OWNER,TYPE,sortSat(OWNER,NAME)
+    </select>
+</mapper>

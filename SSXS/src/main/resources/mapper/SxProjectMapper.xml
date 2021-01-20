@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.SxProjectMapper">
+    <select id="checkName" parameterType="SxProject" resultType="int">
+        SELECT COUNT(ID) FROM sx_project WHERE NAME=#{name} AND OWNER=#{owner}
+    </select>
+    <select id="getSatProject" resultType="SxProjectSat">
+		SELECT sp.id,sp.owner,sp.type,s.sat_id,s.mid,s.sat_name,s.sat_code from  SX_PROJECT sp 
+		LEFT JOIN SATELLITE s on s.SAT_ID=sp.name 
+		WHERE sp.owner= 0 
+	</select>
+</mapper>

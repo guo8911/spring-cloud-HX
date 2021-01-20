@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.DeviceInfoMapper">
+    <resultMap type="DeviceInfo" id="deviceInfoResultMap">
+    	<id column="PK_ID" property="pk_id" />
+    	<result column="DEVICE_CODING" property="device_coding" />
+    	<result column="DEVICE_NAME" property="device_name" />
+    	<result column="DEVICE_MANUFACT" property="device_manufact" />
+    	<result column="DEVICE_VERSION" property="device_version" />
+    	<result column="REMARK" property="remark" />
+    	<result column="D_TASK_TYPE" property="d_task_type" />
+    	<result column="STATE" property="state" />
+    	<result column="LONGITUDE" property="longitude" />
+    	<result column="LATITUDE" property="latitude" />
+    	<result column="HEIGHT" property="height" />
+    	<result column="WORK_STATE" property="work_state" />
+    	<result column="mid" property="mid" />
+    	<result column="DEVICE_TYPE" property="device_type" />
+    	<result column="TRACK_LEAD_TIME" property="track_lead_time" />
+    	<result column="AERIAL_NUMBER" property="aerial_number" />
+    </resultMap>
+    <select id="getDeviceInfo" resultMap="deviceInfoResultMap">
+        SELECT * FROM DEVICE_INFO WHERE state='0'
+    </select>
+</mapper>

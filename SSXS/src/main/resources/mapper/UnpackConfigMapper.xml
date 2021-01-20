@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.UnpackConfigMapper">
+	<select id="getConfigDis" parameterType="int" resultType="UnpackConfig">
+		SELECT field_code,pk_id FROM unpackconfig WHERE SAT_ID=#{sat_id}
+	</select>
+</mapper>

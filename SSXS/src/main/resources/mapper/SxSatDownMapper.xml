@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.ssxs.mapper.SxSatDownMapper">
+	<select id="getSatDownInfoByTime" parameterType="SxSatDown" resultType="SxSatDown">
+		SELECT sd.* FROM sx_satdown sd 
+		LEFT JOIN satellite s ON s.sat_id=sd.sat_id 
+		WHERE sd.sat_id=#{sat_id} 
+		AND sd.datatime BETWEEN #{lasttime} AND #{endtime}
+		ORDER BY sd.datatime DESC
+	</select>
+	<select id="getSatDownForecastInfo" parameterType="SxSatDown" resultType="SxSatDown">
+		SELECT sd.*,s.sat_name,s.sat_code FROM sx_satdown sd 
+		LEFT JOIN satellite s ON s.sat_id=sd.sat_id 
+		WHERE s.mid=#{mid} 
+		AND sd.datatime BETWEEN #{lasttime} AND #{endtime} 
+		ORDER BY sd.datatime
+	</select>
+</mapper>
