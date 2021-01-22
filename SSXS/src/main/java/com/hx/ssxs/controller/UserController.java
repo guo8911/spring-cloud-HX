@@ -2,6 +2,8 @@ package com.hx.ssxs.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,8 @@ public class UserController {
   private UserService userService;
 
   @GetMapping("/findAll")
-  public List<User> findAll(){
+  public List<User> findAll(HttpServletRequest request){
+	  request.getSession().setAttribute("testName", "测试王小丫");
       return userService.findAll();
   }
 }

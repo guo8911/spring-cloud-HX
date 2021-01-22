@@ -3,6 +3,9 @@ package com.hx.ssxs.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hx.ssxs.cache.PageCache;
+import com.hx.ssxs.cache.PageConCache;
+import com.hx.ssxs.entity.DeviceInfo;
+import com.hx.ssxs.entity.PageDevice;
 import com.hx.ssxs.entity.PageOperateInfo;
 import com.hx.ssxs.entity.PageTM;
 import com.hx.ssxs.entity.PageTMBean;
@@ -12,6 +15,7 @@ import com.hx.ssxs.entity.SxFile;
 import com.hx.ssxs.entity.SxGuding;
 import com.hx.ssxs.entity.SxProjectSat;
 import com.hx.ssxs.entity.ViewSxProject;
+import com.hx.ssxs.mapper.DeviceInfoMapper;
 import com.hx.ssxs.mapper.SxCheckoutMapper;
 import com.hx.ssxs.mapper.SxFileMapper;
 import com.hx.ssxs.mapper.SxGudingMapper;
@@ -59,6 +63,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
   private SxFileMapper sxFileMapper;
   @Autowired
   private SxCheckoutMapper sxCheckoutMapper;
+  @Autowired
+  private DeviceInfoMapper deviceInfoMapper;
   
   public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
@@ -151,34 +157,34 @@ public class PageInfoServiceImpl implements IPageInfoService {
     return false;
   }
   
-//  public String getDeviceInfo() {
-//    List<Map<String, Object>> list = this.dao.getDeviceInfo();
-//    PageDevice pd = null;
-//    Map<String, Object> map1 = null;
-//    for (int i = 0; i < list.size(); i++) {
-//      map1 = list.get(i);
-//      pd = new PageDevice();
-//      String device_code = map1.get("device_coding").toString();
-//      String device_id = map1.get("pk_id").toString();
-//      String device_mid = map1.get("mid").toString();
-//      String device_name = map1.get("device_name").toString();
-//      pd.setDevice_id(device_id);
-//      pd.setDevice_mid(device_mid);
-//      pd.setDevcie_code(device_code);
-//      pd.setDevice_name(device_name);
-//      pd.setRowid(i);
-//      PageConCache.getInstance().putDeviceInfo(device_mid, pd);
-//    } 
-//    return JSONArray.toJSONString(list);
-//  }
-//  
-//  public String getParamInfo(String mid) {
-//    List<Map<String, Object>> list = paramList.get(mid);
-//    Map<String, Object> map = new HashMap<>();
-//    map.put("Rows", list);
-//    map.put("Total", Integer.valueOf(list.size()));
-//    return JSONArray.toJSONString(map);
-//  }
+  public List<DeviceInfo> getDeviceInfo() {
+	  List<DeviceInfo> list = deviceInfoMapper.getDeviceInfo();
+    PageDevice pd = null;
+    DeviceInfo map1 = null;
+    for (int i = 0; i < list.size(); i++) {
+      map1 = list.get(i);
+      pd = new PageDevice();
+      String device_code = map1.getDevice_coding();
+      String device_id = map1.getPk_id()+"";
+      String device_mid = map1.getMid()+"";
+      String device_name = map1.getDevice_name();
+      pd.setDevice_id(device_id);
+      pd.setDevice_mid(device_mid);
+      pd.setDevcie_code(device_code);
+      pd.setDevice_name(device_name);
+      pd.setRowid(i);
+      PageConCache.getInstance().putDeviceInfo(device_mid, pd);
+    } 
+    return list;
+  }
+  
+  public String getParamInfo(String mid) {
+    List<Map<String, Object>> list = paramList.get(mid);
+    Map<String, Object> map = new HashMap<>();
+    map.put("Rows", list);
+    map.put("Total", Integer.valueOf(list.size()));
+    return JSONArray.toJSONString(map);
+  }
   
   private void addPageConCache(String data, int proId, int mid) {
     Object obj = JSON.parse(data);
@@ -278,54 +284,54 @@ public class PageInfoServiceImpl implements IPageInfoService {
 //    map.put("Total", Integer.valueOf(result.size()));
 //    return JSONArray.toJSONString(map);
 //  }
-//  
-//  public boolean changeSelectTerm(String devmids, String clientIp) {
-//    if (devmids == null)
-//      synchronized (PageCache.selectMap) {
-//        PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-//        if (poi != null) {
-//          poi.setFirstDev_mid(0);
-//          poi.setSecondDev_mid(0);
-//          poi.setThirdDev_mid(0);
-//          poi.setAutostate(true);
-//        } else {
-//          poi = new PageOperateInfo();
-//          poi.setCurrntIP(clientIp);
-//          poi.setAutostate(true);
-//          PageCache.selectMap.put(clientIp, poi);
-//        } 
-//        return true;
-//      }  
-//    String[] devmid = devmids.split(",");
-//    synchronized (PageCache.selectMap) {
-//      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-//      if (poi == null)
-//        poi = new PageOperateInfo(); 
-//      poi.setFirstDev_mid(0);
-//      poi.setSecondDev_mid(0);
-//      poi.setThirdDev_mid(0);
-//      boolean flag = false;
-//      if (devmid.length > 2)
-//        poi.setThirdDev_mid(Integer.parseInt(devmid[2])); 
-//      if (devmid.length > 1)
-//        poi.setSecondDev_mid(Integer.parseInt(devmid[1])); 
-//      if (devmid.length > 0) {
-//        poi.setFirstDev_mid(Integer.parseInt(devmid[0]));
-//        flag = true;
-//      } 
-//      if (!flag) {
-//        poi.setAutostate(true);
-//      } else {
-//        poi.setAutostate(false);
-//      } 
-//    } 
-//    return true;
-//  }
-//  
-//  public boolean changeReceiveDataState(String mid, String show_id, String clientIp) {
-//    return true;
-//  }
-//  
+  
+  public boolean changeSelectTerm(String devmids, String clientIp) {
+    if (devmids == null)
+      synchronized (PageCache.selectMap) {
+        PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+        if (poi != null) {
+          poi.setFirstDev_mid(0);
+          poi.setSecondDev_mid(0);
+          poi.setThirdDev_mid(0);
+          poi.setAutostate(true);
+        } else {
+          poi = new PageOperateInfo();
+          poi.setCurrntIP(clientIp);
+          poi.setAutostate(true);
+          PageCache.selectMap.put(clientIp, poi);
+        } 
+        return true;
+      }  
+    String[] devmid = devmids.split(",");
+    synchronized (PageCache.selectMap) {
+      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+      if (poi == null)
+        poi = new PageOperateInfo(); 
+      poi.setFirstDev_mid(0);
+      poi.setSecondDev_mid(0);
+      poi.setThirdDev_mid(0);
+      boolean flag = false;
+      if (devmid.length > 2)
+        poi.setThirdDev_mid(Integer.parseInt(devmid[2])); 
+      if (devmid.length > 1)
+        poi.setSecondDev_mid(Integer.parseInt(devmid[1])); 
+      if (devmid.length > 0) {
+        poi.setFirstDev_mid(Integer.parseInt(devmid[0]));
+        flag = true;
+      } 
+      if (!flag) {
+        poi.setAutostate(true);
+      } else {
+        poi.setAutostate(false);
+      } 
+    } 
+    return true;
+  }
+  
+  public boolean changeReceiveDataState(String mid, String show_id, String clientIp) {
+    return true;
+  }
+  
 //  public String getSatDownForecastInfo(String lastime, String mid) {
 //    String cycle = SystemParameter.getInstance().getParameter("satCycle" + mid);
 //    if (cycle == null && "".equals(cycle)) {

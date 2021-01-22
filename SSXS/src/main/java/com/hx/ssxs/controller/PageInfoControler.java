@@ -2,6 +2,9 @@ package com.hx.ssxs.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.hx.ssxs.cache.PageCache;
+import com.hx.ssxs.entity.DeviceInfo;
+import com.hx.ssxs.entity.PageOperateInfo;
 import com.hx.ssxs.entity.SxGuding;
 import com.hx.ssxs.entity.ViewSxProject;
 import com.hx.ssxs.service.IPageInfoService;
@@ -49,6 +52,8 @@ public class PageInfoControler {
   @RequestMapping({"/updateSelectPage"})
   @ResponseBody
   public String updateSelectPage(String tabid, String mid, HttpServletRequest request) {
+	  System.out.println("test..........");
+	  System.out.println(request.getSession().getAttribute("testName"));
     if (log.isDebugEnabled())
       log.debug("[获取固定页面信息，id=" + tabid + "]"); 
     String clientIp = PageTools.getLocalIp(request);
@@ -72,64 +77,68 @@ public class PageInfoControler {
     return this.iPageInfoService.checkOutFile(proId);
   }
   
-//  @RequestMapping({"/getDeviceInfo"})
-//  @ResponseBody
-//  public String getDeviceInfo() {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取测控设备]"); 
-//    return this.iPageInfoService.getDeviceInfo();
-//  }
+  @RequestMapping({"/getDeviceInfo"})
+  @ResponseBody
+  public List<DeviceInfo> getDeviceInfo() {
+    if (log.isDebugEnabled())
+      log.debug("[获取测控设备]"); 
+    return this.iPageInfoService.getDeviceInfo();
+  }
   
-//  @RequestMapping({"/getClientIp"})
-//  @ResponseBody
-//  public String getClientIp(HttpServletRequest request) {
-//    return PageTools.getLocalIp(request);
-//  }
-//  
-//  @RequestMapping({"/getParamInfo"})
-//  @ResponseBody
-//  public String getParamInfo(String mid) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取航天器参数信息mid=" + mid + "]"); 
-//    return this.service.getParamInfo(mid);
-//  }
-//  
-//  @RequestMapping({"/changeReceiveDataState"})
-//  @ResponseBody
-//  public String changeReceiveDataState(HttpServletRequest request, String mid, String show_id) {
-//    if (log.isDebugEnabled())
-//      log.debug("[改变数据接收状态mid=" + mid + ",show_id=" + show_id + "]"); 
-//    String clientIp = PageTools.getLocalIp(request);
-//    boolean flag = this.service.changeReceiveDataState(mid, show_id, clientIp);
-//    if (flag)
-//      return "true"; 
-//    return "false";
-//  }
-//  
-//  @RequestMapping({"/changeSelectTerm"})
-//  @ResponseBody
-//  public String changeSelectTerm(String dev_mids, HttpServletRequest request) {
-//    if (log.isDebugEnabled())
-//      log.debug("[改变数据接收状态devmids=" + dev_mids + "]"); 
-//    String clientIp = PageTools.getLocalIp(request);
-//    boolean flag = this.service.changeSelectTerm(dev_mids, clientIp);
-//    if (flag)
-//      return "true"; 
-//    return "false";
-//  }
-//  
-//  @RequestMapping({"/deletePageCacheInfo"})
-//  @ResponseBody
-//  public String deletePageCacheInfo(String tabid, HttpServletRequest request) {
-//    if (log.isDebugEnabled())
-//      log.debug("[改变数据接收状态tabid=" + tabid + "]"); 
-//    String clientIp = PageTools.getLocalIp(request);
-//    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-//    if (poi != null)
-//      poi.setSelectPageID(null); 
-//    return "true";
-//  }
-//  
+  @RequestMapping({"/getClientIp"})
+  @ResponseBody
+  public String getClientIp(HttpServletRequest request) {
+    return PageTools.getLocalIp(request);
+  }
+  /*
+   * 查询为空，天知道有什么用，原程序有此接口，暂时继续保留
+   * */
+  @RequestMapping({"/getParamInfo"})
+  @ResponseBody
+  public String getParamInfo(String mid) {
+    if (log.isDebugEnabled())
+      log.debug("[获取航天器参数信息mid=" + mid + "]"); 
+    return this.iPageInfoService.getParamInfo(mid);
+  }
+  /*
+   * 恒返回true，天知道有什么用，原程序有此接口，暂时继续保留
+   * */
+  @RequestMapping({"/changeReceiveDataState"})
+  @ResponseBody
+  public String changeReceiveDataState(HttpServletRequest request, String mid, String show_id) {
+    if (log.isDebugEnabled())
+      log.debug("[改变数据接收状态mid=" + mid + ",show_id=" + show_id + "]"); 
+    String clientIp = PageTools.getLocalIp(request);
+    boolean flag = this.iPageInfoService.changeReceiveDataState(mid, show_id, clientIp);
+    if (flag)
+      return "true"; 
+    return "false";
+  }
+  
+  @RequestMapping({"/changeSelectTerm"})
+  @ResponseBody
+  public String changeSelectTerm(String dev_mids, HttpServletRequest request) {
+    if (log.isDebugEnabled())
+      log.debug("[改变数据接收状态devmids=" + dev_mids + "]"); 
+    String clientIp = PageTools.getLocalIp(request);
+    boolean flag = this.iPageInfoService.changeSelectTerm(dev_mids, clientIp);
+    if (flag)
+      return "true"; 
+    return "false";
+  }
+  
+  @RequestMapping({"/deletePageCacheInfo"})
+  @ResponseBody
+  public String deletePageCacheInfo(String tabid, HttpServletRequest request) {
+    if (log.isDebugEnabled())
+      log.debug("[改变数据接收状态tabid=" + tabid + "]"); 
+    String clientIp = PageTools.getLocalIp(request);
+    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+    if (poi != null)
+      poi.setSelectPageID(null); 
+    return "true";
+  }
+  
 //  @RequestMapping({"/getTrackCountInfo"})
 //  @ResponseBody
 //  public String getTrackCountInfo(String mid) {
