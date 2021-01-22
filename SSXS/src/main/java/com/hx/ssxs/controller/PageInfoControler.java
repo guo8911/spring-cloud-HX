@@ -2,11 +2,17 @@ package com.hx.ssxs.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.hx.ssxs.entity.SxGuding;
+import com.hx.ssxs.entity.ViewSxProject;
+import com.hx.ssxs.service.IPageInfoService;
+import com.hx.ssxs.util.PageTools;
+
 //import com.xpoplarsoft.framework.parameter.SystemParameter;
 //import com.yk.ssxs.bean.PageOperateInfo;
 //import com.yk.ssxs.cache.PageCache;
 //import com.yk.ssxs.util.PageTools;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -21,59 +27,59 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PageInfoControler {
   private static Log log = LogFactory.getLog(PageInfoControler.class);
   
-//  @Autowired
-//  IPageInfoService service;
-//  
-//  @RequestMapping({"/getTree"})
-//  @ResponseBody
-//  public String getTree(String keyname, HttpServletRequest request) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取页面树信息，keyname=" + keyname + "]"); 
-//    return JSONArray.toJSONString(this.service.getTree(keyname, request));
-//  }
-//  
-//  @RequestMapping({"/getPageOfGD"})
-//  @ResponseBody
-//  public String getPageOfGD(String id) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取固定页面信息，id=" + id + "]"); 
-//    return JSONArray.toJSONString(this.service.getPageOfGD(id));
-//  }
-//  
-//  @RequestMapping({"/updateSelectPage"})
-//  @ResponseBody
-//  public String updateSelectPage(String tabid, String mid, HttpServletRequest request) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取固定页面信息，id=" + tabid + "]"); 
-//    String clientIp = PageTools.getLocalIp(request);
-//    return JSONArray.toJSONString(this.service.updateSelectPage(tabid, mid, 
-//          clientIp));
-//  }
-//  
-//  @RequestMapping({"/getPageFile"})
-//  @ResponseBody
-//  public String getPageFile(String proId, String mid, boolean readOnly) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取页面信息，proId=" + proId + ",readOnly=" + readOnly + "]"); 
-//    return this.service.getPageFile(proId, Integer.parseInt(mid), readOnly);
-//  }
-//  
-//  @RequestMapping({"/checkOutFile"})
-//  @ResponseBody
-//  public String checkOutFile(String proId) {
-//    if (log.isDebugEnabled())
-//      log.debug("[监测页面是否正在编辑，proId=" + proId + "]"); 
-//    return this.service.checkOutFile(proId);
-//  }
-//  
+  @Autowired
+  private IPageInfoService iPageInfoService;
+  
+  @RequestMapping({"/getTree"})
+  @ResponseBody
+  public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
+    if (log.isDebugEnabled())
+      log.debug("[获取页面树信息，keyname=" + keyname + "]"); 
+    return this.iPageInfoService.getTree(keyname, request);
+  }
+  
+  @RequestMapping({"/getPageOfGD"})
+  @ResponseBody
+  public SxGuding getPageOfGD(int id) {
+    if (log.isDebugEnabled())
+      log.debug("[获取固定页面信息，id=" + id + "]"); 
+    return this.iPageInfoService.getPageOfGD(id);
+  }
+  
+  @RequestMapping({"/updateSelectPage"})
+  @ResponseBody
+  public String updateSelectPage(String tabid, String mid, HttpServletRequest request) {
+    if (log.isDebugEnabled())
+      log.debug("[获取固定页面信息，id=" + tabid + "]"); 
+    String clientIp = PageTools.getLocalIp(request);
+    return JSONArray.toJSONString(this.iPageInfoService.updateSelectPage(tabid, mid, 
+          clientIp));
+  }
+  
+  @RequestMapping({"/getPageFile"})
+  @ResponseBody
+  public String getPageFile(int proId, int mid, boolean readOnly) {
+    if (log.isDebugEnabled())
+      log.debug("[获取页面信息，proId=" + proId + ",readOnly=" + readOnly + "]"); 
+    return this.iPageInfoService.getPageFile(proId, mid, readOnly);
+  }
+  
+  @RequestMapping({"/checkOutFile"})
+  @ResponseBody
+  public Boolean checkOutFile(int proId) {
+    if (log.isDebugEnabled())
+      log.debug("[监测页面是否正在编辑，proId=" + proId + "]"); 
+    return this.iPageInfoService.checkOutFile(proId);
+  }
+  
 //  @RequestMapping({"/getDeviceInfo"})
 //  @ResponseBody
 //  public String getDeviceInfo() {
 //    if (log.isDebugEnabled())
 //      log.debug("[获取测控设备]"); 
-//    return this.service.getDeviceInfo();
+//    return this.iPageInfoService.getDeviceInfo();
 //  }
-//  
+  
 //  @RequestMapping({"/getClientIp"})
 //  @ResponseBody
 //  public String getClientIp(HttpServletRequest request) {

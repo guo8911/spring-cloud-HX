@@ -2,7 +2,24 @@ package com.hx.ssxs.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.hx.ssxs.cache.PageCache;
+import com.hx.ssxs.entity.PageOperateInfo;
+import com.hx.ssxs.entity.PageTM;
+import com.hx.ssxs.entity.PageTMBean;
+import com.hx.ssxs.entity.SatInfoManager;
+import com.hx.ssxs.entity.SxCheckout;
+import com.hx.ssxs.entity.SxFile;
+import com.hx.ssxs.entity.SxGuding;
+import com.hx.ssxs.entity.SxProjectSat;
+import com.hx.ssxs.entity.ViewSxProject;
+import com.hx.ssxs.mapper.SxCheckoutMapper;
+import com.hx.ssxs.mapper.SxFileMapper;
+import com.hx.ssxs.mapper.SxGudingMapper;
+import com.hx.ssxs.mapper.SxProjectMapper;
+import com.hx.ssxs.mapper.ViewSxProjectMapper;
 import com.hx.ssxs.service.IPageInfoService;
+import com.hx.ssxs.util.PageTools;
+
 //import com.xpoplarsoft.framework.parameter.SystemParameter;
 //import com.xpoplarsoft.framework.utils.DateTools;
 //import com.yk.ssxs.bean.PageOperateInfo;
@@ -32,103 +49,108 @@ public class PageInfoServiceImpl implements IPageInfoService {
   
   public static Map<String, List<Map<String, Object>>> paramList = new ConcurrentHashMap<String, List<Map<String, Object>>>();
   
-//  @Autowired
-//  IPageInfoDao dao;
-//  
-//  public List<Map<String, Object>> getTree(String keyname, HttpServletRequest request) {
-//    List<Map<String, Object>> maps = this.dao.getTree();
+  @Autowired
+  private ViewSxProjectMapper viewSxProjectMapper;
+  @Autowired
+  private SxProjectMapper sxProjectMapper;
+  @Autowired
+  private SxGudingMapper sxGudingMapper;
+  @Autowired
+  private SxFileMapper sxFileMapper;
+  @Autowired
+  private SxCheckoutMapper sxCheckoutMapper;
+  
+  public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
+	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
+	  List<SxProjectSat> sxProjectSatList = sxProjectMapper.getSatProject();
+//	  List<Map<String, Object>> maps = this.dao.getTree();
 //    List<Map<String, Object>> satmap = this.dao.getSatProject();
-//    String localurl = PageTools.getLocalUrl(request);
-//    for (Map<String, Object> map : maps) {
-//      if (map.get("type").toString().equals("2")) {
-//        map.put("icon", String.valueOf(localurl) + "/icons/16X16/asterisk_orange.png");
-//      } else if (map.get("type").toString().equals("1")) {
-//        map.put("icon", String.valueOf(localurl) + "main/img/file.ico");
-//      } 
-//      if (map.get("owner").toString().equals("0")) {
-//        map.put("icon", String.valueOf(localurl) + "main/img/sat.gif");
-//        continue;
-//      } 
-//      if (!map.get("owner").toString().equals("0") && map.get("type").toString().equals("0"))
-//        map.put("icon", String.valueOf(localurl) + "main/img/folder.ico"); 
-//    } 
-//    for (int j = 0; j < maps.size(); j++) {
-//      for (int i = 0; i < satmap.size(); i++) {
-//    	  if ("0".equals(maps.get(j).get("owner") + "")) {
-//				if (null == satmap.get(i).get("name")
-//						|| null == maps.get(j).get("name")) {
-//					continue;
-//				}
-//				if (satmap.get(i).get("name")
-//						.equals(maps.get(j).get("name"))) {
-//					maps.get(j).put("sat_id", satmap.get(i).get("sat_id"));
-//					maps.get(j).put("mid", satmap.get(i).get("mid"));
-//					maps.get(j).put("icon", localurl + "main/img/sat.gif");
-//					maps.get(j).put("sat_code",
-//							satmap.get(i).get("sat_code"));
-//				}
-//			}
-//      } 
-//    } 
-//    if (keyname == null || keyname.equals(""))
-//      return maps; 
-//    List<Map<String, Object>> rsts = new ArrayList<>();
-//    for (Map<String, Object> map : maps) {
-//      if (map.get("name").toString().contains(keyname)) {
-//        addParents(maps, map, rsts);
-//        rsts.add(map);
-//        addChildren(maps, map, rsts);
-//      } 
-//    } 
-//    return rsts;
-//  }
-//  
-//  private void addParents(List<Map<String, Object>> nodes, Map<String, Object> node, List<Map<String, Object>> rsts) {
-//    String owner = node.get("owner").toString();
-//    if (owner.equals("0"))
-//      return; 
-//    for (Map<String, Object> map : nodes) {
-//      if (map.get("id").toString().equals(owner) && !rsts.contains(map)) {
-//        rsts.add(map);
-//        addParents(nodes, map, rsts);
-//      } 
-//    } 
-//  }
-//  
-//  private void addChildren(List<Map<String, Object>> nodes, Map<String, Object> node, List<Map<String, Object>> rsts) {
-//    if (!node.get("type").toString().equals("0"))
-//      return; 
-//    String id = node.get("id").toString();
-//    for (Map<String, Object> map : nodes) {
-//      if (map.get("owner").toString().equals(id) && !rsts.contains(map)) {
-//        rsts.add(map);
-//        addChildren(nodes, map, rsts);
-//      } 
-//    } 
-//  }
-//  
-//  public Map<String, Object> getPageOfGD(String id) {
-//    Map<String, Object> map = this.dao.getPageOfGD(id);
-//    return map;
-//  }
-//  
-//  public String getPageFile(String proId, int mid, boolean readOnly) {
-//    Map<String, Object> pageInfo = this.dao.getPageFile(proId);
-//    if (pageInfo != null) {
-//      String data = (String)pageInfo.get("data");
-//      addPageConCache(data, proId, mid);
-//      return data;
-//    } 
-//    return null;
-//  }
-//  
-//  public String checkOutFile(String proId) {
-//    Map<String, Object> map = this.dao.checkOutFile(proId);
-//    if (map != null)
-//      return "true"; 
-//    return "false";
-//  }
-//  
+    String localurl = PageTools.getLocalUrl(request);
+    for (ViewSxProject viewSxProject : viewSxProjectList) {
+      if (viewSxProject.getType().equals("2")) {
+    	  viewSxProject.setIcon(localurl + "main/img/asterisk_orange.png");
+      } else if (viewSxProject.getType().equals("1")) {
+    	  viewSxProject.setIcon(localurl + "main/img/file.ico");
+      } 
+      if (viewSxProject.getOwner() == 0) {
+    	  viewSxProject.setIcon(localurl + "main/img/sat.gif");
+      } else if (viewSxProject.getType().equals("0"))
+    	  viewSxProject.setIcon(localurl + "main/img/folder.ico"); 
+    } 
+    for (int j = 0; j < viewSxProjectList.size(); j++) {
+      for (int i = 0; i < sxProjectSatList.size(); i++) {
+    	  if ("0".equals(viewSxProjectList.get(j).getOwner() + "")) {
+				if (null == sxProjectSatList.get(i).getSat_name()
+						|| null == viewSxProjectList.get(j).getName()) {
+					continue;
+				}
+				if (sxProjectSatList.get(i).getSat_name().equals(viewSxProjectList.get(j).getName())) {
+					viewSxProjectList.get(j).setSat_id(sxProjectSatList.get(i).getSat_id());
+					viewSxProjectList.get(j).setMid(sxProjectSatList.get(i).getMid());
+					viewSxProjectList.get(j).setSat_code(sxProjectSatList.get(i).getSat_code());
+				}
+			}
+      } 
+    } 
+    if (keyname == null || keyname.equals(""))
+      return viewSxProjectList; 
+    List<ViewSxProject> rsts = new ArrayList<>();
+    for (ViewSxProject map : viewSxProjectList) {
+      if (map.getName().contains(keyname)) {
+        addParents(viewSxProjectList, map, rsts);
+        rsts.add(map);
+        addChildren(viewSxProjectList, map, rsts);
+      } 
+    } 
+    return rsts;
+  }
+  
+  private void addParents(List<ViewSxProject> nodes, ViewSxProject node, List<ViewSxProject> rsts) {
+    int owner = node.getOwner() ;
+    if (owner == 0)
+      return;
+    for (ViewSxProject map : nodes) {
+      if (map.getId() == owner && !rsts.contains(map)) {
+        rsts.add(map);
+        addParents(nodes, map, rsts);
+      } 
+    } 
+  }
+  
+  private void addChildren(List<ViewSxProject> nodes, ViewSxProject node, List<ViewSxProject> rsts) {
+    if (!node.getType().equals("0"))
+      return; 
+    int id = node.getId();
+    for (ViewSxProject map : nodes) {
+      if (map.getOwner()==id && !rsts.contains(map)) {
+        rsts.add(map);
+        addChildren(nodes, map, rsts);
+      } 
+    } 
+  }
+  
+  public SxGuding getPageOfGD(int id) {
+	  SxGuding map = sxGudingMapper.getPageOfGD(id);
+    return map;
+  }
+  
+  public String getPageFile(int proId, int mid, boolean readOnly) {
+	  SxFile pageInfo = sxFileMapper.getPageFile(proId);
+    if (pageInfo.getData() != null) {
+      String data = pageInfo.getData();
+      addPageConCache(data, proId, mid);
+      return data;
+    } 
+    return null;
+  }
+  
+  public Boolean checkOutFile(int proId) {
+	  SxCheckout map = sxCheckoutMapper.checkOutFile(proId);
+    if (map.getData() != null)
+      return true; 
+    return false;
+  }
+  
 //  public String getDeviceInfo() {
 //    List<Map<String, Object>> list = this.dao.getDeviceInfo();
 //    PageDevice pd = null;
@@ -157,82 +179,82 @@ public class PageInfoServiceImpl implements IPageInfoService {
 //    map.put("Total", Integer.valueOf(list.size()));
 //    return JSONArray.toJSONString(map);
 //  }
-//  
-//  private void addPageConCache(String data, String proId, int mid) {
-//    Object obj = JSON.parse(data);
-//    Map<String, Object> map = (Map<String, Object>)obj;
-//    obj = map.get("graphs");
-//    if (obj == null)
-//      return; 
-//    List<Map<String, Object>> list = (List<Map<String, Object>>)obj;
-//    PageTMBean tb = null;
-//    PageTM pt = null;
-//    List<PageTM> TBlist = null;
-//    List<PageTMBean> pageList = new ArrayList<>();
-//    boolean isgrid = true;
-//    for (int i = 0; i < list.size(); i++) {
-//      tb = new PageTMBean();
-//      map = list.get(i);
-//      String id = (String)map.get("id");
-//      tb.setModuleId(id);
-//      String pid = (String)map.get("pid");
-//      tb.setPid(pid);
-//      Map<String, Object> map1 = (Map<String, Object>)map.get("properties");
-//      if ("4".equals(pid)) {
-//        tb.setDev(Integer.parseInt((String)map1.get("dev")));
-//        tb.setDisplayContent((String)map1.get("displayContent"));
-//      } 
-//      List<Map<String, Object>> list1 = (List<Map<String, Object>>)map1.get("params");
-//      if ("2".equals(pid)) {
-//        if (map1.get("colNum") != null) {
-//          int colums = Integer.parseInt((String)map1.get("colNum"));
-//          if (colums != 0)
-//            tb.setColNum(colums); 
-//        } 
-//      } else if ("3".equals(pid) || "5".equals(pid)) {
-//        if (map1.get("dev") != null) {
-//          int colums = Integer.parseInt((String)map1.get("dev"));
-//          if (colums != 0)
-//            tb.setColNum(colums); 
-//        } 
-//        isgrid = false;
-//      } else if ("4".equals(pid) && 
-//        map1.get("dev") != null) {
-//        int colums = Integer.parseInt((String)map1.get("dev"));
-//        if (colums != 0)
-//          tb.setColNum(colums); 
-//      } 
-//      TBlist = new ArrayList<>();
-//      if (list1 != null) {
-//        for (int j = 0; j < list1.size(); j++) {
-//          pt = new PageTM();
-//          map = list1.get(j);
-//          String tm_name = (String)map.get("name");
-//          String tm_code = (String)map.get("code");
-//          int num = Integer.parseInt((String)map.get("parId"));
-//          pt.setTm_code(tm_code);
-//          pt.setTm_name(tm_name);
-//          pt.setNum(num);
-//          TBlist.add(pt);
-//        } 
-//        tb.setList(TBlist);
-//      } 
-//      pageList.add(tb);
-//    } 
-//    PageImpl page = new PageImpl();
-//    page.load(pageList);
-//    page.setIsgrid(isgrid);
-//    page.setPageid(proId);
-//    synchronized (PageCache.map) {
-//      SatInfoManager sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
-//      if (sim != null) {
-//        sim.getPmi().openPage(page);
-//      } else if (log.isErrorEnabled()) {
-//        log.error("[mid=" + mid + "的航天器未配置网络接口！]");
-//      } 
-//    } 
-//  }
-//  
+  
+  private void addPageConCache(String data, int proId, int mid) {
+    Object obj = JSON.parse(data);
+    Map<String, Object> map = (Map<String, Object>)obj;
+    obj = map.get("graphs");
+    if (obj == null)
+      return; 
+    List<Map<String, Object>> list = (List<Map<String, Object>>)obj;
+    PageTMBean tb = null;
+    PageTM pt = null;
+    List<PageTM> TBlist = null;
+    List<PageTMBean> pageList = new ArrayList<>();
+    boolean isgrid = true;
+    for (int i = 0; i < list.size(); i++) {
+      tb = new PageTMBean();
+      map = list.get(i);
+      String id = (String)map.get("id");
+      tb.setModuleId(id);
+      String pid = (String)map.get("pid");
+      tb.setPid(pid);
+      Map<String, Object> map1 = (Map<String, Object>)map.get("properties");
+      if ("4".equals(pid)) {
+        tb.setDev(Integer.parseInt((String)map1.get("dev")));
+        tb.setDisplayContent((String)map1.get("displayContent"));
+      } 
+      List<Map<String, Object>> list1 = (List<Map<String, Object>>)map1.get("params");
+      if ("2".equals(pid)) {
+        if (map1.get("colNum") != null) {
+          int colums = Integer.parseInt((String)map1.get("colNum"));
+          if (colums != 0)
+            tb.setColNum(colums); 
+        } 
+      } else if ("3".equals(pid) || "5".equals(pid)) {
+        if (map1.get("dev") != null) {
+          int colums = Integer.parseInt((String)map1.get("dev"));
+          if (colums != 0)
+            tb.setColNum(colums); 
+        } 
+        isgrid = false;
+      } else if ("4".equals(pid) && 
+        map1.get("dev") != null) {
+        int colums = Integer.parseInt((String)map1.get("dev"));
+        if (colums != 0)
+          tb.setColNum(colums); 
+      } 
+      TBlist = new ArrayList<>();
+      if (list1 != null) {
+        for (int j = 0; j < list1.size(); j++) {
+          pt = new PageTM();
+          map = list1.get(j);
+          String tm_name = (String)map.get("name");
+          String tm_code = (String)map.get("code");
+          int num = Integer.parseInt((String)map.get("parId"));
+          pt.setTm_code(tm_code);
+          pt.setTm_name(tm_name);
+          pt.setNum(num);
+          TBlist.add(pt);
+        } 
+        tb.setList(TBlist);
+      } 
+      pageList.add(tb);
+    } 
+    PageImpl page = new PageImpl();
+    page.load(pageList);
+    page.setIsgrid(isgrid);
+    page.setPageid(proId+"");
+    synchronized (PageCache.map) {
+      SatInfoManager sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+      if (sim != null) {
+        sim.getPmi().openPage(page);
+      } else if (log.isErrorEnabled()) {
+        log.error("[mid=" + mid + "的航天器未配置网络接口！]");
+      } 
+    } 
+  }
+  
 //  public String getTrackCountInfo(String mid) {
 //    List<Map<String, Object>> list = this.dao.getTrackCountInfo(mid);
 //    Map<String, Object> map = new HashMap<>();
@@ -320,15 +342,15 @@ public class PageInfoServiceImpl implements IPageInfoService {
 //    return JSONArray.toJSONString(map);
 //  }
 //  
-//  public Object updateSelectPage(String tabid, String mid, String clientIp) {
-//    synchronized (PageCache.selectMap) {
-//      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-//      if (poi == null)
-//        poi = new PageOperateInfo(); 
-//      poi.setSelectPageID(tabid);
-//      poi.setSendFirst(true);
-//      PageCache.selectMap.put(clientIp, poi);
-//    } 
-//    return Boolean.valueOf(true);
-//  }
+  public Object updateSelectPage(String tabid, String mid, String clientIp) {
+    synchronized (PageCache.selectMap) {
+      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+      if (poi == null)
+        poi = new PageOperateInfo(); 
+      poi.setSelectPageID(tabid);
+      poi.setSendFirst(true);
+      PageCache.selectMap.put(clientIp, poi);
+    } 
+    return Boolean.valueOf(true);
+  }
 }
