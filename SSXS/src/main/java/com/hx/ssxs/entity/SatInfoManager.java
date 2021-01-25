@@ -117,8 +117,9 @@ public class SatInfoManager {
   
   public void receiveThreadRun() {
     for (Thread surt : this.list) {
-      if (surt.getState() == Thread.State.NEW)
-        surt.start(); 
+      if (surt.getState() == Thread.State.NEW) {
+		surt.start();
+	} 
     } 
   }
   

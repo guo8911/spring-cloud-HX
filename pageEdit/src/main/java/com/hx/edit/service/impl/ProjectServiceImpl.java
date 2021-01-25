@@ -36,7 +36,7 @@ import com.hx.edit.mapper.ViewSxProjectMapper;
 import com.hx.edit.service.IProjectService;
 
 @Service
-public class ProjectService implements IProjectService {
+public class ProjectServiceImpl implements IProjectService {
   @Autowired
   private SatelliteMapper satelliteMapper;
   @Autowired
@@ -53,14 +53,17 @@ public class ProjectService implements IProjectService {
   private TmMapper tmMapper;
   @Value("${GudingAddr}")
   private String gudingAddr;
-  public List<Satellite> getSat() {
+  @Override
+public List<Satellite> getSat() {
     return satelliteMapper.getSat();
   }
   
-  public List<ViewSxProject> getProj(String key) {
+  @Override
+public List<ViewSxProject> getProj(String key) {
     List<ViewSxProject> maps = viewSxProjectMapper.getProj();
-    if (key == null || key.equals(""))
-      return maps; 
+    if (key == null || key.equals("")) {
+		return maps;
+	} 
     List<ViewSxProject> rsts = new ArrayList<>();
     for (ViewSxProject map : maps) {
       if (map.getName().contains(key)) {
@@ -83,8 +86,9 @@ public class ProjectService implements IProjectService {
   
   private void addParents(List<ViewSxProject> maps, ViewSxProject map2, List<ViewSxProject> rsts) {
     String owner = map2.getOwner()+ "";
-    if (owner.equals("0"))
-      return; 
+    if ("0".equals(owner)) {
+		return;
+	} 
     for (ViewSxProject map : maps) {
       if ((map.getId()+"").equals(owner) && !rsts.contains(map)) {
         rsts.add(map);
@@ -94,8 +98,9 @@ public class ProjectService implements IProjectService {
   }
   
   private void addChildren(List<ViewSxProject> maps, ViewSxProject map2, List<ViewSxProject> rsts) {
-    if (!map2.getType().equals("0"))
-      return; 
+    if (!"0".equals(map2.getType())) {
+		return;
+	} 
     String id = map2.getId()+"";
     for (ViewSxProject map : maps) {
       if ((map.getOwner()+"").equals(id) && !rsts.contains(map)) {
@@ -104,11 +109,13 @@ public class ProjectService implements IProjectService {
       } 
     } 
   }
-  public List<SxGuding> getGuding() {
+  @Override
+public List<SxGuding> getGuding() {
 	    return sxGudingMapper.getGuding();
 	  }
   
-  public String addNode(String name, int owner, String type, LoginUserBean loginUser) {
+  @Override
+public String addNode(String name, int owner, String type, LoginUserBean loginUser) {
 	SxProject sxProject =new SxProject();
 	sxProject.setName(name);
 	sxProject.setOwner(owner);
@@ -128,7 +135,8 @@ public class ProjectService implements IProjectService {
 	return "";
   }
   
-  public String editNode(int id, String name, LoginUserBean loginUser) {
+  @Override
+public String editNode(int id, String name, LoginUserBean loginUser) {
 	SxProject sxProject =new SxProject();
 	sxProject.setId(id);
 	sxProject.setName(name);
@@ -146,7 +154,8 @@ public class ProjectService implements IProjectService {
 	
 	return "F";
   }
-  @Transactional
+  @Override
+@Transactional
   public String delNode(int id, LoginUserBean loginUser) {
 	  try {
 		  sxFileMapper.deleteFile(id);
@@ -157,7 +166,8 @@ public class ProjectService implements IProjectService {
 	  
     return "T";
   }
-  @Transactional
+  @Override
+@Transactional
   public String addFile(String name, int owner, String type, String data, String uid, LoginUserBean loginUser) {
 	  SxProject sxProject =new SxProject();
 	  sxProject.setName(name);
@@ -184,20 +194,23 @@ public class ProjectService implements IProjectService {
 	  return "";
   }
   
-  public String copyFile(int srcId, int owner, String name, String uid, LoginUserBean loginUser) {
+  @Override
+public String copyFile(int srcId, int owner, String name, String uid, LoginUserBean loginUser) {
     String data = null;
     SxCheckout sxCheckout = sxCheckoutMapper.getCheckout(srcId);
     if (sxCheckout != null) {
       data = sxCheckout.getData();
     } else {
     	SxFile sxFile = sxFileMapper.getFile(srcId);
-      if (sxFile != null)
-        data = sxFile.getData(); 
+      if (sxFile != null) {
+		data = sxFile.getData();
+	} 
     } 
     return addFile(name, owner, "1", data, uid, loginUser);
   }
   
-  public boolean checkout(int proId, String uid) {
+  @Override
+public boolean checkout(int proId, String uid) {
 	  String data=sxFileMapper.getDataIntoCheckout(proId);
 	  if(data !=null) {
 		  try {
@@ -220,7 +233,8 @@ public class ProjectService implements IProjectService {
 	  return false;
   }
   
-  public boolean checkin(int proId) {
+  @Override
+public boolean checkin(int proId) {
 	  try {
 		  sxCheckoutMapper.delCheckout(proId);
 		  return true;
@@ -230,7 +244,8 @@ public class ProjectService implements IProjectService {
 	  
   }
   
-  public boolean save(int proId, String data, LoginUserBean loginUser) {
+  @Override
+public boolean save(int proId, String data, LoginUserBean loginUser) {
 	  SxFile sxFile = new SxFile();
 	  sxFile.setProj_id(proId);
 	  sxFile.setData(data);
@@ -243,7 +258,8 @@ public class ProjectService implements IProjectService {
 	  }
 	  }
 	  
-  public boolean checkallin(String uid) {
+  @Override
+public boolean checkallin(String uid) {
 	  try {
 		  sxCheckoutMapper.delUserCheckout(uid);
 		  return true;
@@ -252,23 +268,27 @@ public class ProjectService implements IProjectService {
 	  }
   }
   
-  public String getLastFile(int proId, boolean readOnly) {
+  @Override
+public String getLastFile(int proId, boolean readOnly) {
 	SxCheckout sxCheckout = new SxCheckout();
 	SxFile sxFile = new SxFile();
 	String data = null;
 	if (readOnly) {
 		 sxCheckout = sxCheckoutMapper.getCheckout(proId);
-	  if (sxCheckout != null)
-	    data =sxCheckout.getData(); 
+	  if (sxCheckout != null) {
+		data =sxCheckout.getData();
+	} 
 	} else {
 		sxFile = sxFileMapper.getFile(proId);
-	  if (sxFile != null)
-	    data = sxFile.getData(); 
+	  if (sxFile != null) {
+		data = sxFile.getData();
+	} 
 	} 
 	return data;
   }
   
-  public String getTm(int satId, String key, int page, int pagesize) {
+  @Override
+public String getTm(int satId, String key, int page, int pagesize) {
 	  Tm tm=new Tm();
 	  tm.setSat_id(satId);
 	  tm.setTm_name("%" + key + "%");
@@ -281,7 +301,8 @@ public class ProjectService implements IProjectService {
       total + "}";
   }
   
-  public String getGudingUrl(int id) {
+  @Override
+public String getGudingUrl(int id) {
     return gudingAddr + sxGudingMapper.getGudingUrl(id) + "?read=true";
   }
 }

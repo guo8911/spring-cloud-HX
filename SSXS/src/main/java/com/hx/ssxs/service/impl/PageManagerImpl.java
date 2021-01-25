@@ -29,7 +29,8 @@ public class PageManagerImpl implements IPageManager {
     this.mid = mid.intValue();
   }
   
-  public PageImpl getPageImpl(String pageid) {
+  @Override
+public PageImpl getPageImpl(String pageid) {
     return this.pageMap.get(pageid);
   }
   
@@ -37,35 +38,43 @@ public class PageManagerImpl implements IPageManager {
     this.pageMap.putAll(map);
   }
   
-  public void setData(SatTMInfo listparam, int mid) {
-    if (this.pageMap == null)
-      return; 
+  @Override
+public void setData(SatTMInfo listparam, int mid) {
+    if (this.pageMap == null) {
+		return;
+	} 
     if (mid != this.mid && 
-      log.isDebugEnabled())
-      log.debug("[页面管理器错乱！]"); 
+      log.isDebugEnabled()) {
+		log.debug("[页面管理器错乱！]");
+	} 
     synchronized (this.pageMap) {
       Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
-      if (entryset.size() == 0)
-        return; 
-      if (this.listSelect == null)
-        this.listSelect = new ArrayList<>(); 
+      if (entryset.size() == 0) {
+		return;
+	} 
+      if (this.listSelect == null) {
+		this.listSelect = new ArrayList<>();
+	} 
       synchronized (PageCache.selectMap) {
         Set<Map.Entry<String, PageOperateInfo>> entrySelect = PageCache.selectMap
           .entrySet();
         for (Map.Entry<String, PageOperateInfo> select : entrySelect) {
           PageOperateInfo poi = select.getValue();
           String pageid = poi.getSelectPageID();
-          if (pageid == null)
-            continue; 
-          if (!this.listSelect.contains(pageid))
-            this.listSelect.add(poi.getSelectPageID()); 
+          if (pageid == null) {
+			continue;
+		} 
+          if (!this.listSelect.contains(pageid)) {
+			this.listSelect.add(poi.getSelectPageID());
+		} 
         } 
       } 
       for (Map.Entry<String, PageImpl> entry : entryset) {
         this.pi = entry.getValue();
         if (this.pi.isgrid() && 
-          !this.listSelect.contains(entry.getKey()))
-          continue; 
+          !this.listSelect.contains(entry.getKey())) {
+			continue;
+		} 
         this.pi.setData(listparam, mid);
         this.pi = null;
       } 
@@ -73,7 +82,8 @@ public class PageManagerImpl implements IPageManager {
     } 
   }
   
-  public void openPage(PageImpl page) {
+  @Override
+public void openPage(PageImpl page) {
     synchronized (this.pageMap) {
       PageImpl pi = this.pageMap.get(page.getPageid());
       if (pi == null) {
@@ -85,14 +95,17 @@ public class PageManagerImpl implements IPageManager {
     } 
   }
   
-  public void closePage(String pageId, String clientIp) {
+  @Override
+public void closePage(String pageId, String clientIp) {
     PageImpl pi = this.pageMap.get(pageId);
     boolean flag = pi.close(clientIp, pageId);
-    if (flag)
-      this.pageMap.remove(pageId); 
+    if (flag) {
+		this.pageMap.remove(pageId);
+	} 
   }
   
-  public void addPageSession(Session session, String clientip, String pageid) {
+  @Override
+public void addPageSession(Session session, String clientip, String pageid) {
     synchronized (this.pageMap) {
       PageImpl pi = this.pageMap.get(pageid);
       if (pi == null) {

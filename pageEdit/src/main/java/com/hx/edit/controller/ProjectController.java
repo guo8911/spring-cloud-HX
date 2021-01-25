@@ -134,8 +134,9 @@ public String delNode(HttpSession session, int id) {
   @RequestMapping({"getTm"})
   @ResponseBody
   public String getTm(int satId, String key, int page, int pagesize) {
-    if (key == null)
-      key = ""; 
+    if (key == null) {
+		key = "";
+	} 
     return this.projectService.getTm(satId, key, page, pagesize);
   }
   

@@ -19,19 +19,22 @@ public class PageTools {
     } else if (realIp.equals(forwarded)) {
       ip = realIp;
     } else {
-      if (forwarded != null)
-        forwarded = forwarded.split(",")[0]; 
+      if (forwarded != null) {
+		forwarded = forwarded.split(",")[0];
+	} 
       ip = String.valueOf(realIp) + "/" + forwarded;
     } 
     return ip;
   }
   
   public static StringBuffer cutSourceIndex(String sources) {
-    if (sources == null)
-      return null; 
+    if (sources == null) {
+		return null;
+	} 
     StringBuffer source = new StringBuffer(sources);
-    for (int index = 2; index < source.length(); index += 3)
-      source.insert(index, " "); 
+    for (int index = 2; index < source.length(); index += 3) {
+		source.insert(index, " ");
+	} 
     return source;
   }
   

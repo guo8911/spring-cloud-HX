@@ -3,11 +3,13 @@ package com.hx.ssxs.util;
 public class ByteUtils {
   public static byte bitToByte(String bit) {
     int re;
-    if (bit == null)
-      return 0; 
+    if (bit == null) {
+		return 0;
+	} 
     int len = bit.length();
-    if (len != 4 && len != 8)
-      return 0; 
+    if (len != 4 && len != 8) {
+		return 0;
+	} 
     if (len == 8) {
       if (bit.charAt(0) == '0') {
         re = Integer.parseInt(bit, 2);
@@ -88,8 +90,9 @@ public class ByteUtils {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < byteArray.length; i++) {
       String b = Integer.toHexString(byteArray[i] & 0xFF);
-      while (b.length() < 2)
-        b = "0" + b; 
+      while (b.length() < 2) {
+		b = "0" + b;
+	} 
       sb.append(b);
     } 
     return sb.toString();

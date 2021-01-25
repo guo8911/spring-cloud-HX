@@ -28,7 +28,8 @@ public class SatPageHandleThread implements Runnable {
     } 
   }
   
-  public void run() {
+  @Override
+public void run() {
     while (true) {
       try {
         while (true) {

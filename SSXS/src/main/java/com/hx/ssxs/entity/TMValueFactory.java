@@ -62,8 +62,9 @@ public class TMValueFactory {
     for (Parameter param1 : list) {
       String devmid = (new StringBuilder(String.valueOf(gp.getSou()))).toString();
       Param param = addParam(param1, time, flag, devmid, mid);
-      if (param != null)
-        listchange.add(param); 
+      if (param != null) {
+		listchange.add(param);
+	} 
     } 
     if (this.sph != null) {
       this.sti = new SatTMInfo();
@@ -86,8 +87,9 @@ public class TMValueFactory {
       String[] key = keys.split("&&");
       if (key[0].equals((new StringBuilder(String.valueOf(firstDev))).toString())) {
         TMValue tm = cacheParam.getValue();
-        if (tm.getValue() == null)
-          continue; 
+        if (tm.getValue() == null) {
+			continue;
+		} 
         long time1 = 0L;
         String time = "";
         try {
@@ -112,13 +114,14 @@ public class TMValueFactory {
             PageImpl pi = pmi.getPageImpl(pageid);
             if (pi != null) {
               Session session = pi.getMapSession(clientip);
-              if (session != null && session.isOpen())
-                try {
+              if (session != null && session.isOpen()) {
+				try {
                   flag = pi.sendAfterSelectByHistory(this.sti, 
                       this.mid, session, clientip);
                 } catch (Exception e) {
                   e.printStackTrace();
-                }  
+                }
+			}  
             } 
           } 
         } 
@@ -126,8 +129,9 @@ public class TMValueFactory {
       } 
       if (key[0].equals((new StringBuilder(String.valueOf(secondDev))).toString())) {
         TMValue tm = cacheParam.getValue();
-        if (tm.getValue() == null)
-          continue; 
+        if (tm.getValue() == null) {
+			continue;
+		} 
         Param param = getParamSelectFirst(tm);
         long time1 = 0L;
         String time = "";
@@ -140,8 +144,9 @@ public class TMValueFactory {
         } catch (ParseException e) {
           e.printStackTrace();
         } 
-        if ("".equals(time))
-          continue; 
+        if ("".equals(time)) {
+			continue;
+		} 
         listchange2.add(param);
         if (this.sph != null) {
           this.sti = new SatTMInfo();
@@ -154,13 +159,14 @@ public class TMValueFactory {
             PageImpl pi = pmi.getPageImpl(pageid);
             if (pi != null) {
               Session session = pi.getMapSession(clientip);
-              if (session != null && session.isOpen())
-                try {
+              if (session != null && session.isOpen()) {
+				try {
                   flag = pi.sendAfterSelectByHistory(this.sti, 
                       this.mid, session, clientip);
                 } catch (Exception e) {
                   e.printStackTrace();
-                }  
+                }
+			}  
             } 
           } 
         } 
@@ -168,8 +174,9 @@ public class TMValueFactory {
       } 
       if (key[0].equals((new StringBuilder(String.valueOf(thirdDev))).toString())) {
         TMValue tm = cacheParam.getValue();
-        if (tm.getValue() == null)
-          continue; 
+        if (tm.getValue() == null) {
+			continue;
+		} 
         Param param = getParamSelectFirst(tm);
         long time1 = 0L;
         String time = "";
@@ -182,8 +189,9 @@ public class TMValueFactory {
         } catch (ParseException e) {
           e.printStackTrace();
         } 
-        if ("".equals(time))
-          continue; 
+        if ("".equals(time)) {
+			continue;
+		} 
         listchange3.add(param);
         if (this.sph != null) {
           this.sti = new SatTMInfo();
@@ -196,13 +204,14 @@ public class TMValueFactory {
             PageImpl pi = pmi.getPageImpl(pageid);
             if (pi != null) {
               Session session = pi.getMapSession(clientip);
-              if (session != null && session.isOpen())
-                try {
+              if (session != null && session.isOpen()) {
+				try {
                   flag = pi.sendAfterSelectByHistory(this.sti, 
                       this.mid, session, clientip);
                 } catch (Exception e) {
                   e.printStackTrace();
-                }  
+                }
+			}  
             } 
           } 
         } 
@@ -228,8 +237,9 @@ public class TMValueFactory {
     int num = 0;
     num = param1.getTmNum();
     TMValue tmValue = this.TMValueCache.get(String.valueOf(devmid) + "&&" + num + "&&" + mid);
-    if (tmValue == null)
-      return null; 
+    if (tmValue == null) {
+		return null;
+	} 
     Param param = getParam(param1);
     param.setCode(tmValue.getCode());
     String disValue = null;
@@ -240,11 +250,13 @@ public class TMValueFactory {
         disValue = cd.get(Integer.valueOf(Integer.parseInt(param1.getTmValue())));
       } 
     } catch (Exception e) {
-      if (this.log.isDebugEnabled())
-        this.log.debug("[参数" + tmValue.getCode() + "无显示值！]"); 
+      if (this.log.isDebugEnabled()) {
+		this.log.debug("[参数" + tmValue.getCode() + "无显示值！]");
+	} 
     } 
-    if (disValue != null)
-      param.setDisplayValue(disValue); 
+    if (disValue != null) {
+		param.setDisplayValue(disValue);
+	} 
     param.setDataType(tmValue.getDataType());
     param.setTm_id(tmValue.getId());
     if (flag == 0) {
@@ -266,8 +278,9 @@ public class TMValueFactory {
     Param param = new Param();
     param.setNum(param1.getTmNum());
     String source = getSourceByHex(param1.getTmSource());
-    while (source.indexOf("0") == 0 && source.length() > 2)
-      source = source.substring(1); 
+    while (source.indexOf("0") == 0 && source.length() > 2) {
+		source = source.substring(1);
+	} 
     param.setSource(source);
     return param;
   }

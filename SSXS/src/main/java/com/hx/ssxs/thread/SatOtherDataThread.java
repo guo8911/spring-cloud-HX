@@ -51,8 +51,9 @@ public class SatOtherDataThread implements Runnable {
           } 
         }
       } catch (Exception e) {
-        if (this.log.isDebugEnabled())
-          this.log.debug("处理非遥测数据发生错误", e); 
+        if (this.log.isDebugEnabled()) {
+			this.log.debug("处理非遥测数据发生错误", e);
+		} 
       } 
     } 
   }

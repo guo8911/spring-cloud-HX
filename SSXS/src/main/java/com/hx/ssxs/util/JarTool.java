@@ -22,14 +22,16 @@ public class JarTool {
   private static Log log = LogFactory.getLog(JarTool.class);
   
   public static void generateJar(String sourcePath, String targetFile) throws FileNotFoundException, IOException {
-    if (log.isDebugEnabled())
-      log.debug("[开始生成jar包,sourcePath=" + sourcePath + ",targetPath=" + 
-          targetFile + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[开始生成jar包,sourcePath=" + sourcePath + ",targetPath=" + 
+		      targetFile + "]");
+	} 
     String targetDirPath = targetFile.substring(0, 
         targetFile.lastIndexOf("/"));
     File targetDir = new File(targetDirPath);
-    if (!targetDir.exists())
-      targetDir.mkdirs(); 
+    if (!targetDir.exists()) {
+		targetDir.mkdirs();
+	} 
     Manifest manifest = new Manifest();
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, 
         "1.0");
@@ -37,8 +39,9 @@ public class JarTool {
           targetFile), manifest);
     writeFile(new File(sourcePath), target, sourcePath);
     target.close();
-    if (log.isDebugEnabled())
-      log.debug("[jar包生成完毕]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[jar包生成完毕]");
+	} 
   }
   
   private static void writeFile(File source, JarOutputStream target, String sourcePath) throws IOException {
@@ -47,8 +50,9 @@ public class JarTool {
       if (source.isDirectory()) {
         String name = source.getPath().replace("\\", "/");
         if (!name.isEmpty()) {
-          if (!name.endsWith("/"))
-            name = String.valueOf(name) + "/"; 
+          if (!name.endsWith("/")) {
+			name = String.valueOf(name) + "/";
+		} 
           if (!name.equals(sourcePath)) {
             name = name.substring(sourcePath.length());
             JarEntry jarEntry = new JarEntry(name);
@@ -76,53 +80,63 @@ public class JarTool {
       byte[] buffer = new byte[1024];
       while (true) {
         int count = in.read(buffer);
-        if (count == -1)
-          break; 
+        if (count == -1) {
+			break;
+		} 
         target.write(buffer, 0, count);
       } 
     } finally {
-      if (in != null)
-        in.close(); 
+      if (in != null) {
+		in.close();
+	} 
     } 
-    if (in != null)
-      in.close(); 
+    if (in != null) {
+		in.close();
+	} 
   }
   
   public static void decompress(String sourceFile, String targetPath) throws IOException {
-    if (log.isDebugEnabled())
-      log.debug("[开始解压jar包,sourceFile=" + sourceFile + ",targetPath=" + 
-          targetPath + "]"); 
-    if (!targetPath.endsWith(File.separator))
-      targetPath = String.valueOf(targetPath) + File.separator; 
+    if (log.isDebugEnabled()) {
+		log.debug("[开始解压jar包,sourceFile=" + sourceFile + ",targetPath=" + 
+		      targetPath + "]");
+	} 
+    if (!targetPath.endsWith(File.separator)) {
+		targetPath = String.valueOf(targetPath) + File.separator;
+	} 
     File dir = new File(targetPath);
-    if (!dir.exists())
-      dir.mkdirs(); 
+    if (!dir.exists()) {
+		dir.mkdirs();
+	} 
     JarFile jf = new JarFile(sourceFile);
     for (Enumeration<JarEntry> e = jf.entries(); e.hasMoreElements(); ) {
       JarEntry je = e.nextElement();
       String outFileName = String.valueOf(targetPath) + je.getName();
       File f = new File(outFileName);
       if (je.isDirectory()) {
-        if (!f.exists())
-          f.mkdirs(); 
+        if (!f.exists()) {
+			f.mkdirs();
+		} 
         continue;
       } 
       File pf = f.getParentFile();
-      if (!pf.exists())
-        pf.mkdirs(); 
+      if (!pf.exists()) {
+		pf.mkdirs();
+	} 
       InputStream in = jf.getInputStream(je);
       OutputStream out = new BufferedOutputStream(
           new FileOutputStream(f));
       byte[] buffer = new byte[2048];
       int nBytes = 0;
-      while ((nBytes = in.read(buffer)) > 0)
-        out.write(buffer, 0, nBytes); 
+      while ((nBytes = in.read(buffer)) > 0) {
+		out.write(buffer, 0, nBytes);
+	} 
       out.flush();
       out.close();
       in.close();
     } 
-    if (log.isDebugEnabled())
-      log.debug("[jar包解压完毕]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[jar包解压完毕]");
+	} 
   }
   
   public static void main(String[] args) {}

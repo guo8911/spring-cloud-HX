@@ -29,18 +29,22 @@ public class SourceHandle implements ITMSourceHandle {
     this.mid = mid.intValue();
   }
   
-  public void addSession(String key, Session session) {
+  @Override
+public void addSession(String key, Session session) {
     this.map.put(key, session);
   }
   
-  public void removeSession(String key) {
+  @Override
+public void removeSession(String key) {
     this.map.remove(key);
   }
   
-  public void handle(DataPackage gp) {
+  @Override
+public void handle(DataPackage gp) {
     Set<Map.Entry<String, Session>> entryset = this.map.entrySet();
-    if (entryset.size() == 0)
-      return; 
+    if (entryset.size() == 0) {
+		return;
+	} 
     int packgeNum = gp.getHead().getPackageNum();
     String time = gp.getHead().getDateTime();
     byte[] data = gp.getBody().getSource().getContent();
@@ -58,14 +62,15 @@ public class SourceHandle implements ITMSourceHandle {
       String[] clientKeys = clientKey.split("&&");
       PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientKeys[0]);
       boolean flag = true;
-      if (poi != null)
-        if (poi.getFirstDev_mid() == dev_mid) {
+      if (poi != null) {
+		if (poi.getFirstDev_mid() == dev_mid) {
           flag = false;
         } else if (poi.getSecondDev_mid() == dev_mid) {
           flag = false;
         } else if (poi.getThirdDev_mid() == dev_mid) {
           flag = false;
-        }  
+        }
+	}  
       try {
         if (!flag) {
           Session session = entry.getValue();
@@ -76,8 +81,9 @@ public class SourceHandle implements ITMSourceHandle {
           this.map.remove(clientKey);
         } 
       } catch (Exception e) {
-        if (log.isErrorEnabled())
-          log.debug("[连接关闭，数据发送异常！]"); 
+        if (log.isErrorEnabled()) {
+			log.debug("[连接关闭，数据发送异常！]");
+		} 
       } 
     } 
   }

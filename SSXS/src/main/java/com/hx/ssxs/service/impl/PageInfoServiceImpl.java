@@ -70,22 +70,24 @@ public class PageInfoServiceImpl implements IPageInfoService {
   @Autowired
   private SxTrackCountMapper sxTrackCountMapper;
   
-  public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
+  @Override
+public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
 	  List<SxProjectSat> sxProjectSatList = sxProjectMapper.getSatProject();
 //	  List<Map<String, Object>> maps = this.dao.getTree();
 //    List<Map<String, Object>> satmap = this.dao.getSatProject();
     String localurl = PageTools.getLocalUrl(request);
     for (ViewSxProject viewSxProject : viewSxProjectList) {
-      if (viewSxProject.getType().equals("2")) {
+      if ("2".equals(viewSxProject.getType())) {
     	  viewSxProject.setIcon(localurl + "main/img/asterisk_orange.png");
-      } else if (viewSxProject.getType().equals("1")) {
+      } else if ("1".equals(viewSxProject.getType())) {
     	  viewSxProject.setIcon(localurl + "main/img/file.ico");
       } 
       if (viewSxProject.getOwner() == 0) {
     	  viewSxProject.setIcon(localurl + "main/img/sat.gif");
-      } else if (viewSxProject.getType().equals("0"))
-    	  viewSxProject.setIcon(localurl + "main/img/folder.ico"); 
+      } else if ("0".equals(viewSxProject.getType())) {
+		viewSxProject.setIcon(localurl + "main/img/folder.ico");
+	} 
     } 
     for (int j = 0; j < viewSxProjectList.size(); j++) {
       for (int i = 0; i < sxProjectSatList.size(); i++) {
@@ -102,8 +104,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
 			}
       } 
     } 
-    if (keyname == null || keyname.equals(""))
-      return viewSxProjectList; 
+    if (keyname == null || keyname.equals("")) {
+		return viewSxProjectList;
+	} 
     List<ViewSxProject> rsts = new ArrayList<>();
     for (ViewSxProject map : viewSxProjectList) {
       if (map.getName().contains(keyname)) {
@@ -117,8 +120,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
   
   private void addParents(List<ViewSxProject> nodes, ViewSxProject node, List<ViewSxProject> rsts) {
     int owner = node.getOwner() ;
-    if (owner == 0)
-      return;
+    if (owner == 0) {
+		return;
+	}
     for (ViewSxProject map : nodes) {
       if (map.getId() == owner && !rsts.contains(map)) {
         rsts.add(map);
@@ -128,8 +132,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
   }
   
   private void addChildren(List<ViewSxProject> nodes, ViewSxProject node, List<ViewSxProject> rsts) {
-    if (!node.getType().equals("0"))
-      return; 
+    if (!"0".equals(node.getType())) {
+		return;
+	} 
     int id = node.getId();
     for (ViewSxProject map : nodes) {
       if (map.getOwner()==id && !rsts.contains(map)) {
@@ -139,12 +144,14 @@ public class PageInfoServiceImpl implements IPageInfoService {
     } 
   }
   
-  public SxGuding getPageOfGD(int id) {
+  @Override
+public SxGuding getPageOfGD(int id) {
 	  SxGuding map = sxGudingMapper.getPageOfGD(id);
     return map;
   }
   
-  public String getPageFile(int proId, int mid, boolean readOnly) {
+  @Override
+public String getPageFile(int proId, int mid, boolean readOnly) {
 	  SxFile pageInfo = sxFileMapper.getPageFile(proId);
     if (pageInfo != null) {
       String data = pageInfo.getData();
@@ -154,14 +161,17 @@ public class PageInfoServiceImpl implements IPageInfoService {
     return null;
   }
   
-  public Boolean checkOutFile(int proId) {
+  @Override
+public Boolean checkOutFile(int proId) {
 	  SxCheckout map = sxCheckoutMapper.checkOutFile(proId);
-    if (map != null)
-      return true; 
+    if (map != null) {
+		return true;
+	} 
     return false;
   }
   
-  public List<DeviceInfo> getDeviceInfo() {
+  @Override
+public List<DeviceInfo> getDeviceInfo() {
 	  List<DeviceInfo> list = deviceInfoMapper.getDeviceInfo();
     PageDevice pd = null;
     DeviceInfo map1 = null;
@@ -182,7 +192,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
     return list;
   }
   
-  public String getParamInfo(String mid) {
+  @Override
+public String getParamInfo(String mid) {
     List<Map<String, Object>> list = paramList.get(mid);
     Map<String, Object> map = new HashMap<>();
     map.put("Rows", list);
@@ -196,8 +207,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
     Object obj = JSON.parse(data);
     Map<String, Object> map = (Map<String, Object>)obj;
     obj = map.get("graphs");
-    if (obj == null)
-      return; 
+    if (obj == null) {
+		return;
+	} 
     List<Map<String, Object>> list = (List<Map<String, Object>>)obj;
     PageTMBean tb = null;
     PageTM pt = null;
@@ -220,21 +232,24 @@ public class PageInfoServiceImpl implements IPageInfoService {
       if ("2".equals(pid)) {
         if (map1.get("colNum") != null) {
           int colums = Integer.parseInt(""+map1.get("colNum"));
-          if (colums != 0)
-            tb.setColNum(colums); 
+          if (colums != 0) {
+			tb.setColNum(colums);
+		} 
         } 
       } else if ("3".equals(pid) || "5".equals(pid)) {
         if (map1.get("dev") != null) {
           int colums = Integer.parseInt(""+map1.get("dev"));
-          if (colums != 0)
-            tb.setColNum(colums); 
+          if (colums != 0) {
+			tb.setColNum(colums);
+		} 
         } 
         isgrid = false;
       } else if ("4".equals(pid) && 
         map1.get("dev") != null) {
         int colums = Integer.parseInt(""+map1.get("dev"));
-        if (colums != 0)
-          tb.setColNum(colums); 
+        if (colums != 0) {
+			tb.setColNum(colums);
+		} 
       } 
       TBlist = new ArrayList<>();
       if (list1 != null) {
@@ -267,7 +282,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
     } 
   }
   
-  public String getTrackCountInfo(int mid) {
+  @Override
+public String getTrackCountInfo(int mid) {
 	  List<SxTrackCount> list = sxTrackCountMapper.getTrackCount(mid);
     Map<String, Object> map = new HashMap<>();
     List<SxTrackCount> result = new ArrayList<>();
@@ -292,36 +308,41 @@ public class PageInfoServiceImpl implements IPageInfoService {
 //    return JSONArray.toJSONString(map);
 //  }
   
-  public boolean changeSelectTerm(String devmids, String clientIp) {
-    if (devmids == null)
-      synchronized (PageCache.selectMap) {
-        PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-        if (poi != null) {
-          poi.setFirstDev_mid(0);
-          poi.setSecondDev_mid(0);
-          poi.setThirdDev_mid(0);
-          poi.setAutostate(true);
-        } else {
-          poi = new PageOperateInfo();
-          poi.setCurrntIP(clientIp);
-          poi.setAutostate(true);
-          PageCache.selectMap.put(clientIp, poi);
-        } 
-        return true;
-      }  
+  @Override
+public boolean changeSelectTerm(String devmids, String clientIp) {
+    if (devmids == null) {
+		synchronized (PageCache.selectMap) {
+		    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+		    if (poi != null) {
+		      poi.setFirstDev_mid(0);
+		      poi.setSecondDev_mid(0);
+		      poi.setThirdDev_mid(0);
+		      poi.setAutostate(true);
+		    } else {
+		      poi = new PageOperateInfo();
+		      poi.setCurrntIP(clientIp);
+		      poi.setAutostate(true);
+		      PageCache.selectMap.put(clientIp, poi);
+		    } 
+		    return true;
+		  }
+	}  
     String[] devmid = devmids.split(",");
     synchronized (PageCache.selectMap) {
       PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-      if (poi == null)
-        poi = new PageOperateInfo(); 
+      if (poi == null) {
+		poi = new PageOperateInfo();
+	} 
       poi.setFirstDev_mid(0);
       poi.setSecondDev_mid(0);
       poi.setThirdDev_mid(0);
       boolean flag = false;
-      if (devmid.length > 2)
-        poi.setThirdDev_mid(Integer.parseInt(devmid[2])); 
-      if (devmid.length > 1)
-        poi.setSecondDev_mid(Integer.parseInt(devmid[1])); 
+      if (devmid.length > 2) {
+		poi.setThirdDev_mid(Integer.parseInt(devmid[2]));
+	} 
+      if (devmid.length > 1) {
+		poi.setSecondDev_mid(Integer.parseInt(devmid[1]));
+	} 
       if (devmid.length > 0) {
         poi.setFirstDev_mid(Integer.parseInt(devmid[0]));
         flag = true;
@@ -335,7 +356,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
     return true;
   }
   
-  public boolean changeReceiveDataState(String mid, String show_id, String clientIp) {
+  @Override
+public boolean changeReceiveDataState(String mid, String show_id, String clientIp) {
     return true;
   }
   
@@ -355,11 +377,13 @@ public class PageInfoServiceImpl implements IPageInfoService {
 //    return JSONArray.toJSONString(map);
 //  }
 //  
-  public Object updateSelectPage(String tabid, String mid, String clientIp) {
+  @Override
+public Object updateSelectPage(String tabid, String mid, String clientIp) {
     synchronized (PageCache.selectMap) {
       PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-      if (poi == null)
-        poi = new PageOperateInfo(); 
+      if (poi == null) {
+		poi = new PageOperateInfo();
+	} 
       poi.setSelectPageID(tabid);
       poi.setSendFirst(true);
       PageCache.selectMap.put(clientIp, poi);

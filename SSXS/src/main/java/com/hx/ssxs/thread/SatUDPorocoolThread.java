@@ -33,7 +33,8 @@ public class SatUDPorocoolThread implements Runnable {
     this.sim.setProcoolDataThread(this);
   }
   
-  public void run() {
+  @Override
+public void run() {
     DataPackage gp = null;
     GroupParameter grouparam = null;
     while (true) {
@@ -43,20 +44,24 @@ public class SatUDPorocoolThread implements Runnable {
           if (gp != null) {
             int bid = gp.getHead().getMesSign();
             int tasksign = gp.getHead().getTaskSign();
-            if (this.log.isDebugEnabled())
-              this.log.debug(String.valueOf(Thread.currentThread().getName()) + ":mid=" + this.mid + " tasksign=" + tasksign); 
-            if (bid == 65536)
-              this.sim.getTmSource().handle(gp); 
+            if (this.log.isDebugEnabled()) {
+				this.log.debug(String.valueOf(Thread.currentThread().getName()) + ":mid=" + this.mid + " tasksign=" + tasksign);
+			} 
+            if (bid == 65536) {
+				this.sim.getTmSource().handle(gp);
+			} 
             if (bid == 65793) {
               List<GroupParameter> groupParameters = gp.getBody().getRealTimeData().getGroupParameters();
-              if (this.log.isDebugEnabled())
-                this.log.debug("参数组数：" + groupParameters.size()); 
+              if (this.log.isDebugEnabled()) {
+				this.log.debug("参数组数：" + groupParameters.size());
+			} 
               for (int i = 0; i < groupParameters.size(); i++) {
                 grouparam = groupParameters.get(i);
                 String time = grouparam.getDataTimeString();
                 if (grouparam != null) {
-                  if (this.log.isDebugEnabled())
-                    this.log.debug("[组里参数为空！]"); 
+                  if (this.log.isDebugEnabled()) {
+					this.log.debug("[组里参数为空！]");
+				} 
                   this.sim.getTmf().checking(grouparam, time, this.mid.intValue());
                 } 
               } 
@@ -70,8 +75,9 @@ public class SatUDPorocoolThread implements Runnable {
         grouparam = null;
         gp = null;
       } catch (Exception e) {
-        if (this.log.isDebugEnabled())
-          this.log.debug("处理数据发生错误", e); 
+        if (this.log.isDebugEnabled()) {
+			this.log.debug("处理数据发生错误", e);
+		} 
       } 
     } 
   }

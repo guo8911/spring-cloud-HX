@@ -28,12 +28,14 @@ public class OtherDataImpl implements IOtherDataHandle {
     this.mid = mid.intValue();
   }
   
-  public void addSession(String key, Session session) {
+  @Override
+public void addSession(String key, Session session) {
     String[] keys = key.split("&&");
     List<String> list = null;
     if ((list = this.pageMap.get(keys[1])) != null) {
-      if (!list.contains(keys[0]))
-        list.add(keys[0]); 
+      if (!list.contains(keys[0])) {
+		list.add(keys[0]);
+	} 
     } else {
       list = new ArrayList<>();
       list.add(keys[0]);
@@ -42,13 +44,15 @@ public class OtherDataImpl implements IOtherDataHandle {
     this.map.put(key, session);
   }
   
-  public void removeSession(String key) {
+  @Override
+public void removeSession(String key) {
     String[] keys = key.split("&&");
     this.map.remove(key);
     ((List)this.pageMap.get(keys[1])).remove(keys[0]);
   }
   
-  public void handleData(Head head, int mid, List<Map<String, String>> list) {
+  @Override
+public void handleData(Head head, int mid, List<Map<String, String>> list) {
     int mesign = head.getMesSign();
     if (mesign == 262401) {
       CmdHandle(list);
@@ -65,10 +69,12 @@ public class OtherDataImpl implements IOtherDataHandle {
   
   private void LoopCheckHandle(List<Map<String, String>> list) {
     List<String> listClientip = this.pageMap.get("12");
-    if (listClientip == null)
-      return; 
-    if (log.isDebugEnabled())
-      log.debug("[小环比对信息处理数据！]"); 
+    if (listClientip == null) {
+		return;
+	} 
+    if (log.isDebugEnabled()) {
+		log.debug("[小环比对信息处理数据！]");
+	} 
     Map<String, Object> returnData = new HashMap<>();
     Map<String, String> result = null;
     for (int i = 0; i < list.size(); i++) {
@@ -76,9 +82,10 @@ public class OtherDataImpl implements IOtherDataHandle {
       String dev_mid = ((Map)list.get(i)).get("dev_mid").toString();
       result.put("dev_mid", dev_mid);
       PageDevice pd = PageConCache.getInstance().getDeviceInfo(dev_mid);
-      if (pd != null)
-        result.put("dev_name", 
-            (pd.getDevice_name() != null) ? pd.getDevice_name() : ""); 
+      if (pd != null) {
+		result.put("dev_name", 
+            (pd.getDevice_name() != null) ? pd.getDevice_name() : "");
+	} 
       result.put("con_time", (((Map)list.get(i)).get("con_time") != null) ? ""+((Map)list
           .get(i)).get("con_time") : "");
       result.put("cmd_time", (((Map)list.get(i)).get("cmd_time") != null) ? ""+((Map)list
@@ -100,30 +107,36 @@ public class OtherDataImpl implements IOtherDataHandle {
         } 
         session.getBasicRemote().sendText(json.toJson(returnData));
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("[" + clientip + "小环比对页面关闭！]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[" + clientip + "小环比对页面关闭！]");
+		} 
       } 
     } 
-    if (log.isDebugEnabled())
-      log.debug("[小环比对处理数据完成！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[小环比对处理数据完成！]");
+	} 
   }
   
   private void ExternalTestHandle(List<Map<String, String>> list) {
     List<String> listClientip = this.pageMap.get("12");
-    if (listClientip == null)
-      return; 
-    if (log.isDebugEnabled())
-      log.debug("[外测信息处理数据！]"); 
+    if (listClientip == null) {
+		return;
+	} 
+    if (log.isDebugEnabled()) {
+		log.debug("[外测信息处理数据！]");
+	} 
     Map<String, Object> returnData = new HashMap<>();
     Map<String, String> result = new HashMap<>();
     for (int i = 0; i < list.size(); i++) {
       String time = ""+((Map)list.get(i)).get("send_time");
-      if (log.isDebugEnabled())
-        log.debug("[外测处理前时间=" + time + "]"); 
+      if (log.isDebugEnabled()) {
+		log.debug("[外测处理前时间=" + time + "]");
+	} 
       String dev_mid = ((Map)list.get(i)).get("dev_mid").toString();
       PageDevice pd = null;
-      if (dev_mid != null)
-        pd = PageConCache.getInstance().getDeviceInfo(dev_mid); 
+      if (dev_mid != null) {
+		pd = PageConCache.getInstance().getDeviceInfo(dev_mid);
+	} 
       if (pd != null) {
         result.put("dev_mid", (((Map)list.get(i)).get("dev_mid") != null) ? ""+((Map)list
             .get(i)).get("dev_mid") : "");
@@ -152,8 +165,9 @@ public class OtherDataImpl implements IOtherDataHandle {
     } 
     returnData.put("data", result);
     returnData.put("type", Integer.valueOf(1));
-    if (log.isDebugEnabled())
-      log.debug("[外测结果显示处理数据完成！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[外测结果显示处理数据完成！]");
+	} 
     Gson json = new Gson();
     for (String clientip : listClientip) {
       Session session = this.map.get(String.valueOf(clientip) + "&&12&&" + this.mid);
@@ -164,20 +178,24 @@ public class OtherDataImpl implements IOtherDataHandle {
         } 
         session.getBasicRemote().sendText(json.toJson(returnData));
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("[" + clientip + "外测处理页面关闭]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[" + clientip + "外测处理页面关闭]");
+		} 
       } 
     } 
-    if (log.isDebugEnabled())
-      log.debug("[外测结果显示处理数据发送！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[外测结果显示处理数据发送！]");
+	} 
   }
   
   private void SendReceiveHandle(List<Map<String, String>> list) {
     List<String> listClientip = this.pageMap.get("3");
-    if (listClientip == null)
-      return; 
-    if (log.isDebugEnabled())
-      log.debug("[设备收发汇总信息处理数据！]"); 
+    if (listClientip == null) {
+		return;
+	} 
+    if (log.isDebugEnabled()) {
+		log.debug("[设备收发汇总信息处理数据！]");
+	} 
     Map<String, Object> result = new HashMap<>();
     List<Object> res = new ArrayList();
     Map<String, Object> mapLink = null;
@@ -191,8 +209,9 @@ public class OtherDataImpl implements IOtherDataHandle {
       mapLink.put("info", info);
       res.add(mapLink);
     } 
-    if (res.isEmpty())
-      return; 
+    if (res.isEmpty()) {
+		return;
+	} 
     result.put("data", res);
     result.put("type", Integer.valueOf(1));
     Gson json = new Gson();
@@ -205,8 +224,9 @@ public class OtherDataImpl implements IOtherDataHandle {
         } 
         session.getBasicRemote().sendText(json.toJson(result));
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("[" + clientip + "设备收发汇总页面已关闭]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[" + clientip + "设备收发汇总页面已关闭]");
+		} 
       } 
     } 
   }
@@ -214,20 +234,24 @@ public class OtherDataImpl implements IOtherDataHandle {
   private void CmdHandle(List<Map<String, String>> list) {
     CmdTeleControl cmdTe = null;
     Gson json = new Gson();
-    if (log.isDebugEnabled())
-      log.debug("[遥控指令数据--mid=" + this.mid + "," + json.toJson(list) + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[遥控指令数据--mid=" + this.mid + "," + json.toJson(list) + "]");
+	} 
     List<String> listClientip = this.pageMap.get("11");
-    if (listClientip == null)
-      return; 
-    if (log.isDebugEnabled())
-      log.debug("[遥控指令处理数据！]"); 
+    if (listClientip == null) {
+		return;
+	} 
+    if (log.isDebugEnabled()) {
+		log.debug("[遥控指令处理数据！]");
+	} 
     for (int i = 0; i < list.size(); i++) {
       cmdTe = new CmdTeleControl();
       String dev_mid = ""+((Map)list.get(i)).get("dev_id");
       cmdTe.setDev_mid_se(dev_mid);
       PageDevice pd = PageConCache.getInstance().getDeviceInfo(dev_mid);
-      if (pd != null)
-        cmdTe.setDev_name_se(pd.getDevice_name()); 
+      if (pd != null) {
+		cmdTe.setDev_name_se(pd.getDevice_name());
+	} 
       cmdTe.setCode(""+((Map)list.get(i)).get("code"));
       cmdTe.setDeclare((((Map)list.get(i)).get("description") != null) ? ""+((Map)list.get(
             i)).get("description") : "");
@@ -250,23 +274,28 @@ public class OtherDataImpl implements IOtherDataHandle {
           continue;
         } 
         session.getBasicRemote().sendText(json.toJson(cmdTe));
-        if (log.isDebugEnabled())
-          log.debug("[遥控指令---" + json.toJson(cmdTe) + "]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[遥控指令---" + json.toJson(cmdTe) + "]");
+		} 
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("[" + clientip + "遥控指令页面关闭" + e + "]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[" + clientip + "遥控指令页面关闭" + e + "]");
+		} 
       } 
     } 
-    if (log.isDebugEnabled())
-      log.debug("[遥控指令显示处理数据完成！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[遥控指令显示处理数据完成！]");
+	} 
   }
   
   private void LinkDataHandle(List<Map<String, String>> list) {
     List<String> listClientip = this.pageMap.get("3");
-    if (listClientip == null)
-      return; 
-    if (log.isDebugEnabled())
-      log.debug("[链路监视信息处理数据！]"); 
+    if (listClientip == null) {
+		return;
+	} 
+    if (log.isDebugEnabled()) {
+		log.debug("[链路监视信息处理数据！]");
+	} 
     Map<String, Object> result = new HashMap<>();
     List<Object> res = new ArrayList();
     Map<String, Object> mapLink = null;
@@ -288,11 +317,13 @@ public class OtherDataImpl implements IOtherDataHandle {
         } 
         session.getBasicRemote().sendText(json.toJson(result));
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("[" + clientip + "链路监视页面已关闭]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[" + clientip + "链路监视页面已关闭]");
+		} 
       } 
     } 
-    if (log.isDebugEnabled())
-      log.debug("[链路监视信息处理数据完成！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[链路监视信息处理数据完成！]");
+	} 
   }
 }

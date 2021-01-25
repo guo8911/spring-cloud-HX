@@ -23,8 +23,9 @@ public class JarTool {
     System.out.println("targetPath --> " + targetFile);
     String targetDirPath = targetFile.substring(0, targetFile.lastIndexOf("/"));
     File targetDir = new File(targetDirPath);
-    if (!targetDir.exists())
-      targetDir.mkdirs(); 
+    if (!targetDir.exists()) {
+		targetDir.mkdirs();
+	} 
     Manifest manifest = new Manifest();
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
     JarOutputStream target = new JarOutputStream(new FileOutputStream(targetFile), manifest);
@@ -39,8 +40,9 @@ public class JarTool {
       if (source.isDirectory()) {
         String name = source.getPath().replace("\\", "/");
         if (!name.isEmpty()) {
-          if (!name.endsWith("/"))
-            name = String.valueOf(name) + "/"; 
+          if (!name.endsWith("/")) {
+			name = String.valueOf(name) + "/";
+		} 
           if (!name.equals(sourcePath)) {
             name = name.substring(sourcePath.length());
             JarEntry jarEntry = new JarEntry(name);
@@ -67,46 +69,54 @@ public class JarTool {
       byte[] buffer = new byte[1024];
       while (true) {
         int count = in.read(buffer);
-        if (count == -1)
-          break; 
+        if (count == -1) {
+			break;
+		} 
         target.write(buffer, 0, count);
       } 
     } finally {
-      if (in != null)
-        in.close(); 
+      if (in != null) {
+		in.close();
+	} 
     } 
-    if (in != null)
-      in.close(); 
+    if (in != null) {
+		in.close();
+	} 
   }
   
   public static void decompress(String sourceFile, String targetPath) throws IOException {
     System.out.println("*** --> 开始解压jar包...");
     System.out.println("sourcePath --> " + sourceFile);
     System.out.println("targetPath --> " + targetPath);
-    if (!targetPath.endsWith(File.separator))
-      targetPath = String.valueOf(targetPath) + File.separator; 
+    if (!targetPath.endsWith(File.separator)) {
+		targetPath = String.valueOf(targetPath) + File.separator;
+	} 
     File dir = new File(targetPath);
-    if (!dir.exists())
-      dir.mkdirs(); 
+    if (!dir.exists()) {
+		dir.mkdirs();
+	} 
     JarFile jf = new JarFile(sourceFile);
     for (Enumeration<JarEntry> e = jf.entries(); e.hasMoreElements(); ) {
       JarEntry je = e.nextElement();
       String outFileName = String.valueOf(targetPath) + je.getName();
       File f = new File(outFileName);
       if (je.isDirectory()) {
-        if (!f.exists())
-          f.mkdirs(); 
+        if (!f.exists()) {
+			f.mkdirs();
+		} 
         continue;
       } 
       File pf = f.getParentFile();
-      if (!pf.exists())
-        pf.mkdirs(); 
+      if (!pf.exists()) {
+		pf.mkdirs();
+	} 
       InputStream in = jf.getInputStream(je);
       OutputStream out = new BufferedOutputStream(new FileOutputStream(f));
       byte[] buffer = new byte[2048];
       int nBytes = 0;
-      while ((nBytes = in.read(buffer)) > 0)
-        out.write(buffer, 0, nBytes); 
+      while ((nBytes = in.read(buffer)) > 0) {
+		out.write(buffer, 0, nBytes);
+	} 
       out.flush();
       out.close();
       in.close();

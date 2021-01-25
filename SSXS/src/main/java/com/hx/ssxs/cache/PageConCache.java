@@ -14,8 +14,9 @@ public class PageConCache {
   private static PageConCache pageConCache = null;
   
   public static PageConCache getInstance() {
-    if (pageConCache == null)
-      pageConCache = new PageConCache(); 
+    if (pageConCache == null) {
+		pageConCache = new PageConCache();
+	} 
     return pageConCache;
   }
   

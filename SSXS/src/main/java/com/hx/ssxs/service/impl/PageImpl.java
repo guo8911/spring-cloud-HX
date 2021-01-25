@@ -51,7 +51,8 @@ public class PageImpl implements IPage {
   
   private DecimalFormat df = new DecimalFormat("0.00000");
   
-  public void load(List<PageTMBean> pageContent) {
+  @Override
+public void load(List<PageTMBean> pageContent) {
     this.list.addAll(pageContent);
   }
   
@@ -75,11 +76,13 @@ public class PageImpl implements IPage {
     this.mapSession.remove(String.valueOf(clientIp) + "&&" + pageid);
   }
   
-  public boolean close(String clientIp, String pageid) {
+  @Override
+public boolean close(String clientIp, String pageid) {
     boolean flag = false;
     removeSession(clientIp, pageid);
-    if (this.mapSession.isEmpty())
-      flag = true; 
+    if (this.mapSession.isEmpty()) {
+		flag = true;
+	} 
     return flag;
   }
   
@@ -94,17 +97,21 @@ public class PageImpl implements IPage {
     } 
     Map<String, Param> map1 = new HashMap<>();
     Map<String, Param> map = new HashMap<>();
-    if (sti.getListparam().size() != 0)
-      for (int i = 0; i < sti.getListparam().size(); i++) {
-        Param param = sti.getListparam().get(i);
-        if (param != null)
-          map.put(param.getCode(), param); 
-      }  
-    if (log.isDebugEnabled())
-      log.debug("[开始组装发送数据！]"); 
+    if (sti.getListparam().size() != 0) {
+		for (int i = 0; i < sti.getListparam().size(); i++) {
+		    Param param = sti.getListparam().get(i);
+		    if (param != null) {
+				map.put(param.getCode(), param);
+			} 
+		  }
+	}  
+    if (log.isDebugEnabled()) {
+		log.debug("[开始组装发送数据！]");
+	} 
     Set<Map.Entry<String, Session>> entryset = this.mapSession.entrySet();
-    if (entryset.size() == 0)
-      return; 
+    if (entryset.size() == 0) {
+		return;
+	} 
     for (Map.Entry<String, Session> entry : entryset) {
       String[] keys = (""+entry.getKey()).split("&&");
       String clientip = keys[0];
@@ -113,11 +120,13 @@ public class PageImpl implements IPage {
         poi = (PageOperateInfo)PageCache.selectMap.get(clientip);
       } 
       if (this.isgrid && 
-        !poi.isSendFirst())
-        continue; 
+        !poi.isSendFirst()) {
+		continue;
+	} 
       if (this.isgrid && 
-        !this.pageid.equals(poi.getSelectPageID()))
-        continue; 
+        !this.pageid.equals(poi.getSelectPageID())) {
+		continue;
+	} 
       long currentTime = System.currentTimeMillis();
       int dev_mid = sti.getDev_mid();
       int column = 0;
@@ -147,8 +156,9 @@ public class PageImpl implements IPage {
         } 
         if (column != 0) {
           result = formData(mid, column, dataTime, map, dev_mid);
-          if (log.isDebugEnabled())
-            log.debug("[遥测配置页面处理数据完成！]"); 
+          if (log.isDebugEnabled()) {
+			log.debug("[遥测配置页面处理数据完成！]");
+		} 
           sendData(false, column, result, entry.getValue());
           this.paramMap.clear();
         } 
@@ -180,16 +190,19 @@ public class PageImpl implements IPage {
         return true;
       } 
       Map<String, Param> map = new HashMap<>();
-      if (sti.getListparam().size() != 0)
-        for (int i = 0; i < sti.getListparam().size(); i++) {
+      if (sti.getListparam().size() != 0) {
+		for (int i = 0; i < sti.getListparam().size(); i++) {
           Param param = sti.getListparam().get(i);
-          if (param != null)
-            map.put(param.getCode(), param); 
-        }  
+          if (param != null) {
+			map.put(param.getCode(), param);
+		} 
+        }
+	}  
       if (column != 0) {
         this.result = formData(mid, column, dataTime, map, dev_mid);
-        if (log.isDebugEnabled())
-          log.debug("[遥测配置页面处理数据完成！]"); 
+        if (log.isDebugEnabled()) {
+			log.debug("[遥测配置页面处理数据完成！]");
+		} 
         sendData(false, column, this.result, session);
         this.paramMap.clear();
       } 
@@ -200,14 +213,17 @@ public class PageImpl implements IPage {
   private void sendData(boolean flag, int colnum, List<Map<String, Object>> result, Session session) {
     Gson json = new Gson();
     try {
-      if (session != null && session.isOpen())
-        session.getAsyncRemote().sendText(json.toJson(result)); 
+      if (session != null && session.isOpen()) {
+		session.getAsyncRemote().sendText(json.toJson(result));
+	} 
     } catch (Exception e) {
-      if (log.isErrorEnabled())
-        log.debug("[连接关闭，数据发送异常！]"); 
+      if (log.isErrorEnabled()) {
+		log.debug("[连接关闭，数据发送异常！]");
+	} 
     } 
-    if (log.isDebugEnabled())
-      log.debug("[遥测配置页面发送数据完成！]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[遥测配置页面发送数据完成！]");
+	} 
   }
   
   private List<Map<String, Object>> formData(int mid, int colnum, long dataTime, Map<String, Param> map, int dev_mid) {
@@ -233,10 +249,12 @@ public class PageImpl implements IPage {
             } 
             String va = (new StringBuilder(String.valueOf(param.getValue()))).toString();
             if (colnum == 1 && 
-              "P24－1W12W13".equals(param.getCode()))
-              System.out.println(String.valueOf(param.getNum()) + ":" + param.getValue()); 
-            if (va.indexOf(".") > -1)
-              va = this.df.format(Double.parseDouble(va)); 
+              "P24－1W12W13".equals(param.getCode())) {
+				System.out.println(String.valueOf(param.getNum()) + ":" + param.getValue());
+			} 
+            if (va.indexOf(".") > -1) {
+				va = this.df.format(Double.parseDouble(va));
+			} 
             if ("F0W0F0W3".equals(param.getCode())) {
               va = this.sdf1.format(DateTools.jsTurnDate(Long.parseLong(va), "2009-01-01"));
             } else if ("P430W0W3".equals(param.getCode())) {
@@ -275,33 +293,37 @@ public class PageImpl implements IPage {
         this.tmMap = null;
       } else {
         if ("4".equals(ptb.getPid())) {
-          if (colnum != ptb.getColNum())
-            continue; 
+          if (colnum != ptb.getColNum()) {
+			continue;
+		} 
           this.tmMap = new HashMap<>();
           this.tmMap.put("displayContent", ptb.getDisplayContent());
           if ("1".equals(ptb.getDisplayContent()) || "0".equals(ptb.getDisplayContent())) {
             this.tmMap.put("value", Long.valueOf(dataTime));
           } else {
             PageDevice pd = PageConCache.getInstance().getDeviceInfo((new StringBuilder(String.valueOf(dev_mid))).toString());
-            if (pd != null)
-              this.tmMap.put("value", pd.getDevice_name()); 
+            if (pd != null) {
+				this.tmMap.put("value", pd.getDevice_name());
+			} 
           } 
           this.paramMap.put(ptb.getModuleId(), this.tmMap);
           continue;
         } 
         if ("3".equals(ptb.getPid()) || "5".equals(ptb.getPid())) {
-          if (colnum != ptb.getColNum())
-            continue; 
+          if (colnum != ptb.getColNum()) {
+			continue;
+		} 
           this.tmMap = new HashMap<>();
-          if (ptb.getList() != null)
-            for (PageTM pt : ptb.getList()) {
+          if (ptb.getList() != null) {
+			for (PageTM pt : ptb.getList()) {
               param = map.get(pt.getTm_code());
               if (param != null) {
                 String va = (new StringBuilder(String.valueOf(param.getValue()))).toString();
                 param.setValue(va);
                 this.tmMap.put((new StringBuilder(String.valueOf(pt.getNum()))).toString(), param);
               } 
-            }  
+            }
+		}  
         } 
       } 
       if (this.tablemap != null && !this.tablemap.isEmpty()) {

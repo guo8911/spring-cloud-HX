@@ -1,15 +1,15 @@
-package com.hx.edit.service.impl;
+package com.hx.ssxs.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hx.edit.entity.User;
-import com.hx.edit.mapper.UserMapper;
-import com.hx.edit.service.UserService;
+import com.hx.ssxs.entity.User;
+import com.hx.ssxs.mapper.UserMapper;
+import com.hx.ssxs.service.UserService;
 @Service("userService")
-public class UserServiceimpl implements UserService{
+public class UserServiceImpl implements UserService{
 
 	@Autowired
     private UserMapper userMapper;

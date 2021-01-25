@@ -28,10 +28,12 @@ public class ClobUtil {
         e.printStackTrace();
       } finally {
         try {
-          if (br != null)
-            br.close(); 
-          if (inStream != null)
-            inStream.close(); 
+          if (br != null) {
+			br.close();
+		} 
+          if (inStream != null) {
+			inStream.close();
+		} 
         } catch (IOException e) {
           e.printStackTrace();
         } 

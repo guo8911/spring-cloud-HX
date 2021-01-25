@@ -46,8 +46,9 @@ public class DynamicController {
       File file = arrayOfFile1[b];
       if (!file.isDirectory()) {
         String name = file.getName();
-        if (name.endsWith(".css"))
-          css.add(name); 
+        if (name.endsWith(".css")) {
+			css.add(name);
+		} 
       } 
       b++;
     } 
@@ -58,8 +59,9 @@ public class DynamicController {
       File file = arrayOfFile2[i];
       if (!file.isDirectory()) {
         String name = file.getName();
-        if (name.endsWith(".js"))
-          js.add(name); 
+        if (name.endsWith(".js")) {
+			js.add(name);
+		} 
       } 
       i++;
     } 

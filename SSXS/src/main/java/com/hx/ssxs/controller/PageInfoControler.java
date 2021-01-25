@@ -36,24 +36,27 @@ public class PageInfoControler {
   @RequestMapping({"/getTree"})
   @ResponseBody
   public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
-    if (log.isDebugEnabled())
-      log.debug("[获取页面树信息，keyname=" + keyname + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取页面树信息，keyname=" + keyname + "]");
+	} 
     return this.iPageInfoService.getTree(keyname, request);
   }
   
   @RequestMapping({"/getPageOfGD"})
   @ResponseBody
   public SxGuding getPageOfGD(int id) {
-    if (log.isDebugEnabled())
-      log.debug("[获取固定页面信息，id=" + id + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取固定页面信息，id=" + id + "]");
+	} 
     return this.iPageInfoService.getPageOfGD(id);
   }
   
   @RequestMapping({"/updateSelectPage"})
   @ResponseBody
   public String updateSelectPage(String tabid, String mid, HttpServletRequest request) {
-    if (log.isDebugEnabled())
-      log.debug("[获取固定页面信息，id=" + tabid + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取固定页面信息，id=" + tabid + "]");
+	} 
     String clientIp = PageTools.getLocalIp(request);
     return JSONArray.toJSONString(this.iPageInfoService.updateSelectPage(tabid, mid, 
           clientIp));
@@ -62,24 +65,27 @@ public class PageInfoControler {
   @RequestMapping({"/getPageFile"})
   @ResponseBody
   public String getPageFile(int proId, int mid, boolean readOnly) {
-    if (log.isDebugEnabled())
-      log.debug("[获取页面信息，proId=" + proId + ",readOnly=" + readOnly + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取页面信息，proId=" + proId + ",readOnly=" + readOnly + "]");
+	} 
     return this.iPageInfoService.getPageFile(proId, mid, readOnly);
   }
   
   @RequestMapping({"/checkOutFile"})
   @ResponseBody
   public Boolean checkOutFile(int proId) {
-    if (log.isDebugEnabled())
-      log.debug("[监测页面是否正在编辑，proId=" + proId + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[监测页面是否正在编辑，proId=" + proId + "]");
+	} 
     return this.iPageInfoService.checkOutFile(proId);
   }
   
   @RequestMapping({"/getDeviceInfo"})
   @ResponseBody
   public List<DeviceInfo> getDeviceInfo() {
-    if (log.isDebugEnabled())
-      log.debug("[获取测控设备]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取测控设备]");
+	} 
     return this.iPageInfoService.getDeviceInfo();
   }
   
@@ -94,8 +100,9 @@ public class PageInfoControler {
   @RequestMapping({"/getParamInfo"})
   @ResponseBody
   public String getParamInfo(String mid) {
-    if (log.isDebugEnabled())
-      log.debug("[获取航天器参数信息mid=" + mid + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[获取航天器参数信息mid=" + mid + "]");
+	} 
     return this.iPageInfoService.getParamInfo(mid);
   }
   /*
@@ -104,36 +111,42 @@ public class PageInfoControler {
   @RequestMapping({"/changeReceiveDataState"})
   @ResponseBody
   public String changeReceiveDataState(HttpServletRequest request, String mid, String show_id) {
-    if (log.isDebugEnabled())
-      log.debug("[改变数据接收状态mid=" + mid + ",show_id=" + show_id + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[改变数据接收状态mid=" + mid + ",show_id=" + show_id + "]");
+	} 
     String clientIp = PageTools.getLocalIp(request);
     boolean flag = this.iPageInfoService.changeReceiveDataState(mid, show_id, clientIp);
-    if (flag)
-      return "true"; 
+    if (flag) {
+		return "true";
+	} 
     return "false";
   }
   
   @RequestMapping({"/changeSelectTerm"})
   @ResponseBody
   public String changeSelectTerm(String dev_mids, HttpServletRequest request) {
-    if (log.isDebugEnabled())
-      log.debug("[改变数据接收状态devmids=" + dev_mids + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[改变数据接收状态devmids=" + dev_mids + "]");
+	} 
     String clientIp = PageTools.getLocalIp(request);
     boolean flag = this.iPageInfoService.changeSelectTerm(dev_mids, clientIp);
-    if (flag)
-      return "true"; 
+    if (flag) {
+		return "true";
+	} 
     return "false";
   }
   
   @RequestMapping({"/deletePageCacheInfo"})
   @ResponseBody
   public String deletePageCacheInfo(String tabid, HttpServletRequest request) {
-    if (log.isDebugEnabled())
-      log.debug("[改变数据接收状态tabid=" + tabid + "]"); 
+    if (log.isDebugEnabled()) {
+		log.debug("[改变数据接收状态tabid=" + tabid + "]");
+	} 
     String clientIp = PageTools.getLocalIp(request);
     PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
-    if (poi != null)
-      poi.setSelectPageID(null); 
+    if (poi != null) {
+		poi.setSelectPageID(null);
+	} 
     return "true";
   }
   
