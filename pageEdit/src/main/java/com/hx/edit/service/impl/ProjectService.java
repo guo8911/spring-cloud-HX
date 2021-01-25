@@ -187,11 +187,11 @@ public class ProjectService implements IProjectService {
   public String copyFile(int srcId, int owner, String name, String uid, LoginUserBean loginUser) {
     String data = null;
     SxCheckout sxCheckout = sxCheckoutMapper.getCheckout(srcId);
-    if (sxCheckout.getData() != null) {
+    if (sxCheckout != null) {
       data = sxCheckout.getData();
     } else {
     	SxFile sxFile = sxFileMapper.getFile(srcId);
-      if (sxFile.getData() != null)
+      if (sxFile != null)
         data = sxFile.getData(); 
     } 
     return addFile(name, owner, "1", data, uid, loginUser);
@@ -258,11 +258,11 @@ public class ProjectService implements IProjectService {
 	String data = null;
 	if (readOnly) {
 		 sxCheckout = sxCheckoutMapper.getCheckout(proId);
-	  if (sxCheckout.getData() != null)
+	  if (sxCheckout != null)
 	    data =sxCheckout.getData(); 
 	} else {
 		sxFile = sxFileMapper.getFile(proId);
-	  if (sxFile.getData() != null)
+	  if (sxFile != null)
 	    data = sxFile.getData(); 
 	} 
 	return data;

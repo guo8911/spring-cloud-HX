@@ -219,7 +219,7 @@ public class TMValueFactory {
     param.setNum(tm.getNum());
     param.setSource(tm.getSource());
     param.setTm_id(tm.getId());
-    param.setValue((String)tm.getValue());
+    param.setValue(tm.getValue()+"");
     param.setChangeFlag(true);
     return param;
   }

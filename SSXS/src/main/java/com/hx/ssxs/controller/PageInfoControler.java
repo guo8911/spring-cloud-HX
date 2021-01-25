@@ -52,8 +52,6 @@ public class PageInfoControler {
   @RequestMapping({"/updateSelectPage"})
   @ResponseBody
   public String updateSelectPage(String tabid, String mid, HttpServletRequest request) {
-	  System.out.println("test..........");
-	  System.out.println(request.getSession().getAttribute("testName"));
     if (log.isDebugEnabled())
       log.debug("[获取固定页面信息，id=" + tabid + "]"); 
     String clientIp = PageTools.getLocalIp(request);
@@ -139,14 +137,15 @@ public class PageInfoControler {
     return "true";
   }
   
-//  @RequestMapping({"/getTrackCountInfo"})
-//  @ResponseBody
-//  public String getTrackCountInfo(String mid) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取轨道计算结果数据mid=" + mid + "]"); 
-//    return this.service.getTrackCountInfo(mid);
-//  }
-//  
+  @RequestMapping({"/getTrackCountInfo"})
+  @ResponseBody
+  public String getTrackCountInfo(int mid) {
+    if (log.isDebugEnabled()) {
+		log.debug("[获取轨道计算结果数据mid=" + mid + "]");
+	} 
+    return this.iPageInfoService.getTrackCountInfo(mid);
+  }
+  
 //  @RequestMapping({"/getForecastInfo"})
 //  @ResponseBody
 //  public String getForecastInfo(String mid) {

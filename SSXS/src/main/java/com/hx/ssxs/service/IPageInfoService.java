@@ -21,8 +21,8 @@ public interface IPageInfoService {
   
   String getParamInfo(String paramString);
   
-//  String getTrackCountInfo(String paramString);
-//  
+  String getTrackCountInfo(int paramString);
+  
 //  String getForecastInfo(String paramString);
   
   boolean changeSelectTerm(String paramString1, String paramString2);

@@ -106,7 +106,7 @@ public class PageImpl implements IPage {
     if (entryset.size() == 0)
       return; 
     for (Map.Entry<String, Session> entry : entryset) {
-      String[] keys = ((String)entry.getKey()).split("&&");
+      String[] keys = (""+entry.getKey()).split("&&");
       String clientip = keys[0];
       PageOperateInfo poi = null;
       synchronized (PageCache.selectMap) {

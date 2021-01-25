@@ -79,13 +79,13 @@ public class OtherDataImpl implements IOtherDataHandle {
       if (pd != null)
         result.put("dev_name", 
             (pd.getDevice_name() != null) ? pd.getDevice_name() : ""); 
-      result.put("con_time", (((Map)list.get(i)).get("con_time") != null) ? (String)((Map)list
+      result.put("con_time", (((Map)list.get(i)).get("con_time") != null) ? ""+((Map)list
           .get(i)).get("con_time") : "");
-      result.put("cmd_time", (((Map)list.get(i)).get("cmd_time") != null) ? (String)((Map)list
+      result.put("cmd_time", (((Map)list.get(i)).get("cmd_time") != null) ? ""+((Map)list
           .get(i)).get("cmd_time") : "");
-      result.put("content", (((Map)list.get(i)).get("content") != null) ? (String)((Map)list
+      result.put("content", (((Map)list.get(i)).get("content") != null) ? ""+((Map)list
           .get(i)).get("content") : "");
-      result.put("result", (((Map)list.get(i)).get("result") != null) ? (String)((Map)list
+      result.put("result", (((Map)list.get(i)).get("result") != null) ? ""+((Map)list
           .get(i)).get("result") : "");
     } 
     returnData.put("data", result);
@@ -117,7 +117,7 @@ public class OtherDataImpl implements IOtherDataHandle {
     Map<String, Object> returnData = new HashMap<>();
     Map<String, String> result = new HashMap<>();
     for (int i = 0; i < list.size(); i++) {
-      String time = (String)((Map)list.get(i)).get("send_time");
+      String time = ""+((Map)list.get(i)).get("send_time");
       if (log.isDebugEnabled())
         log.debug("[外测处理前时间=" + time + "]"); 
       String dev_mid = ((Map)list.get(i)).get("dev_mid").toString();
@@ -125,29 +125,29 @@ public class OtherDataImpl implements IOtherDataHandle {
       if (dev_mid != null)
         pd = PageConCache.getInstance().getDeviceInfo(dev_mid); 
       if (pd != null) {
-        result.put("dev_mid", (((Map)list.get(i)).get("dev_mid") != null) ? (String)((Map)list
+        result.put("dev_mid", (((Map)list.get(i)).get("dev_mid") != null) ? ""+((Map)list
             .get(i)).get("dev_mid") : "");
         result.put("dev_name", pd.getDevice_name());
       } 
-      result.put("send_time", (((Map)list.get(i)).get("send_time") != null) ? (String)((Map)list
+      result.put("send_time", (((Map)list.get(i)).get("send_time") != null) ? ""+((Map)list
           .get(i)).get("send_time") : "");
-      result.put("range", (((Map)list.get(i)).get("ranges") != null) ? (String)((Map)list.get(i))
+      result.put("range", (((Map)list.get(i)).get("ranges") != null) ? ""+((Map)list.get(i))
           .get("ranges") : "");
       result.put(
           "range_percent", 
-          (((Map)list.get(i)).get("range_percent") != null) ? (String)((Map)list.get(i)).get(
+          (((Map)list.get(i)).get("range_percent") != null) ? ""+((Map)list.get(i)).get(
             "range_percent") : "");
-      result.put("angle", (((Map)list.get(i)).get("angle") != null) ? (String)((Map)list.get(i))
+      result.put("angle", (((Map)list.get(i)).get("angle") != null) ? ""+((Map)list.get(i))
           .get("angle") : "");
       result.put(
           "angle_percent", 
-          (((Map)list.get(i)).get("angle_percent") != null) ? (String)((Map)list.get(i)).get(
+          (((Map)list.get(i)).get("angle_percent") != null) ? ""+((Map)list.get(i)).get(
             "angle_percent") : "");
-      result.put("pitch", (((Map)list.get(i)).get("pitch") != null) ? (String)((Map)list.get(i))
+      result.put("pitch", (((Map)list.get(i)).get("pitch") != null) ? ""+((Map)list.get(i))
           .get("pitch") : "");
       result.put(
           "pitch_percent", 
-          (((Map)list.get(i)).get("pitch_percent") != null) ? (String)((Map)list.get(i)).get(
+          (((Map)list.get(i)).get("pitch_percent") != null) ? ""+((Map)list.get(i)).get(
             "pitch_percent") : "");
     } 
     returnData.put("data", result);
@@ -183,11 +183,11 @@ public class OtherDataImpl implements IOtherDataHandle {
     Map<String, Object> mapLink = null;
     for (int i = 0; i < list.size(); i++) {
       mapLink = new HashMap<>();
-      String dev_mid = (String)((Map)list.get(i)).get("DevId");
+      String dev_mid = ""+((Map)list.get(i)).get("DevId");
       mapLink.put("dev_mid", dev_mid);
-      String datatype = (String)((Map)list.get(i)).get("Direction");
+      String datatype = ""+((Map)list.get(i)).get("Direction");
       mapLink.put("dataType", datatype);
-      String info = (String)((Map)list.get(i)).get("InfoType");
+      String info = ""+((Map)list.get(i)).get("InfoType");
       mapLink.put("info", info);
       res.add(mapLink);
     } 
@@ -223,23 +223,23 @@ public class OtherDataImpl implements IOtherDataHandle {
       log.debug("[遥控指令处理数据！]"); 
     for (int i = 0; i < list.size(); i++) {
       cmdTe = new CmdTeleControl();
-      String dev_mid = (String)((Map)list.get(i)).get("dev_id");
+      String dev_mid = ""+((Map)list.get(i)).get("dev_id");
       cmdTe.setDev_mid_se(dev_mid);
       PageDevice pd = PageConCache.getInstance().getDeviceInfo(dev_mid);
       if (pd != null)
         cmdTe.setDev_name_se(pd.getDevice_name()); 
-      cmdTe.setCode((String)((Map)list.get(i)).get("code"));
-      cmdTe.setDeclare((((Map)list.get(i)).get("description") != null) ? (String)((Map)list.get(
+      cmdTe.setCode(""+((Map)list.get(i)).get("code"));
+      cmdTe.setDeclare((((Map)list.get(i)).get("description") != null) ? ""+((Map)list.get(
             i)).get("description") : "");
-      cmdTe.setTime_se((((Map)list.get(i)).get("send_time") != null) ? (String)((Map)list.get(i))
+      cmdTe.setTime_se((((Map)list.get(i)).get("send_time") != null) ? ""+((Map)list.get(i))
           .get("send_time") : "");
-      cmdTe.setTime_exe((((Map)list.get(i)).get("execute_time") != null) ? (String)((Map)list
+      cmdTe.setTime_exe((((Map)list.get(i)).get("execute_time") != null) ? ""+((Map)list
           .get(i)).get("execute_time") : "");
-      cmdTe.setCom_result((((Map)list.get(i)).get("comparison_result") != null) ? (String)((Map)list
+      cmdTe.setCom_result((((Map)list.get(i)).get("comparison_result") != null) ? ""+((Map)list
           .get(i)).get("comparison_result") : "");
-      cmdTe.setExe_re((((Map)list.get(i)).get("execute_result") != null) ? (String)((Map)list
+      cmdTe.setExe_re((((Map)list.get(i)).get("execute_result") != null) ? ""+((Map)list
           .get(i)).get("execute_result") : "");
-      cmdTe.setDegree_exe((((Map)list.get(i)).get("execute_count") != null) ? (String)((Map)list
+      cmdTe.setDegree_exe((((Map)list.get(i)).get("execute_count") != null) ? ""+((Map)list
           .get(i)).get("execute_count") : "");
     } 
     for (String clientip : listClientip) {

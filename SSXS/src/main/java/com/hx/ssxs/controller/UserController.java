@@ -25,7 +25,6 @@ public class UserController {
 
   @GetMapping("/findAll")
   public List<User> findAll(HttpServletRequest request){
-	  request.getSession().setAttribute("testName", "测试王小丫");
       return userService.findAll();
   }
 }

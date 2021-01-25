@@ -14,12 +14,14 @@ import com.hx.ssxs.entity.SxCheckout;
 import com.hx.ssxs.entity.SxFile;
 import com.hx.ssxs.entity.SxGuding;
 import com.hx.ssxs.entity.SxProjectSat;
+import com.hx.ssxs.entity.SxTrackCount;
 import com.hx.ssxs.entity.ViewSxProject;
 import com.hx.ssxs.mapper.DeviceInfoMapper;
 import com.hx.ssxs.mapper.SxCheckoutMapper;
 import com.hx.ssxs.mapper.SxFileMapper;
 import com.hx.ssxs.mapper.SxGudingMapper;
 import com.hx.ssxs.mapper.SxProjectMapper;
+import com.hx.ssxs.mapper.SxTrackCountMapper;
 import com.hx.ssxs.mapper.ViewSxProjectMapper;
 import com.hx.ssxs.service.IPageInfoService;
 import com.hx.ssxs.util.PageTools;
@@ -65,6 +67,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
   private SxCheckoutMapper sxCheckoutMapper;
   @Autowired
   private DeviceInfoMapper deviceInfoMapper;
+  @Autowired
+  private SxTrackCountMapper sxTrackCountMapper;
   
   public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
@@ -142,7 +146,7 @@ public class PageInfoServiceImpl implements IPageInfoService {
   
   public String getPageFile(int proId, int mid, boolean readOnly) {
 	  SxFile pageInfo = sxFileMapper.getPageFile(proId);
-    if (pageInfo.getData() != null) {
+    if (pageInfo != null) {
       String data = pageInfo.getData();
       addPageConCache(data, proId, mid);
       return data;
@@ -152,7 +156,7 @@ public class PageInfoServiceImpl implements IPageInfoService {
   
   public Boolean checkOutFile(int proId) {
 	  SxCheckout map = sxCheckoutMapper.checkOutFile(proId);
-    if (map.getData() != null)
+    if (map != null)
       return true; 
     return false;
   }
@@ -182,7 +186,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
     List<Map<String, Object>> list = paramList.get(mid);
     Map<String, Object> map = new HashMap<>();
     map.put("Rows", list);
-    map.put("Total", Integer.valueOf(list.size()));
+    if(list !=null) {
+    	map.put("Total", list.size());
+    }
     return JSONArray.toJSONString(map);
   }
   
@@ -201,32 +207,32 @@ public class PageInfoServiceImpl implements IPageInfoService {
     for (int i = 0; i < list.size(); i++) {
       tb = new PageTMBean();
       map = list.get(i);
-      String id = (String)map.get("id");
+      String id = ""+map.get("id");
       tb.setModuleId(id);
-      String pid = (String)map.get("pid");
+      String pid = ""+map.get("pid");
       tb.setPid(pid);
       Map<String, Object> map1 = (Map<String, Object>)map.get("properties");
       if ("4".equals(pid)) {
-        tb.setDev(Integer.parseInt((String)map1.get("dev")));
-        tb.setDisplayContent((String)map1.get("displayContent"));
+        tb.setDev(Integer.parseInt(""+map1.get("dev")));
+        tb.setDisplayContent(""+map1.get("displayContent"));
       } 
       List<Map<String, Object>> list1 = (List<Map<String, Object>>)map1.get("params");
       if ("2".equals(pid)) {
         if (map1.get("colNum") != null) {
-          int colums = Integer.parseInt((String)map1.get("colNum"));
+          int colums = Integer.parseInt(""+map1.get("colNum"));
           if (colums != 0)
             tb.setColNum(colums); 
         } 
       } else if ("3".equals(pid) || "5".equals(pid)) {
         if (map1.get("dev") != null) {
-          int colums = Integer.parseInt((String)map1.get("dev"));
+          int colums = Integer.parseInt(""+map1.get("dev"));
           if (colums != 0)
             tb.setColNum(colums); 
         } 
         isgrid = false;
       } else if ("4".equals(pid) && 
         map1.get("dev") != null) {
-        int colums = Integer.parseInt((String)map1.get("dev"));
+        int colums = Integer.parseInt(""+map1.get("dev"));
         if (colums != 0)
           tb.setColNum(colums); 
       } 
@@ -235,9 +241,9 @@ public class PageInfoServiceImpl implements IPageInfoService {
         for (int j = 0; j < list1.size(); j++) {
           pt = new PageTM();
           map = list1.get(j);
-          String tm_name = (String)map.get("name");
-          String tm_code = (String)map.get("code");
-          int num = Integer.parseInt((String)map.get("parId"));
+          String tm_name = ""+map.get("name");
+          String tm_code = ""+map.get("code");
+          int num = Integer.parseInt(map.get("parId")+"");
           pt.setTm_code(tm_code);
           pt.setTm_name(tm_name);
           pt.setNum(num);
@@ -261,18 +267,19 @@ public class PageInfoServiceImpl implements IPageInfoService {
     } 
   }
   
-//  public String getTrackCountInfo(String mid) {
-//    List<Map<String, Object>> list = this.dao.getTrackCountInfo(mid);
-//    Map<String, Object> map = new HashMap<>();
-//    List<Map<String, Object>> result = new ArrayList<>();
-//    for (int i = 0; i < list.size() && 
-//      i <= 19; i++)
-//      result.add(list.get(i)); 
-//    map.put("Rows", result);
-//    map.put("Total", Integer.valueOf(result.size()));
-//    return JSONArray.toJSONString(map);
-//  }
-//  
+  public String getTrackCountInfo(int mid) {
+	  List<SxTrackCount> list = sxTrackCountMapper.getTrackCount(mid);
+    Map<String, Object> map = new HashMap<>();
+    List<SxTrackCount> result = new ArrayList<>();
+    for (int i = 0; i < list.size() && 
+      i <= 19; i++) {
+    	result.add(list.get(i)); 
+    }
+    map.put("Rows", result);
+    map.put("Total", Integer.valueOf(result.size()));
+    return JSONArray.toJSONString(map);
+  }
+  
 //  public String getForecastInfo(String mid) {
 //    List<Map<String, Object>> list = this.dao.getForecastInfo(mid);
 //    Map<String, Object> map = new HashMap<>();
