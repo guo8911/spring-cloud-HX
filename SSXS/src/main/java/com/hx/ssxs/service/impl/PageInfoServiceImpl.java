@@ -88,17 +88,17 @@ public class PageInfoServiceImpl implements IPageInfoService {
 public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
 	  List<SxProjectSat> sxProjectSatList = sxProjectMapper.getSatProject();
-    String localurl = PageTools.getLocalUrl(request);
+//    String localurl = PageTools.getLocalUrl(request);
     for (ViewSxProject viewSxProject : viewSxProjectList) {
       if ("2".equals(viewSxProject.getType())) {
-    	  viewSxProject.setIcon(localurl + "main/img/asterisk_orange.png");
+    	  viewSxProject.setIcon("asterisk_orange.png");
       } else if ("1".equals(viewSxProject.getType())) {
-    	  viewSxProject.setIcon(localurl + "main/img/file.ico");
+    	  viewSxProject.setIcon("file.ico");
       } 
       if (viewSxProject.getOwner() == 0) {
-    	  viewSxProject.setIcon(localurl + "main/img/sat.gif");
+    	  viewSxProject.setIcon("sat.gif");
       } else if ("0".equals(viewSxProject.getType())) {
-		viewSxProject.setIcon(localurl + "main/img/folder.ico");
+		viewSxProject.setIcon("folder.ico");
 	} 
     } 
     for (int j = 0; j < viewSxProjectList.size(); j++) {
