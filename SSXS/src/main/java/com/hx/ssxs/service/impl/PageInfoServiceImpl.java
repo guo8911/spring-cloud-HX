@@ -12,20 +12,27 @@ import com.hx.ssxs.entity.PageTMBean;
 import com.hx.ssxs.entity.SatInfoManager;
 import com.hx.ssxs.entity.SxCheckout;
 import com.hx.ssxs.entity.SxFile;
+import com.hx.ssxs.entity.SxFollow;
 import com.hx.ssxs.entity.SxGuding;
 import com.hx.ssxs.entity.SxProjectSat;
+import com.hx.ssxs.entity.SxSatDown;
 import com.hx.ssxs.entity.SxTrackCount;
 import com.hx.ssxs.entity.ViewSxProject;
 import com.hx.ssxs.mapper.DeviceInfoMapper;
 import com.hx.ssxs.mapper.SxCheckoutMapper;
 import com.hx.ssxs.mapper.SxFileMapper;
+import com.hx.ssxs.mapper.SxFollowMapper;
 import com.hx.ssxs.mapper.SxGudingMapper;
 import com.hx.ssxs.mapper.SxProjectMapper;
+import com.hx.ssxs.mapper.SxSatDownMapper;
 import com.hx.ssxs.mapper.SxTrackCountMapper;
 import com.hx.ssxs.mapper.ViewSxProjectMapper;
 import com.hx.ssxs.service.IPageInfoService;
+import com.hx.ssxs.util.DateTools;
 import com.hx.ssxs.util.PageTools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 //import com.xpoplarsoft.framework.parameter.SystemParameter;
 //import com.xpoplarsoft.framework.utils.DateTools;
 //import com.yk.ssxs.bean.PageOperateInfo;
@@ -47,6 +54,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -69,13 +77,17 @@ public class PageInfoServiceImpl implements IPageInfoService {
   private DeviceInfoMapper deviceInfoMapper;
   @Autowired
   private SxTrackCountMapper sxTrackCountMapper;
+  @Autowired
+  private SxFollowMapper sxFollowMapper;
+  @Autowired
+  private SxSatDownMapper sxSatDownMapper;
+  @Value("${satCycle1}")
+  private String satCycle1;
   
   @Override
 public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	  List<ViewSxProject> viewSxProjectList = viewSxProjectMapper.getProj();
 	  List<SxProjectSat> sxProjectSatList = sxProjectMapper.getSatProject();
-//	  List<Map<String, Object>> maps = this.dao.getTree();
-//    List<Map<String, Object>> satmap = this.dao.getSatProject();
     String localurl = PageTools.getLocalUrl(request);
     for (ViewSxProject viewSxProject : viewSxProjectList) {
       if ("2".equals(viewSxProject.getType())) {
@@ -295,18 +307,19 @@ public String getTrackCountInfo(int mid) {
     map.put("Total", Integer.valueOf(result.size()));
     return JSONArray.toJSONString(map);
   }
-  
-//  public String getForecastInfo(String mid) {
-//    List<Map<String, Object>> list = this.dao.getForecastInfo(mid);
-//    Map<String, Object> map = new HashMap<>();
-//    List<Map<String, Object>> result = new ArrayList<>();
-//    for (int i = 0; i < list.size() && 
-//      i <= 19; i++)
-//      result.add(list.get(i)); 
-//    map.put("Rows", result);
-//    map.put("Total", Integer.valueOf(result.size()));
-//    return JSONArray.toJSONString(map);
-//  }
+  @Override
+  public String getForecastInfo(int mid) {
+    List<SxFollow> list = sxFollowMapper.getForecast(mid);
+    Map<String, Object> map = new HashMap<>();
+    List<SxFollow> result = new ArrayList<>();
+    for (int i = 0; i < list.size() && 
+      i <= 19; i++) {
+		result.add(list.get(i));
+	} 
+    map.put("Rows", result);
+    map.put("Total", Integer.valueOf(result.size()));
+    return JSONArray.toJSONString(map);
+  }
   
   @Override
 public boolean changeSelectTerm(String devmids, String clientIp) {
@@ -360,23 +373,40 @@ public boolean changeSelectTerm(String devmids, String clientIp) {
 public boolean changeReceiveDataState(String mid, String show_id, String clientIp) {
     return true;
   }
+  /**
+   * 方法保留，暂时没有用处
+   * */
+  @Override
+  public String getSatDownForecastInfo(String lastime, int mid) {
+	  String cycle = satCycle1;
+    if (cycle == null || "".equals(cycle)) {
+      if (log.isDebugEnabled()) {
+		log.debug("[航天器mid=" + mid + "运行周期为空]");
+	} 
+      cycle = "100";
+    } 
+    if (lastime == null || "".equals(lastime)) {
+      lastime = DateTools.getCurryDateTime(); 
+    }
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    long endTime = 0L;
+    try {
+      endTime = sdf.parse(lastime).getTime() + (Integer.parseInt(cycle) * 60000);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } 
+    String endtime = sdf.format(Long.valueOf(endTime));
+    SxSatDown sxSatDown =new SxSatDown();
+    sxSatDown.setMid(mid);
+    sxSatDown.setLasttime(lastime);
+    sxSatDown.setEndtime(endtime);
+    List<SxSatDown> list = sxSatDownMapper.getSatDownForecastInfo(sxSatDown);
+    Map<String, Object> map = new HashMap<>();
+    map.put("Rows", list);
+    map.put("Total", Integer.valueOf(list.size()));
+    return JSONArray.toJSONString(map);
+  }
   
-//  public String getSatDownForecastInfo(String lastime, String mid) {
-//    String cycle = SystemParameter.getInstance().getParameter("satCycle" + mid);
-//    if (cycle == null && "".equals(cycle)) {
-//      if (log.isDebugEnabled())
-//        log.debug("[航天器mid=" + mid + "运行周期为空]"); 
-//      cycle = "100";
-//    } 
-//    if ("".equals(lastime))
-//      lastime = DateTools.getCurryDateTime(); 
-//    List<Map<String, Object>> list = this.dao.getSatDownForecastInfo(lastime, mid, Integer.parseInt(cycle));
-//    Map<String, Object> map = new HashMap<>();
-//    map.put("Rows", list);
-//    map.put("Total", Integer.valueOf(list.size()));
-//    return JSONArray.toJSONString(map);
-//  }
-//  
   @Override
 public Object updateSelectPage(String tabid, String mid, String clientIp) {
     synchronized (PageCache.selectMap) {

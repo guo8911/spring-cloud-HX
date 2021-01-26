@@ -10,10 +10,6 @@ import com.hx.ssxs.entity.ViewSxProject;
 import com.hx.ssxs.service.IPageInfoService;
 import com.hx.ssxs.util.PageTools;
 
-//import com.xpoplarsoft.framework.parameter.SystemParameter;
-//import com.yk.ssxs.bean.PageOperateInfo;
-//import com.yk.ssxs.cache.PageCache;
-//import com.yk.ssxs.util.PageTools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +17,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+/**
+ * @author Jerome Guo
+ * 20210126
+ * */
 @Controller
-@RequestMapping({"/pageInfoAction"})
+@RequestMapping({"/rest/pageInfoAction"})
 public class PageInfoControler {
   private static Log log = LogFactory.getLog(PageInfoControler.class);
   
   @Autowired
   private IPageInfoService iPageInfoService;
+  @Value("${sysManagerAddr}")
+  private String sysManagerAddr;
   
   @RequestMapping({"/getTree"})
   @ResponseBody
@@ -159,30 +161,31 @@ public class PageInfoControler {
     return this.iPageInfoService.getTrackCountInfo(mid);
   }
   
-//  @RequestMapping({"/getForecastInfo"})
-//  @ResponseBody
-//  public String getForecastInfo(String mid) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取跟踪预报信息数据mid=" + mid + "]"); 
-//    return this.service.getForecastInfo(mid);
-//  }
-//  
-//  @RequestMapping({"/getSysManagerAddr"})
-//  @ResponseBody
-//  public String getSysManagerAddr(HttpServletRequest request) {
-//    Map<String, Object> map = new HashMap<>();
-//    String pageUrl = SystemParameter.getInstance().getParameter(
-//        "sysManagerAddr");
-//    map.put("result", Boolean.valueOf(true));
-//    map.put("url", pageUrl);
-//    return JSON.toJSONString(map);
-//  }
-//  
-//  @RequestMapping({"/getSatDownForecastInfo"})
-//  @ResponseBody
-//  public String getSatDownForecastInfo(String lastime, String mid) {
-//    if (log.isDebugEnabled())
-//      log.debug("[获取星下点预报信息数据mid=" + mid + ",lastime=" + lastime + "]"); 
-//    return this.service.getSatDownForecastInfo(lastime, mid);
-//  }
+  @RequestMapping({"/getForecastInfo"})
+  @ResponseBody
+  public String getForecastInfo(int mid) {
+    if (log.isDebugEnabled()) {
+		log.debug("[获取跟踪预报信息数据mid=" + mid + "]");
+	} 
+    return this.iPageInfoService.getForecastInfo(mid);
+  }
+  
+  @RequestMapping({"/getSysManagerAddr"})
+  @ResponseBody
+  public String getSysManagerAddr(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<>();
+    String pageUrl = sysManagerAddr;
+    map.put("result", Boolean.valueOf(true));
+    map.put("url", pageUrl);
+    return JSON.toJSONString(map);
+  }
+  
+  @RequestMapping({"/getSatDownForecastInfo"})
+  @ResponseBody
+  public String getSatDownForecastInfo(String lastime, int mid) {
+    if (log.isDebugEnabled()) {
+		log.debug("[获取星下点预报信息数据mid=" + mid + ",lastime=" + lastime + "]");
+	} 
+    return this.iPageInfoService.getSatDownForecastInfo(lastime, mid);
+  }
 }

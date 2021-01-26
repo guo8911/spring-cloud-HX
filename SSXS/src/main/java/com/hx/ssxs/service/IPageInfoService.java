@@ -23,13 +23,13 @@ public interface IPageInfoService {
   
   String getTrackCountInfo(int paramString);
   
-//  String getForecastInfo(String paramString);
+  String getForecastInfo(int paramString);
   
   boolean changeSelectTerm(String paramString1, String paramString2);
   
   boolean changeReceiveDataState(String paramString1, String paramString2, String paramString3);
   
-//  String getSatDownForecastInfo(String paramString1, String paramString2);
-//  
+  String getSatDownForecastInfo(String paramString1, int paramString2);
+  
   Object updateSelectPage(String paramString1, String paramString2, String paramString3);
 }
