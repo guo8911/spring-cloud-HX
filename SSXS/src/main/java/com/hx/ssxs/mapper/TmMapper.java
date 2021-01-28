@@ -9,4 +9,5 @@ import com.hx.ssxs.entity.Tm;
 @Mapper
 public interface TmMapper {
 	List<Tm> getParamInfo(int mid);
+	List<Tm> getTmBySatId(int sat_id);
 }

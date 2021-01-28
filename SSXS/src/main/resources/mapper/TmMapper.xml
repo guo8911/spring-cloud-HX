@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hx.ssxs.mapper.TmMapper">
-	<select id="getParamInfo" parameterType="int" resultType="Tm">
+	<resultMap type="Tm" id="tmResultMap">
+    	<id column="TM_ID" property="tm_id" />
+    	<result column="SAT_ID" property="sat_id" />
+    	<result column="TM_NUM" property="tm_num" />
+    	<result column="TM_NAME" property="tm_name" />
+    	<result column="TM_ALIAS" property="tm_alias" />
+    	<result column="TM_CODE" property="tm_code" />
+    	<result column="TM_TYPE" property="tm_type" />
+    	<result column="TM_BDH" property="tm_bdh" />
+    	<result column="STATUS" property="status" />
+    	<result column="CREATE_USER" property="create_user" />
+    	<result column="CREATE_TIME" property="create_time" />
+    	<result column="DATA_TYPE" property="data_type" />
+    	<result column="EXPRESSION" property="expression" />
+    	<result column="TM_UNIT" property="tm_unit" />
+    </resultMap>
+    
+	<select id="getParamInfo" parameterType="int" resultMap="tmResultMap" fetchSize="1000">
 		SELECT * from tm t LEFT JOIN SATELLITE s on s.SAT_ID=t.SAT_ID 
 		WHERE t.STATUS= 0 AND s.MID=#{mid} AND s.status=0 
 		ORDER BY t.tm_num
+	</select>
+	<select id="getTmBySatId" parameterType="int" resultMap="tmResultMap" fetchSize="1000">
+		select * from tm where status=0 and sat_id=#{sat_id}
 	</select>
 </mapper>
