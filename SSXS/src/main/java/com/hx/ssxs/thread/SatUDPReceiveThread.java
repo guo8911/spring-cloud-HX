@@ -48,16 +48,18 @@ public class SatUDPReceiveThread implements Runnable {
     } 
   }
   
-  public void run() {
+  @Override
+public void run() {
 	byte[] data = null;
     while (true)
     {
       this.usi = 
         new UDPServerImpl(this.ip, Integer.parseInt(this.port), 
         Integer.parseInt(this.type));
-      if (this.log.isDebugEnabled())
-        this.log.debug("[航天器代号：" + this.code + " 通道类型：" + this.type + 
+      if (this.log.isDebugEnabled()) {
+		this.log.debug("[航天器代号：" + this.code + " 通道类型：" + this.type + 
           " 组播地址:" + this.ip + " 端口:" + this.port + "]");
+	}
       try
       {
         while (this.usi.isStatus()) {

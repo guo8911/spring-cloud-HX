@@ -49,43 +49,51 @@ public class UDPServerImpl extends AbstractAdapter {
       this.client.setNetworkInterface(NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
       this.status = true;
     } catch (Exception e) {
-      if (log.isErrorEnabled())
-        log.error("创建udp client发生异常", e); 
-      if (this.client != null)
-        close(); 
+      if (log.isErrorEnabled()) {
+		log.error("创建udp client发生异常", e);
+	} 
+      if (this.client != null) {
+		close();
+	} 
     } 
   }
   
   public boolean multicastSend(byte[] data) {
     boolean result = false;
     try {
-      if (log.isDebugEnabled())
-        log.debug("组件UDPAdapterImpl[multicastSend]开始执行,发送数据长度为[" + data.length + "]"); 
+      if (log.isDebugEnabled()) {
+		log.debug("组件UDPAdapterImpl[multicastSend]开始执行,发送数据长度为[" + data.length + "]");
+	} 
       DatagramPacket dp = new DatagramPacket(data, data.length, this.group, this.port);
       this.client.send(dp);
       result = true;
     } catch (Exception e) {
-      if (log.isErrorEnabled())
-        log.error("组播发送方法[multicastSend]发生异常", e); 
+      if (log.isErrorEnabled()) {
+		log.error("组播发送方法[multicastSend]发生异常", e);
+	} 
     } 
     return result;
   }
   
   public byte[] recieveData(int data_length) {
     try {
-      if (this.data == null)
-        this.data = new byte[data_length]; 
-      if (this.dp == null)
-        this.dp = new DatagramPacket(this.data, data_length); 
+      if (this.data == null) {
+		this.data = new byte[data_length];
+	} 
+      if (this.dp == null) {
+		this.dp = new DatagramPacket(this.data, data_length);
+	} 
       this.client.receive(this.dp);
       int dataLen = this.dp.getLength();
-      if (log.isDebugEnabled())
-        log.debug("实际接收到的数据长度为[" + dataLen + "]"); 
+      if (log.isDebugEnabled()) {
+		log.debug("实际接收到的数据长度为[" + dataLen + "]");
+	} 
       this.dataBuf = new byte[dataLen];
       System.arraycopy(this.data, 0, this.dataBuf, 0, dataLen);
     } catch (Exception e1) {
-      if (log.isDebugEnabled())
-        log.debug("[遥测数据接收异常！" + e1 + "]"); 
+      if (log.isDebugEnabled()) {
+		log.debug("[遥测数据接收异常！" + e1 + "]");
+	} 
       this.status = false;
     } 
     return this.dataBuf;
@@ -95,14 +103,16 @@ public class UDPServerImpl extends AbstractAdapter {
     try {
       this.client.leaveGroup(this.group);
     } catch (Exception e) {
-      if (log.isErrorEnabled())
-        log.error("client leaveGroup error", e); 
+      if (log.isErrorEnabled()) {
+		log.error("client leaveGroup error", e);
+	} 
     } 
     try {
       this.client.close();
     } catch (Exception e) {
-      if (log.isErrorEnabled())
-        log.error("client close error", e); 
+      if (log.isErrorEnabled()) {
+		log.error("client close error", e);
+	} 
     } 
   }
 }

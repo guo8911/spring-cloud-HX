@@ -51,8 +51,9 @@ public class ConnectTMInfoLoad {
     System.out.println("开始初始化遥测数据...");
     List<SatNet> satNetList = satNetMapper.getSatTMConnect();
     List<String> list = new ArrayList<>();
-    if (this.log.isDebugEnabled())
-      this.log.debug("开始创建接收线程..."); 
+    if (this.log.isDebugEnabled()) {
+		this.log.debug("开始创建接收线程...");
+	} 
     Thread thread = null;
     if (satNetList != null) {
       for (SatNet satNet : satNetList) {
@@ -96,14 +97,17 @@ public class ConnectTMInfoLoad {
           div.setMap(mapConfig);
           sim.getTmf().displayValueLoad(div);
         } 
-        if (!PageCache.satInfo.containsKey(satCode))
-          PageCache.satInfo.put(satCode, Integer.valueOf(mid)); 
+        if (!PageCache.satInfo.containsKey(satCode)) {
+			PageCache.satInfo.put(satCode, Integer.valueOf(mid));
+		} 
       } 
     } 
-    if (this.log.isDebugEnabled())
-      this.log.debug("创建接收线程完成！"); 
-    if (this.log.isDebugEnabled())
-      this.log.debug("正在加载遥测数据..."); 
+    if (this.log.isDebugEnabled()) {
+		this.log.debug("创建接收线程完成！");
+	} 
+    if (this.log.isDebugEnabled()) {
+		this.log.debug("正在加载遥测数据...");
+	} 
     System.out.println("正在加载遥测数据...");
     if (list.size() != 0) {
       TMValue tmcache = null;
@@ -133,9 +137,9 @@ public class ConnectTMInfoLoad {
               } else if ("2".equals(dataType)) {
                 tmcache.setDataType(DataType.STRING);
               } 
-              mapTM.put(String.valueOf(dev_mid) + "&&" + num + "&&" + mid, tmcache);
+              mapTM.put(dev_mid + "&&" + num + "&&" + mid, tmcache);
             } 
-            System.out.println(String.valueOf(dev_mid) + "航天器" + mid + "参数放入缓存！");
+            System.out.println("设备" + dev_mid + "航天器" + mid + "参数放入缓存！");
           } 
           sim.getTmf().load(mapTM);
           thread = new Thread((Runnable)new SatPageHandleThread(Integer.parseInt(mid)), String.valueOf(mid) + "&&TMhandle");
@@ -143,16 +147,19 @@ public class ConnectTMInfoLoad {
         } 
       } 
       System.out.println("加载遥测数据完成！");
-      if (this.log.isDebugEnabled())
-        this.log.debug("加载遥测数据完成！"); 
-      if (this.log.isDebugEnabled())
-        this.log.debug("正在启动遥测数据接收线程..."); 
+      if (this.log.isDebugEnabled()) {
+		this.log.debug("加载遥测数据完成！");
+	} 
+      if (this.log.isDebugEnabled()) {
+		this.log.debug("正在启动遥测数据接收线程...");
+	} 
       for (String mid : list) {
         sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(Integer.parseInt(mid)));
         sim.receiveThreadRun();
       } 
-      if (this.log.isDebugEnabled())
-        this.log.debug("启动遥测数据接收线程完成！"); 
+      if (this.log.isDebugEnabled()) {
+		this.log.debug("启动遥测数据接收线程完成！");
+	} 
       System.out.println("初始化遥测数据完成！");
     } 
   }
