@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SxTrackCount implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int pk_id;
+	private Integer pk_id;
 	private String dataTime;
 	private String half_roller;
 	private String bias;
@@ -12,13 +12,13 @@ public class SxTrackCount implements Serializable  {
 	private String spot_equator;
 	private String place_angle;
 	private String flat_angle;
-	private int sat_id;
+	private Integer sat_id;
 	private String submiter_id;
 	private String submit_time;
-	public int getPk_id() {
+	public Integer getPk_id() {
 		return pk_id;
 	}
-	public void setPk_id(int pk_id) {
+	public void setPk_id(Integer pk_id) {
 		this.pk_id = pk_id;
 	}
 	public String getDataTime() {
@@ -63,10 +63,10 @@ public class SxTrackCount implements Serializable  {
 	public void setFlat_angle(String flat_angle) {
 		this.flat_angle = flat_angle;
 	}
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
 	public String getSubmiter_id() {

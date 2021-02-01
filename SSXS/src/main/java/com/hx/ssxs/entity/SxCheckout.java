@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class SxCheckout implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int proj_id;
+	private Integer proj_id;
 	private String user_id;
 	private String data;
-	public int getProj_id() {
+	public Integer getProj_id() {
 		return proj_id;
 	}
-	public void setProj_id(int proj_id) {
+	public void setProj_id(Integer proj_id) {
 		this.proj_id = proj_id;
 	}
 	public String getUser_id() {

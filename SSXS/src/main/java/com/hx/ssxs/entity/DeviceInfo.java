@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class DeviceInfo implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int pk_id;
+	private Integer pk_id;
 	private String device_coding;
 	private String device_name;
 	private String device_manufact;
@@ -16,14 +16,14 @@ public class DeviceInfo implements Serializable  {
 	private String latitude;
 	private String height;
 	private String work_state;
-	private int mid;
+	private Integer mid;
 	private String device_type;
 	private String track_lead_time;
 	private String aerial_number;
-	public int getPk_id() {
+	public Integer getPk_id() {
 		return pk_id;
 	}
-	public void setPk_id(int pk_id) {
+	public void setPk_id(Integer pk_id) {
 		this.pk_id = pk_id;
 	}
 	public String getDevice_coding() {
@@ -92,10 +92,10 @@ public class DeviceInfo implements Serializable  {
 	public void setWork_state(String work_state) {
 		this.work_state = work_state;
 	}
-	public int getMid() {
+	public Integer getMid() {
 		return mid;
 	}
-	public void setMid(int mid) {
+	public void setMid(Integer mid) {
 		this.mid = mid;
 	}
 	public String getDevice_type() {

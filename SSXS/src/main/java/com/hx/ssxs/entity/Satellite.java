@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class Satellite implements Serializable {
 	private static final long serialVersionUID = 1L;
-    private int sat_id;
-    private int mid;
+    private Integer sat_id;
+    private Integer mid;
     private String sat_name;
     private String sat_code;
-    private int status;
+    private Integer status;
     private String sat_alias;
     private String multicast_address;
     private String udp_port;
@@ -20,16 +20,16 @@ public class Satellite implements Serializable {
     private String send_result_port;
     private String channel;
     private String version;
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
-	public int getMid() {
+	public Integer getMid() {
 		return mid;
 	}
-	public void setMid(int mid) {
+	public void setMid(Integer mid) {
 		this.mid = mid;
 	}
 	public String getSat_name() {
@@ -44,10 +44,10 @@ public class Satellite implements Serializable {
 	public void setSat_code(String sat_code) {
 		this.sat_code = sat_code;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public String getSat_alias() {

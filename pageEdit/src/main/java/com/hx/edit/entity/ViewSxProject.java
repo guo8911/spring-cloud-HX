@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public class ViewSxProject implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private String name;
-	private int owner;
+	private Integer owner;
 	private String type;
 	private String fk;
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -21,10 +21,10 @@ public class ViewSxProject implements Serializable  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getOwner() {
+	public Integer getOwner() {
 		return owner;
 	}
-	public void setOwner(int owner) {
+	public void setOwner(Integer owner) {
 		this.owner = owner;
 	}
 	public String getType() {

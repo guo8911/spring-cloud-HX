@@ -5,38 +5,38 @@ import java.util.Date;
 
 public class Tm implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int tm_id;
-	private int sat_id;
-	private int tm_num;
+	private Integer tm_id;
+	private Integer sat_id;
+	private Integer tm_num;
 	private String tm_name;
 	private String tm_alias;
 	private String tm_code;
-	private int tm_type;
+	private Integer tm_type;
 	private String tm_bdh;
-	private int status;
+	private Integer status;
 	private String create_user;
 	private String create_time;
-	private int data_type;
+	private Integer data_type;
 	private String expression;
 	private String tm_unit;
-	private int start;
-	private int size;
-	public int getTm_id() {
+	private Integer start;
+	private Integer size;
+	public Integer getTm_id() {
 		return tm_id;
 	}
-	public void setTm_id(int tm_id) {
+	public void setTm_id(Integer tm_id) {
 		this.tm_id = tm_id;
 	}
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
-	public int getTm_num() {
+	public Integer getTm_num() {
 		return tm_num;
 	}
-	public void setTm_num(int tm_num) {
+	public void setTm_num(Integer tm_num) {
 		this.tm_num = tm_num;
 	}
 	public String getTm_name() {
@@ -57,10 +57,10 @@ public class Tm implements Serializable  {
 	public void setTm_code(String tm_code) {
 		this.tm_code = tm_code;
 	}
-	public int getTm_type() {
+	public Integer getTm_type() {
 		return tm_type;
 	}
-	public void setTm_type(int tm_type) {
+	public void setTm_type(Integer tm_type) {
 		this.tm_type = tm_type;
 	}
 	public String getTm_bdh() {
@@ -69,10 +69,10 @@ public class Tm implements Serializable  {
 	public void setTm_bdh(String tm_bdh) {
 		this.tm_bdh = tm_bdh;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public String getCreate_user() {
@@ -87,10 +87,10 @@ public class Tm implements Serializable  {
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
 	}
-	public int getData_type() {
+	public Integer getData_type() {
 		return data_type;
 	}
-	public void setData_type(int data_type) {
+	public void setData_type(Integer data_type) {
 		this.data_type = data_type;
 	}
 	public String getExpression() {
@@ -105,16 +105,16 @@ public class Tm implements Serializable  {
 	public void setTm_unit(String tm_unit) {
 		this.tm_unit = tm_unit;
 	}
-	public int getStart() {
+	public Integer getStart() {
 		return start;
 	}
-	public void setStart(int start) {
+	public void setStart(Integer start) {
 		this.start = start;
 	}
-	public int getSize() {
+	public Integer getSize() {
 		return size;
 	}
-	public void setSize(int size) {
+	public void setSize(Integer size) {
 		this.size = size;
 	}
 

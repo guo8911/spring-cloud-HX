@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 public class ViewSxProject implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private String name;
-	private int owner;
+	private Integer owner;
 	private String type;
 	private String fk;
 	private String icon;
-	private int sat_id;
-	private int mid;
+	private Integer sat_id;
+	private Integer mid;
 	private String sat_code;
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -25,10 +25,10 @@ public class ViewSxProject implements Serializable  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getOwner() {
+	public Integer getOwner() {
 		return owner;
 	}
-	public void setOwner(int owner) {
+	public void setOwner(Integer owner) {
 		this.owner = owner;
 	}
 	public String getType() {
@@ -49,16 +49,16 @@ public class ViewSxProject implements Serializable  {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
-	public int getMid() {
+	public Integer getMid() {
 		return mid;
 	}
-	public void setMid(int mid) {
+	public void setMid(Integer mid) {
 		this.mid = mid;
 	}
 	public String getSat_code() {

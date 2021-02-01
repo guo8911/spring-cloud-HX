@@ -5,29 +5,29 @@ import java.io.Serializable;
 public class UnpackConfig implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	private String pk_id;
-	private int sat_id;
+	private Integer sat_id;
 	private String f_id;
-	private int seq;
+	private Integer seq;
 	private String save_site;
 	private String field_name;
-	private int field_len;
+	private Integer field_len;
 	private String exec_func;
 	private String field_desc;
 	private String field_code;
 	private String protocol_id;
-	private int field_start;
-	private int position;
-	private int len_type;
+	private Integer field_start;
+	private Integer position;
+	private Integer len_type;
 	public String getPk_id() {
 		return pk_id;
 	}
 	public void setPk_id(String pk_id) {
 		this.pk_id = pk_id;
 	}
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
 	public String getF_id() {
@@ -36,10 +36,10 @@ public class UnpackConfig implements Serializable  {
 	public void setF_id(String f_id) {
 		this.f_id = f_id;
 	}
-	public int getSeq() {
+	public Integer getSeq() {
 		return seq;
 	}
-	public void setSeq(int seq) {
+	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
 	public String getSave_site() {
@@ -54,10 +54,10 @@ public class UnpackConfig implements Serializable  {
 	public void setField_name(String field_name) {
 		this.field_name = field_name;
 	}
-	public int getField_len() {
+	public Integer getField_len() {
 		return field_len;
 	}
-	public void setField_len(int field_len) {
+	public void setField_len(Integer field_len) {
 		this.field_len = field_len;
 	}
 	public String getExec_func() {
@@ -84,22 +84,22 @@ public class UnpackConfig implements Serializable  {
 	public void setProtocol_id(String protocol_id) {
 		this.protocol_id = protocol_id;
 	}
-	public int getField_start() {
+	public Integer getField_start() {
 		return field_start;
 	}
-	public void setField_start(int field_start) {
+	public void setField_start(Integer field_start) {
 		this.field_start = field_start;
 	}
-	public int getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
-	public int getLen_type() {
+	public Integer getLen_type() {
 		return len_type;
 	}
-	public void setLen_type(int len_type) {
+	public void setLen_type(Integer len_type) {
 		this.len_type = len_type;
 	}
 

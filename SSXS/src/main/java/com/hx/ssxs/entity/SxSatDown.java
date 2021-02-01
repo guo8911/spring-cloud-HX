@@ -5,22 +5,22 @@ import java.util.Date;
 
 public class SxSatDown implements Serializable  {
 	private static final long serialVersionUID = 1L;
-	private int pk_id;
+	private Integer pk_id;
 	private String datatime;
 	private Float longitude;
 	private Float latitude;
 	private Float altitude;
-	private int sat_id;
+	private Integer sat_id;
 	
 	private String sat_name;
 	private String sat_code;
-	private int mid;
+	private Integer mid;
 	private String lasttime;
 	private String endtime;
-	public int getPk_id() {
+	public Integer getPk_id() {
 		return pk_id;
 	}
-	public void setPk_id(int pk_id) {
+	public void setPk_id(Integer pk_id) {
 		this.pk_id = pk_id;
 	}
 	public String getDatatime() {
@@ -47,10 +47,10 @@ public class SxSatDown implements Serializable  {
 	public void setAltitude(Float altitude) {
 		this.altitude = altitude;
 	}
-	public int getSat_id() {
+	public Integer getSat_id() {
 		return sat_id;
 	}
-	public void setSat_id(int sat_id) {
+	public void setSat_id(Integer sat_id) {
 		this.sat_id = sat_id;
 	}
 	public String getSat_name() {
@@ -65,10 +65,10 @@ public class SxSatDown implements Serializable  {
 	public void setSat_code(String sat_code) {
 		this.sat_code = sat_code;
 	}
-	public int getMid() {
+	public Integer getMid() {
 		return mid;
 	}
-	public void setMid(int mid) {
+	public void setMid(Integer mid) {
 		this.mid = mid;
 	}
 	public String getLasttime() {
