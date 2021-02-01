@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: gateway-ws
+          uri: lb:ws://ssxs/WebSocket
+          predicates:
+            - Path=/WebSocket/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8040
+#logging:
+  #level:
+    #org.springframework.cloud.gateway: debug
