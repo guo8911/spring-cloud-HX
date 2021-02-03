@@ -14,7 +14,7 @@ public class PageTools {
       if (forwarded == null) {
         ip = remoteAddr;
       } else {
-        ip = String.valueOf(remoteAddr) + "/" + forwarded.split(",")[0];
+        ip = forwarded.split(",")[0];
       } 
     } else if (realIp.equals(forwarded)) {
       ip = realIp;
@@ -22,7 +22,7 @@ public class PageTools {
       if (forwarded != null) {
 		forwarded = forwarded.split(",")[0];
 	} 
-      ip = String.valueOf(realIp) + "/" + forwarded;
+      ip = forwarded;
     } 
     return ip;
   }
