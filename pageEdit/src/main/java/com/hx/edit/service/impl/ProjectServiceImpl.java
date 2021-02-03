@@ -1,17 +1,12 @@
 package com.hx.edit.service.impl;
 
-//import com.alibaba.fastjson.JSONArray;
-//import com.editor.dao.IProjectDao;
-//import com.editor.service.IProjectService;
-//import com.editor.util.ClobUtil;
-//import com.xpoplarsoft.framework.db.DBResult;
-//import com.xpoplarsoft.framework.interfaces.bean.LoginUserBean;
-//import com.xpoplarsoft.framework.parameter.SystemParameter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -75,7 +70,7 @@ public List<ViewSxProject> getProj(String key) {
     List<ViewSxProject> rsts1 = new ArrayList<>();
     for (ViewSxProject map : maps) {
       for (ViewSxProject rst : rsts) {
-        if (map.getId()==rst.getId()) {
+        if (Objects.equals(map.getId(),rst.getId())) {
           rsts1.add(rst);
           break;
         } 

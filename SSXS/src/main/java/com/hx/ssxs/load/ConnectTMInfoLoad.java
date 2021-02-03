@@ -31,6 +31,12 @@ import com.hx.ssxs.mapper.UnpackConfigMapper;
 import com.hx.ssxs.thread.SatPageHandleThread;
 import com.hx.ssxs.thread.SatUDPReceiveThread;
 import com.hx.ssxs.thread.SatUDPorocoolThread;
+
+/**
+ * @author Jerome Guo
+ * 
+ * 遥测信息加载类
+ * */
 @Component
 public class ConnectTMInfoLoad {
 	@Autowired
@@ -49,6 +55,7 @@ public class ConnectTMInfoLoad {
   public void load() {
     SatInfoManager sim = null;
     System.out.println("开始初始化遥测数据...");
+    //获取卫星数据总线通道
     List<SatNet> satNetList = satNetMapper.getSatTMConnect();
     List<String> list = new ArrayList<>();
     if (this.log.isDebugEnabled()) {
@@ -64,13 +71,15 @@ public class ConnectTMInfoLoad {
         String mid = satNet.getMid();
         String sat_id = satNet.getSat_id();
         String name = String.valueOf(satCode) + "&&&" + type;
+        //创建UDP数据接收线程
         thread = new Thread((Runnable)new SatUDPReceiveThread(type, ip, port, satCode, Integer.parseInt(mid), 65535), name);
-        sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(Integer.parseInt(mid)));
+        sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
         sim.addThread(thread);
         if (!list.contains(mid)) {
           list.add(mid);
           DisplayValueCache div = null;
           Map<String, ConfigDisplay> display = new HashMap<>();
+          //查询遥测参数实际值、显示值
           List<TmDisplay> tmDisplayList = tmDisplayMapper.queryTMDisplayBySatCode(satCode);
           if(tmDisplayList !=null) {
         	  for(TmDisplay tmDisplay : tmDisplayList) {
@@ -86,6 +95,7 @@ public class ConnectTMInfoLoad {
           div = new DisplayValueCache();
           div.setMapc(display);
           Map<String, String> mapConfig = new HashMap<>();
+          //查询解压配置
           List<UnpackConfig> unpackConfigList = unpackConfigMapper.getConfigDis(Integer.valueOf(sat_id));
           if(unpackConfigList !=null) {
         	  for(UnpackConfig unpackConfig : unpackConfigList) {
@@ -111,12 +121,14 @@ public class ConnectTMInfoLoad {
     System.out.println("正在加载遥测数据...");
     if (list.size() != 0) {
       TMValue tmcache = null;
+      //查询设备站信息
       List<DeviceInfo> deviceInfoList = deviceInfoMapper.getDeviceInfo();
       for (String mid : list) {
         thread = new Thread((Runnable)new SatUDPorocoolThread(Integer.parseInt(mid)), "afterproxcool" + mid);
         sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(Integer.parseInt(mid)));
         sim.addThread(thread);
         HashMap<String, TMValue> mapTM = new HashMap<>();
+        //查询遥测参数大表
         List<Tm> tmList = tmMapper.getParamInfo(Integer.valueOf(mid));
         if (tmList != null) {
           for (DeviceInfo devMap : deviceInfoList) {

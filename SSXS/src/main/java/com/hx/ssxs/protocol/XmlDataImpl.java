@@ -69,7 +69,7 @@ public class XmlDataImpl implements IPack<XmlData>{
 		Map<String, String> xMap =  xData.getContain().get(0);
 		String content ="";
 		for (String key : xMap.keySet()) {
-			if (!key.equals("#1") && !key.equals("#2")) {
+			if (!"#1".equals(key) && !"#2".equals(key)) {
 				content = content + "<"+key+">"+xMap.get(key)+"</"+key+"> ";
 			}
 		}

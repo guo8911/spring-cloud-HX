@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -95,7 +96,7 @@ public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
       } else if ("1".equals(viewSxProject.getType())) {
     	  viewSxProject.setIcon("file.ico");
       } 
-      if (viewSxProject.getOwner() == 0) {
+      if (Objects.equals(viewSxProject.getOwner(), 0)) {
     	  viewSxProject.setIcon("sat.gif");
       } else if ("0".equals(viewSxProject.getType())) {
 		viewSxProject.setIcon("folder.ico");
@@ -136,7 +137,7 @@ public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 		return;
 	}
     for (ViewSxProject map : nodes) {
-      if (map.getId() == owner && !rsts.contains(map)) {
+      if (Objects.equals(map.getId(),owner) && !rsts.contains(map)) {
         rsts.add(map);
         addParents(nodes, map, rsts);
       } 
@@ -149,7 +150,7 @@ public List<ViewSxProject> getTree(String keyname, HttpServletRequest request) {
 	} 
     int id = node.getId();
     for (ViewSxProject map : nodes) {
-      if (map.getOwner()==id && !rsts.contains(map)) {
+      if (Objects.equals(map.getOwner(),id) && !rsts.contains(map)) {
         rsts.add(map);
         addChildren(nodes, map, rsts);
       } 
