@@ -47,9 +47,11 @@ public void run() {
             if (this.log.isDebugEnabled()) {
 				this.log.debug(String.valueOf(Thread.currentThread().getName()) + ":mid=" + this.mid + " tasksign=" + tasksign);
 			} 
+            //遥测数据原码
             if (bid == 65536) {
 				this.sim.getTmSource().handle(gp);
 			} 
+            //实时遥测数据处理结果
             if (bid == 65793) {
               List<GroupParameter> groupParameters = gp.getBody().getRealTimeData().getGroupParameters();
               if (this.log.isDebugEnabled()) {
@@ -66,6 +68,7 @@ public void run() {
                 } 
               } 
             } 
+            //延时遥测数据处理结果
             if (bid == 65794) {
             	List list = gp.getBody().getDelayData().getPackageParameters(); 
             }
