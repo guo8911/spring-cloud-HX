@@ -74,7 +74,14 @@ public String editNode(HttpSession session, int id, String name) {
 public String delNode(HttpSession session, int id) {
   LoginUserBean loginUser = (LoginUserBean)session
     .getAttribute("LoginUser");
-  return this.projectService.delNode(id, loginUser);
+  try {
+	this.projectService.delNode(id, loginUser);
+} catch (Exception e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	return "F";
+}
+  return "T";
 }
 
   @RequestMapping({"addFile"})
@@ -82,7 +89,17 @@ public String delNode(HttpSession session, int id) {
   public String addFile(HttpSession session, String name, int owner, String type, String data, String uid) {
     LoginUserBean loginUser = (LoginUserBean)session
       .getAttribute("LoginUser");
-    return this.projectService.addFile(name, owner, type, data, uid, loginUser);
+    String str= "";
+    try {
+    	str =this.projectService.addFile(name, owner, type, data, uid, loginUser);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		if(e.getMessage().contains("NameUnique")) {
+			return "R";
+		}
+	}
+    return str;
   }
   
   @RequestMapping({"copyFile"})

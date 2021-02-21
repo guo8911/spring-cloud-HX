@@ -20,7 +20,7 @@ public interface IProjectService {
   
   String editNode(int id, String paramString2, LoginUserBean paramLoginUserBean);
   
-  String delNode(int paramString, LoginUserBean paramLoginUserBean);
+  void delNode(int paramString, LoginUserBean paramLoginUserBean);
   
   
   String addFile(String paramString1, int paramInt1, String paramInt2, String paramString2, String paramString3, LoginUserBean paramLoginUserBean);

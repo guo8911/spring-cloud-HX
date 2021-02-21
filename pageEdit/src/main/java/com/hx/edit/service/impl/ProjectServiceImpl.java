@@ -150,19 +150,13 @@ public String editNode(int id, String name, LoginUserBean loginUser) {
 	return "F";
   }
   @Override
-@Transactional
-  public String delNode(int id, LoginUserBean loginUser) {
-	  try {
-		  sxFileMapper.deleteFile(id);
-		  sxProjectMapper.deleteProject(id);
-	  }catch(Exception e) {
-		  return "F";
-	  }
-	  
-    return "T";
+  @Transactional
+  public void delNode(int id, LoginUserBean loginUser) {
+	  sxFileMapper.deleteFile(id);
+	  sxProjectMapper.deleteProject(id);
   }
   @Override
-@Transactional
+  @Transactional
   public String addFile(String name, int owner, String type, String data, String uid, LoginUserBean loginUser) {
 	  SxProject sxProject =new SxProject();
 	  sxProject.setName(name);
@@ -172,18 +166,11 @@ public String editNode(int id, String name, LoginUserBean loginUser) {
 	  sxFile.setData(data);
 	  sxFile.setDate(new Date());
 	  sxFile.setUser_id(uid);
-	  try {
-			int i=sxProjectMapper.addNode(sxProject);
-			if(i!=0) {
-				sxFile.setProj_id(sxProject.getId());
-				sxFileMapper.addFile(sxFile);
-				return sxProject.getId()+"";
-			}
-		}catch (Exception e){
-//			System.out.println(e.getMessage());
-			if(e.getMessage().contains("NameUnique")) {
-				return "R";
-			}
+		int i=sxProjectMapper.addNode(sxProject);
+		if(i!=0) {
+			sxFile.setProj_id(sxProject.getId());
+			sxFileMapper.addFile(sxFile);
+			return sxProject.getId()+"";
 		}
 
 	  return "";
