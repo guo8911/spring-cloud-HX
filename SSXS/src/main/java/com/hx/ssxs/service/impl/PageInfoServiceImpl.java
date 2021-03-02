@@ -30,6 +30,7 @@ import com.hx.ssxs.mapper.ViewSxProjectMapper;
 import com.hx.ssxs.service.IPageInfoService;
 import com.hx.ssxs.util.DateTools;
 import com.hx.ssxs.util.PageTools;
+import com.hx.ssxs.util.RedisUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,6 +83,8 @@ public class PageInfoServiceImpl implements IPageInfoService {
   private SxFollowMapper sxFollowMapper;
   @Autowired
   private SxSatDownMapper sxSatDownMapper;
+  @Autowired
+  private RedisUtil redisUtil;
   @Value("${satCycle1}")
   private String satCycle1;
   
@@ -326,24 +329,28 @@ public String getTrackCountInfo(int mid) {
 public boolean changeSelectTerm(String devmids, String clientIp) {
     if (devmids == null) {
 		synchronized (PageCache.selectMap) {
-		    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+			PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientIp);
+//		    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
 		    if (poi != null) {
 		      poi.setFirstDev_mid(0);
 		      poi.setSecondDev_mid(0);
 		      poi.setThirdDev_mid(0);
 		      poi.setAutostate(true);
+		      redisUtil.setHash("selectMap", clientIp, poi);
 		    } else {
 		      poi = new PageOperateInfo();
 		      poi.setCurrntIP(clientIp);
 		      poi.setAutostate(true);
-		      PageCache.selectMap.put(clientIp, poi);
+		      redisUtil.setHash("selectMap", clientIp, poi);
+//		      PageCache.selectMap.put(clientIp, poi);
 		    } 
 		    return true;
 		  }
 	}  
     String[] devmid = devmids.split(",");
     synchronized (PageCache.selectMap) {
-      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+    	PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientIp);
+//      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
       if (poi == null) {
 		poi = new PageOperateInfo();
 	} 
@@ -366,6 +373,7 @@ public boolean changeSelectTerm(String devmids, String clientIp) {
       } else {
         poi.setAutostate(false);
       } 
+      redisUtil.setHash("selectMap", clientIp, poi);
     } 
     return true;
   }
@@ -411,13 +419,15 @@ public boolean changeReceiveDataState(String mid, String show_id, String clientI
   @Override
 public Object updateSelectPage(String tabid, String mid, String clientIp) {
     synchronized (PageCache.selectMap) {
-      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+//      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+      PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientIp);
       if (poi == null) {
 		poi = new PageOperateInfo();
 	} 
       poi.setSelectPageID(tabid);
       poi.setSendFirst(true);
-      PageCache.selectMap.put(clientIp, poi);
+//      PageCache.selectMap.put(clientIp, poi);
+      redisUtil.setHash("selectMap", clientIp, poi);
     } 
     return Boolean.valueOf(true);
   }

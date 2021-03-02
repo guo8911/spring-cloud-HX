@@ -1,7 +1,14 @@
 package com.hx.ssxs.entity;
 
-public class PageOperateInfo {
-  private String currntIP;
+import java.io.Serializable;
+
+public class PageOperateInfo implements Serializable{
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private String currntIP;
   
   private boolean autostate = false;
   
