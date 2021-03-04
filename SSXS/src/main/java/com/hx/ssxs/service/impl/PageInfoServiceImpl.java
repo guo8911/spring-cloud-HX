@@ -284,14 +284,14 @@ public String getParamInfo(String mid) {
       } 
       pageList.add(tb);
     } 
-    PageImpl page = new PageImpl();
+    PageImpl page = new PageImpl(redisUtil);
     page.load(pageList);
     page.setIsgrid(isgrid);
     page.setPageid(proId+"");
-    synchronized (PageCache.map) {
-      SatInfoManager sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+    synchronized (PageCache.simMap) {
+      SatInfoManager sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
       if (sim != null) {
-        sim.getPmi().openPage(page);
+        sim.getPmi().openPage(page,mid);
       } else if (log.isErrorEnabled()) {
         log.error("[mid=" + mid + "的航天器未配置网络接口！]");
       } 
@@ -336,14 +336,13 @@ public boolean changeSelectTerm(String devmids, String clientIp) {
 		      poi.setSecondDev_mid(0);
 		      poi.setThirdDev_mid(0);
 		      poi.setAutostate(true);
-		      redisUtil.setHash("selectMap", clientIp, poi);
 		    } else {
 		      poi = new PageOperateInfo();
 		      poi.setCurrntIP(clientIp);
 		      poi.setAutostate(true);
-		      redisUtil.setHash("selectMap", clientIp, poi);
 //		      PageCache.selectMap.put(clientIp, poi);
 		    } 
+		    redisUtil.setHash("selectMap", clientIp, poi);
 		    return true;
 		  }
 	}  

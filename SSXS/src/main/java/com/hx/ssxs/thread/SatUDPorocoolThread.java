@@ -29,7 +29,7 @@ public class SatUDPorocoolThread implements Runnable {
   
   public SatUDPorocoolThread(int mid) {
     this.mid = Integer.valueOf(mid);
-    this.sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+    this.sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
     this.sim.setProcoolDataThread(this);
   }
   

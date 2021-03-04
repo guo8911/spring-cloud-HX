@@ -11,6 +11,8 @@ import com.hx.ssxs.entity.Param;
 import com.hx.ssxs.entity.SatTMInfo;
 import com.hx.ssxs.service.IPage;
 import com.hx.ssxs.util.DateTools;
+import com.hx.ssxs.util.RedisUtil;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.websocket.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 public class PageImpl implements IPage {
   private static Log log = LogFactory.getLog(PageImpl.class);
@@ -50,6 +54,12 @@ public class PageImpl implements IPage {
   private List<Map<String, Object>> result = null;
   
   private DecimalFormat df = new DecimalFormat("0.00000");
+  
+  private RedisUtil redisUtil;
+  
+  public PageImpl(RedisUtil redisUtil) {
+	    this.redisUtil = redisUtil;
+	  }
   
   @Override
 public void load(List<PageTMBean> pageContent) {
@@ -117,7 +127,8 @@ public boolean close(String clientIp, String pageid) {
       String clientip = keys[0];
       PageOperateInfo poi = null;
       synchronized (PageCache.selectMap) {
-        poi = (PageOperateInfo)PageCache.selectMap.get(clientip);
+//        poi = (PageOperateInfo)PageCache.selectMap.get(clientip);
+    	  poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientip);
       } 
       if (this.isgrid && 
         !poi.isSendFirst()) {
@@ -163,6 +174,7 @@ public boolean close(String clientIp, String pageid) {
           this.paramMap.clear();
         } 
       } 
+      redisUtil.setHash("selectMap", clientip, poi);
     } 
   }
   
@@ -175,7 +187,8 @@ public boolean close(String clientIp, String pageid) {
     } catch (ParseException e) {
       e.printStackTrace();
     } 
-    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientip);
+//    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientip);
+    PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientip);
     if (poi != null) {
       if (poi.getFirstDev_mid() == sti.getDev_mid()) {
         column = 1;

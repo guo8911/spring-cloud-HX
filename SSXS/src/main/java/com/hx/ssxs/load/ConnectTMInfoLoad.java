@@ -31,6 +31,7 @@ import com.hx.ssxs.mapper.UnpackConfigMapper;
 import com.hx.ssxs.thread.SatPageHandleThread;
 import com.hx.ssxs.thread.SatUDPReceiveThread;
 import com.hx.ssxs.thread.SatUDPorocoolThread;
+import com.hx.ssxs.util.RedisUtil;
 
 /**
  * @author Jerome Guo
@@ -49,6 +50,8 @@ public class ConnectTMInfoLoad {
 	private DeviceInfoMapper deviceInfoMapper;
 	@Autowired
 	private TmMapper tmMapper;
+	@Autowired
+	private RedisUtil redisUtil;
   private Log log = LogFactory.getLog(ConnectTMInfoLoad.class);
   
   @PostConstruct
@@ -72,8 +75,8 @@ public class ConnectTMInfoLoad {
         String sat_id = satNet.getSat_id();
         String name = String.valueOf(satCode) + "&&&" + type;
         //创建UDP数据接收线程
-        thread = new Thread((Runnable)new SatUDPReceiveThread(type, ip, port, satCode, Integer.parseInt(mid), 65535), name);
-        sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+        thread = new Thread((Runnable)new SatUDPReceiveThread(type, ip, port, satCode, Integer.parseInt(mid), 65535,redisUtil), name);
+        sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
         sim.addThread(thread);
         if (!list.contains(mid)) {
           list.add(mid);
@@ -125,7 +128,7 @@ public class ConnectTMInfoLoad {
       List<DeviceInfo> deviceInfoList = deviceInfoMapper.getDeviceInfo();
       for (String mid : list) {
         thread = new Thread((Runnable)new SatUDPorocoolThread(Integer.parseInt(mid)), "afterproxcool" + mid);
-        sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(Integer.parseInt(mid)));
+        sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(Integer.parseInt(mid)));
         sim.addThread(thread);
         HashMap<String, TMValue> mapTM = new HashMap<>();
         //查询遥测参数大表
@@ -166,7 +169,7 @@ public class ConnectTMInfoLoad {
 		this.log.debug("正在启动遥测数据接收线程...");
 	} 
       for (String mid : list) {
-        sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(Integer.parseInt(mid)));
+        sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(Integer.parseInt(mid)));
         sim.receiveThreadRun();
       } 
       if (this.log.isDebugEnabled()) {

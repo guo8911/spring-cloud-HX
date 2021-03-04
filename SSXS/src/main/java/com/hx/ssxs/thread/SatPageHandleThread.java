@@ -16,7 +16,7 @@ public class SatPageHandleThread implements Runnable {
   private int mid;
   
   public SatPageHandleThread(int mid) {
-    this.sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+    this.sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
     this.mid = mid;
     this.sim.setSph(this);
   }

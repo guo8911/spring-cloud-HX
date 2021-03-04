@@ -1,5 +1,6 @@
 package com.hx.ssxs.util;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class RedisUtil {
      * @param value value值
      */
     public void setString(String key, String value) {
-        this.redisTemplate.opsForValue().set(key, value);
+    	this.redisTemplate.opsForValue().set(key, value);
     }
 
     /**
@@ -34,7 +35,7 @@ public class RedisUtil {
      * @param timeUnit 过期时间单位
      */
     public void setLock(String key, String value, Long expire, TimeUnit timeUnit) {
-        this.redisTemplate.opsForValue().set(key, value, expire, timeUnit);
+    	this.redisTemplate.opsForValue().set(key, value, expire, timeUnit);
     }
 
     /**
@@ -64,6 +65,16 @@ public class RedisUtil {
      */
     public Object getHash(String key,String field) {
         return  this.redisTemplate.opsForHash().get(key, field);
+    }
+    
+    /**
+     * hash类型读取操作
+     * @param key key值
+     * @param field field值
+     * @return value值
+     */
+    public Map<Object, Object> getHashs(String key) {
+        return  this.redisTemplate.opsForHash().entries(key);
     }
     
     /**

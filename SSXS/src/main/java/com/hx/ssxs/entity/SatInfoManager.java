@@ -12,6 +12,7 @@ import com.hx.ssxs.service.impl.SourceHandle;
 import com.hx.ssxs.thread.SatOtherDataThread;
 import com.hx.ssxs.thread.SatPageHandleThread;
 import com.hx.ssxs.thread.SatUDPorocoolThread;
+import com.hx.ssxs.util.RedisUtil;
 
 public class SatInfoManager {
   private List<Thread> list = new ArrayList<>();
@@ -59,11 +60,11 @@ public class SatInfoManager {
     this.procoolDataThread = procoolDataThread;
   }
   
-  public SatInfoManager(Integer mid) {
-    this.pmi = (IPageManager)new PageManagerImpl(mid);
+  public SatInfoManager(Integer mid, RedisUtil redisUtil) {
+    this.pmi = (IPageManager)new PageManagerImpl(mid, redisUtil);
     this.tmf = new TMValueFactory(mid);
     this.oth = (IOtherDataHandle)new OtherDataImpl(mid);
-    this.tmSource = (ITMSourceHandle)new SourceHandle(mid);
+    this.tmSource = (ITMSourceHandle)new SourceHandle(mid, redisUtil);
     this.satmid = mid;
   }
   

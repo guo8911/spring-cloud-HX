@@ -9,6 +9,7 @@ import com.hx.ssxs.entity.PageOperateInfo;
 import com.hx.ssxs.service.ITMSourceHandle;
 import com.hx.ssxs.util.DataTools;
 import com.hx.ssxs.util.PageTools;
+import com.hx.ssxs.util.RedisUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.websocket.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 public class SourceHandle implements ITMSourceHandle {
   private static Log log = LogFactory.getLog(SourceHandle.class);
@@ -25,8 +28,11 @@ public class SourceHandle implements ITMSourceHandle {
   
   private int mid;
   
-  public SourceHandle(Integer mid) {
+  private RedisUtil redisUtil;
+  
+  public SourceHandle(Integer mid, RedisUtil redisUtil) {
     this.mid = mid.intValue();
+    this.redisUtil = redisUtil;
   }
   
   @Override
@@ -60,7 +66,8 @@ public void handle(DataPackage gp) {
     for (Map.Entry<String, Session> entry : entryset) {
       String clientKey = entry.getKey();
       String[] clientKeys = clientKey.split("&&");
-      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientKeys[0]);
+//      PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientKeys[0]);
+      PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientKeys[0]);
       boolean flag = true;
       if (poi != null) {
 		if (poi.getFirstDev_mid() == dev_mid) {

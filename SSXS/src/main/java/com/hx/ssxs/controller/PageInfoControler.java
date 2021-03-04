@@ -9,6 +9,7 @@ import com.hx.ssxs.entity.SxGuding;
 import com.hx.ssxs.entity.ViewSxProject;
 import com.hx.ssxs.service.IPageInfoService;
 import com.hx.ssxs.util.PageTools;
+import com.hx.ssxs.util.RedisUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,8 @@ public class PageInfoControler {
   private IPageInfoService iPageInfoService;
   @Value("${sysManagerAddr}")
   private String sysManagerAddr;
+  @Autowired
+  private RedisUtil redisUtil;
   
   @RequestMapping({"/getTree"})
   @ResponseBody
@@ -145,10 +148,12 @@ public class PageInfoControler {
 		log.debug("[改变数据接收状态tabid=" + tabid + "]");
 	} 
     String clientIp = PageTools.getLocalIp(request);
-    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+//    PageOperateInfo poi = (PageOperateInfo)PageCache.selectMap.get(clientIp);
+    PageOperateInfo poi = (PageOperateInfo) redisUtil.getHash("selectMap", clientIp);
     if (poi != null) {
 		poi.setSelectPageID(null);
 	} 
+    redisUtil.setHash("selectMap", clientIp, poi);
     return "true";
   }
   

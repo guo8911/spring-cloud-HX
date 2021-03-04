@@ -7,7 +7,7 @@ import com.hx.ssxs.entity.PageOperateInfo;
 import com.hx.ssxs.entity.SatInfoManager;
 
 public class PageCache {
-  public static Map<Integer, SatInfoManager> map = new ConcurrentHashMap<>();
+  public static Map<Integer, SatInfoManager> simMap = new ConcurrentHashMap<>();
   
   public static volatile Map<String, Integer> satInfo = new ConcurrentHashMap<>();
   

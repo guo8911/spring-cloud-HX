@@ -8,6 +8,7 @@ import com.hx.ssxs.data.DataPackage;
 import com.hx.ssxs.entity.SatInfoManager;
 import com.hx.ssxs.protocol.PackImpl;
 import com.hx.ssxs.udp.UDPServerImpl;
+import com.hx.ssxs.util.RedisUtil;
 
 public class SatUDPReceiveThread implements Runnable {
   private Log log = LogFactory.getLog(SatUDPReceiveThread.class);
@@ -34,17 +35,17 @@ public class SatUDPReceiveThread implements Runnable {
   
   private String code = null;
   
-  public SatUDPReceiveThread(String type, String ip, String port, String satCode, int mid, int data_length) {
+  public SatUDPReceiveThread(String type, String ip, String port, String satCode, int mid, int data_length,RedisUtil redisUtil) {
     this.ip = ip;
     this.type = type;
     this.port = port;
     this.mid = Integer.valueOf(mid);
     this.code = satCode;
     this.data_length = data_length;
-    this.sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+    this.sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
     if (this.sim == null) {
-      this.sim = new SatInfoManager(Integer.valueOf(mid));
-      PageCache.map.put(Integer.valueOf(mid), this.sim);
+      this.sim = new SatInfoManager(Integer.valueOf(mid),redisUtil);
+      PageCache.simMap.put(Integer.valueOf(mid), this.sim);
     } 
   }
   

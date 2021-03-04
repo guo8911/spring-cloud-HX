@@ -8,7 +8,7 @@ import com.hx.ssxs.service.impl.PageImpl;
 public interface IPageManager {
   void setData(SatTMInfo paramSatTMInfo, int paramInt);
   
-  void openPage(PageImpl paramPageImpl);
+  void openPage(PageImpl paramPageImpl,Integer mid);
   
   void closePage(String paramString1, String paramString2);
   

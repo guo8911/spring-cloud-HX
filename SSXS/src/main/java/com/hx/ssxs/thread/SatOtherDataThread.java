@@ -23,7 +23,7 @@ public class SatOtherDataThread implements Runnable {
   
   public SatOtherDataThread(int mid) {
     this.mid = mid;
-    this.sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(mid));
+    this.sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
     this.sim.setSodt(this);
   }
   

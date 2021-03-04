@@ -43,7 +43,7 @@ public class WebSocketServer {
     String[] con = userId.split("_");
     String key = null;
     String pageId = con[1];
-    SatInfoManager sim = (SatInfoManager)PageCache.map.get(Integer.valueOf(con[0]));
+    SatInfoManager sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(con[0]));
     if ("1".equals(con[4])) {
       if ("4".equals(con[1])) {
         key = String.valueOf(con[3]) + "&&" + con[0];
@@ -72,8 +72,8 @@ public class WebSocketServer {
     if (session != null) {
 		try {
 		    String[] con = userId.split("_");
-		    synchronized (PageCache.map) {
-		      SatInfoManager sim = (SatInfoManager)PageCache.map.get(
+		    synchronized (PageCache.simMap) {
+		      SatInfoManager sim = (SatInfoManager)PageCache.simMap.get(
 		          Integer.valueOf(Integer.parseInt(con[0])));
 		      String pageid = con[1];
 		      if ("2".equals(con[4])) {
