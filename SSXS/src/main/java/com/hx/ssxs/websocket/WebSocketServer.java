@@ -54,7 +54,7 @@ public class WebSocketServer {
       } 
     } else {
       try {
-        sim.getPmi().addPageSession(session, con[3], pageId);
+        sim.getPmi().addPageSession(session, con[3], pageId,con[0]);
       } catch (Exception e) {
         if (logger.isDebugEnabled()) {
 			logger.debug("[添加session信息出错]" + e);
@@ -77,7 +77,7 @@ public class WebSocketServer {
 		          Integer.valueOf(Integer.parseInt(con[0])));
 		      String pageid = con[1];
 		      if ("2".equals(con[4])) {
-				sim.getPmi().closePage(pageid, con[3]);
+				sim.getPmi().closePage(pageid, con[3],con[0]);
 			} 
 		    } 
 		  } catch (Exception e) {

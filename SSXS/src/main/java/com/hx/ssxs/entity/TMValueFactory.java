@@ -105,7 +105,7 @@ public class TMValueFactory {
           this.sti.setMid(this.mid);
           IPageManager pmi = sim.getPmi();
           if (pmi != null) {
-            PageImpl pi = pmi.getPageImpl(pageid);
+            PageImpl pi = pmi.getPageImpl(pageid,this.mid);
             if (pi != null) {
               Session session = pi.getMapSession(clientip);
               if (session != null && session.isOpen()) {

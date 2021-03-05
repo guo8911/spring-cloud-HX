@@ -10,9 +10,9 @@ public interface IPageManager {
   
   void openPage(PageImpl paramPageImpl,Integer mid);
   
-  void closePage(String paramString1, String paramString2);
+  void closePage(String paramString1, String paramString2,String mid);
   
-  void addPageSession(Session paramSession, String paramString1, String paramString2);
+  void addPageSession(Session paramSession, String paramString1, String paramString2,String mid);
   
-  PageImpl getPageImpl(String paramString);
+  PageImpl getPageImpl(String paramString,Integer mid);
 }

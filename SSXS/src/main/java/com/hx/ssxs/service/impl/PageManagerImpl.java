@@ -37,8 +37,10 @@ public class PageManagerImpl implements IPageManager {
   }
   
   @Override
-public PageImpl getPageImpl(String pageid) {
-    return this.pageMap.get(pageid);
+public PageImpl getPageImpl(String pageid,Integer mid) {
+	  PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageid);
+//	  return this.pageMap.get(pageid);
+	  return pi;
   }
   
   public void setMap(Map<String, PageImpl> map) {
@@ -92,35 +94,40 @@ public void setData(SatTMInfo listparam, int mid) {
   @Override
 public void openPage(PageImpl page,Integer mid) {
     synchronized (this.pageMap) {
-//    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", page.getPageid());
-      PageImpl pi = this.pageMap.get(page.getPageid());
+    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+page.getPageid());
+//      PageImpl pi = this.pageMap.get(page.getPageid());
       if (pi == null) {
-        this.pageMap.put(page.getPageid(), page);
+//        this.pageMap.put(page.getPageid(), page);
       } else {
         pi.setIsgrid(page.isgrid());
         pi.load(page.getList());
       } 
+      redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), pi);
     } 
   }
   
   @Override
-public void closePage(String pageId, String clientIp) {
-    PageImpl pi = this.pageMap.get(pageId);
+public void closePage(String pageId, String clientIp,String mid) { 
+//    PageImpl pi = this.pageMap.get(pageId);
+    PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageId);
     boolean flag = pi.close(clientIp, pageId);
     if (flag) {
-		this.pageMap.remove(pageId);
+//		this.pageMap.remove(pageId);
+    	redisUtil.deletehash("pageMap", mid+"_"+pageId);
 	} 
   }
   
   @Override
-public void addPageSession(Session session, String clientip, String pageid) {
+public void addPageSession(Session session, String clientip, String pageid,String mid) {
     synchronized (this.pageMap) {
-      PageImpl pi = this.pageMap.get(pageid);
+//      PageImpl pi = this.pageMap.get(pageid);
+    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageid);
       if (pi == null) {
         pi = new PageImpl(redisUtil);
         pi.setPageid(pageid);
       } 
       pi.putClientSession(clientip, session, pageid);
+      redisUtil.setHash("pageMap", mid+"_"+pageid, pi);
     } 
   }
 }
