@@ -43,21 +43,29 @@ public PageImpl getPageImpl(String pageid,Integer mid) {
 	  return pi;
   }
   
-  public void setMap(Map<String, PageImpl> map) {
-    this.pageMap.putAll(map);
+  public void setMap(Map<String, PageImpl> map, int mid ) {
+//    this.pageMap.putAll(map);
+	  map.forEach((key, value) -> {
+		  redisUtil.setHash("pageMap", mid+"_"+key, value);
+      });
   }
   
   @Override
 public void setData(SatTMInfo listparam, int mid) {
-    if (this.pageMap == null) {
-		return;
-	} 
+	  Map<Object, Object> piMap = redisUtil.getHashs("pageMap");
+//	  if (this.pageMap == null) {
+//		return;
+//	} 
+	  if (piMap == null) {
+			return;
+		} 
     if (mid != this.mid && 
       log.isDebugEnabled()) {
 		log.debug("[页面管理器错乱！]");
 	} 
     synchronized (this.pageMap) {
-      Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
+    	Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
+//      Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
       if (entryset.size() == 0) {
 		return;
 	} 
@@ -66,9 +74,9 @@ public void setData(SatTMInfo listparam, int mid) {
 	} 
       synchronized (PageCache.selectMap) {
 //        Set<Map.Entry<String, PageOperateInfo>> entrySelect = PageCache.selectMap.entrySet();
-        Set<Map.Entry<String, PageOperateInfo>> entrySelect = (Set<Entry<String, PageOperateInfo>>) redisUtil.getHashs("selectMap");
-        for (Map.Entry<String, PageOperateInfo> select : entrySelect) {
-          PageOperateInfo poi = select.getValue();
+        Set<Map.Entry<Object,Object>> entrySelect = redisUtil.getHashs("selectMap").entrySet();
+        for (Map.Entry<Object,Object> select : entrySelect) {
+          PageOperateInfo poi = (PageOperateInfo) select.getValue();
           String pageid = poi.getSelectPageID();
           if (pageid == null) {
 			continue;
