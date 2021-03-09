@@ -6,6 +6,8 @@ import com.hx.ssxs.data.Head;
 import com.hx.ssxs.entity.CmdTeleControl;
 import com.hx.ssxs.entity.PageDevice;
 import com.hx.ssxs.service.IOtherDataHandle;
+import com.hx.ssxs.util.RedisUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +26,11 @@ public class OtherDataImpl implements IOtherDataHandle {
   
   private int mid;
   
-  public OtherDataImpl(Integer mid) {
+  private RedisUtil redisUtil;
+  
+  public OtherDataImpl(Integer mid,RedisUtil redisUtil) {
     this.mid = mid.intValue();
+    this.redisUtil = redisUtil;
   }
   
   @Override

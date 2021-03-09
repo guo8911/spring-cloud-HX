@@ -64,7 +64,7 @@ public void setData(SatTMInfo listparam, int mid) {
 		log.debug("[页面管理器错乱！]");
 	} 
     synchronized (this.pageMap) {
-    	Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
+    	Set<Map.Entry<Object,Object>> entryset = redisUtil.getHashs("pageMap").entrySet();
 //      Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
       if (entryset.size() == 0) {
 		return;
@@ -86,8 +86,8 @@ public void setData(SatTMInfo listparam, int mid) {
 		} 
         } 
       } 
-      for (Map.Entry<String, PageImpl> entry : entryset) {
-        this.pi = entry.getValue();
+      for (Map.Entry<Object,Object> entry : entryset) {
+        this.pi = (PageImpl)entry.getValue();
         if (this.pi.isgrid() && 
           !this.listSelect.contains(entry.getKey())) {
 			continue;

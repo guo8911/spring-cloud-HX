@@ -63,7 +63,7 @@ public class SatInfoManager {
   public SatInfoManager(Integer mid, RedisUtil redisUtil) {
     this.pmi = (IPageManager)new PageManagerImpl(mid, redisUtil);
     this.tmf = new TMValueFactory(mid);
-    this.oth = (IOtherDataHandle)new OtherDataImpl(mid);
+    this.oth = (IOtherDataHandle)new OtherDataImpl(mid, redisUtil);
     this.tmSource = (ITMSourceHandle)new SourceHandle(mid, redisUtil);
     this.satmid = mid;
   }
