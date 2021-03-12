@@ -1,9 +1,15 @@
 package com.hx.ssxs.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PageTMBean {
-  private String pid;
+public class PageTMBean implements Serializable{
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private String pid;
   
   private String moduleId;
   

@@ -38,9 +38,7 @@ public class PageManagerImpl implements IPageManager {
   
   @Override
 public PageImpl getPageImpl(String pageid,Integer mid) {
-	  PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageid);
-//	  return this.pageMap.get(pageid);
-	  return pi;
+	  return this.pageMap.get(pageid);
   }
   
   public void setMap(Map<String, PageImpl> map, int mid ) {
@@ -52,20 +50,16 @@ public PageImpl getPageImpl(String pageid,Integer mid) {
   
   @Override
 public void setData(SatTMInfo listparam, int mid) {
-	  Map<Object, Object> piMap = redisUtil.getHashs("pageMap");
-//	  if (this.pageMap == null) {
-//		return;
-//	} 
-	  if (piMap == null) {
-			return;
-		} 
+	  if (this.pageMap == null) {
+		return;
+	}  
     if (mid != this.mid && 
       log.isDebugEnabled()) {
 		log.debug("[页面管理器错乱！]");
 	} 
     synchronized (this.pageMap) {
-    	Set<Map.Entry<Object,Object>> entryset = redisUtil.getHashs("pageMap").entrySet();
-//      Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
+//    	Set<Map.Entry<Object,Object>> entryset = redisUtil.getHashs("pageMap").entrySet();
+      Set<Map.Entry<String, PageImpl>> entryset = this.pageMap.entrySet();
       if (entryset.size() == 0) {
 		return;
 	} 
@@ -86,8 +80,8 @@ public void setData(SatTMInfo listparam, int mid) {
 		} 
         } 
       } 
-      for (Map.Entry<Object,Object> entry : entryset) {
-        this.pi = (PageImpl)entry.getValue();
+      for (Entry<String, PageImpl> entry : entryset) {
+        this.pi = entry.getValue();
         if (this.pi.isgrid() && 
           !this.listSelect.contains(entry.getKey())) {
 			continue;
@@ -106,6 +100,7 @@ public void openPage(PageImpl page,Integer mid) {
 //      PageImpl pi = this.pageMap.get(page.getPageid());
       if (pi == null) {
 //        this.pageMap.put(page.getPageid(), page);
+    	  redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), page);
       } else {
         pi.setIsgrid(page.isgrid());
         pi.load(page.getList());
@@ -116,11 +111,11 @@ public void openPage(PageImpl page,Integer mid) {
   
   @Override
 public void closePage(String pageId, String clientIp,String mid) { 
-//    PageImpl pi = this.pageMap.get(pageId);
-    PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageId);
+    PageImpl pi = this.pageMap.get(pageId);
+//    PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageId);
     boolean flag = pi.close(clientIp, pageId);
     if (flag) {
-//		this.pageMap.remove(pageId);
+		this.pageMap.remove(pageId);
     	redisUtil.deletehash("pageMap", mid+"_"+pageId);
 	} 
   }
@@ -133,9 +128,11 @@ public void addPageSession(Session session, String clientip, String pageid,Strin
       if (pi == null) {
         pi = new PageImpl(redisUtil);
         pi.setPageid(pageid);
+        redisUtil.setHash("pageMap", mid+"_"+pageid, pi);
       } 
       pi.putClientSession(clientip, session, pageid);
-      redisUtil.setHash("pageMap", mid+"_"+pageid, pi);
+      pi.setRedisUtil(redisUtil);
+      this.pageMap.put(pageid, pi);
     } 
   }
 }

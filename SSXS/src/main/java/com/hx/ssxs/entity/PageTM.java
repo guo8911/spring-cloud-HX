@@ -1,7 +1,14 @@
 package com.hx.ssxs.entity;
 
-public class PageTM {
-  private String tm;
+import java.io.Serializable;
+
+public class PageTM implements Serializable{
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private String tm;
   
   private String tm_name;
   

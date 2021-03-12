@@ -13,6 +13,7 @@ import com.hx.ssxs.service.IPage;
 import com.hx.ssxs.util.DateTools;
 import com.hx.ssxs.util.RedisUtil;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,11 +26,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.websocket.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-public class PageImpl implements IPage {
-  private static Log log = LogFactory.getLog(PageImpl.class);
+public class PageImpl implements IPage,Serializable {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private static Log log = LogFactory.getLog(PageImpl.class);
   
   private String pageid;
   
@@ -55,7 +59,7 @@ public class PageImpl implements IPage {
   
   private DecimalFormat df = new DecimalFormat("0.00000");
   
-  private RedisUtil redisUtil;
+  private transient RedisUtil redisUtil;
   
   public PageImpl(RedisUtil redisUtil) {
 	    this.redisUtil = redisUtil;
@@ -86,7 +90,15 @@ public void load(List<PageTMBean> pageContent) {
     this.mapSession.remove(String.valueOf(clientIp) + "&&" + pageid);
   }
   
-  @Override
+  public RedisUtil getRedisUtil() {
+	return redisUtil;
+}
+
+public void setRedisUtil(RedisUtil redisUtil) {
+	this.redisUtil = redisUtil;
+}
+
+@Override
 public boolean close(String clientIp, String pageid) {
     boolean flag = false;
     removeSession(clientIp, pageid);
