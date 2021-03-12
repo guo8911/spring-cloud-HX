@@ -283,7 +283,7 @@ public class PackImpl  implements IPack<DataPackage>{
 	public DataPackage unpack(byte[] data) {
 		
 		if (log.isInfoEnabled()) {
-			log.info("组件[PackImpl]方法[unpack]开始执行,data数据长度=[" + data.length + "]");
+//			log.info("组件[PackImpl]方法[unpack]开始执行,data数据长度=[" + data.length + "]");
 		}
 		
 		DataPackage  dp  =  new DataPackage();		

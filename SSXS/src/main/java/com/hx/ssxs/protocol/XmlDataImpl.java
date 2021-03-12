@@ -25,7 +25,7 @@ public class XmlDataImpl implements IPack<XmlData>{
     public XmlData unpack(byte[] data) {
 
         if (log.isInfoEnabled()) {
-            log.info("组件[XmlDataImpl] 方法[unpack]开始执行");
+//            log.info("组件[XmlDataImpl] 方法[unpack]开始执行");
         }
 
         SAXBuilder builder = new SAXBuilder();

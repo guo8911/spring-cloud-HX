@@ -14,7 +14,7 @@ public class SourceDataImpl implements IPack<Source>{
 	@Override
 	public Source unpack(byte[] data) {
 		if (log.isInfoEnabled()) {
-			log.info("组件[SourceDataImpl] 原码方法[unpack]开始执行"+"数据长度："+data.length);
+//			log.info("组件[SourceDataImpl] 原码方法[unpack]开始执行"+"数据长度："+data.length);
 		}
 		Source source = new Source();
 		//设备标识

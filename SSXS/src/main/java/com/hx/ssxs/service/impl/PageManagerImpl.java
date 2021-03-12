@@ -104,8 +104,8 @@ public void openPage(PageImpl page,Integer mid) {
       } else {
         pi.setIsgrid(page.isgrid());
         pi.load(page.getList());
+        redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), pi);
       } 
-      redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), pi);
     } 
   }
   
