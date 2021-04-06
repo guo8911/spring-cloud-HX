@@ -41,10 +41,10 @@ public PageImpl getPageImpl(String pageid,Integer mid) {
 	  return this.pageMap.get(pageid);
   }
   
-  public void setMap(Map<String, PageImpl> map, int mid ) {
+  public void setMap(Map<String, PageImpl> map, int mid,String clientip ) {
 //    this.pageMap.putAll(map);
 	  map.forEach((key, value) -> {
-		  redisUtil.setHash("pageMap", mid+"_"+key, value);
+		  redisUtil.setHash("pageMap", clientip+"_"+mid+"_"+key, value);
       });
   }
   
@@ -94,17 +94,17 @@ public void setData(SatTMInfo listparam, int mid) {
   }
   
   @Override
-public void openPage(PageImpl page,Integer mid) {
+public void openPage(PageImpl page,Integer mid,String clientip) {
     synchronized (this.pageMap) {
-    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+page.getPageid());
+    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", clientip+"_"+mid+"_"+page.getPageid());
 //      PageImpl pi = this.pageMap.get(page.getPageid());
       if (pi == null) {
 //        this.pageMap.put(page.getPageid(), page);
-    	  redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), page);
+    	  redisUtil.setHash("pageMap", clientip+"_"+mid+"_"+page.getPageid(), page);
       } else {
         pi.setIsgrid(page.isgrid());
         pi.load(page.getList());
-        redisUtil.setHash("pageMap", mid+"_"+page.getPageid(), pi);
+        redisUtil.setHash("pageMap", clientip+"_"+mid+"_"+page.getPageid(), pi);
       } 
     } 
   }
@@ -116,7 +116,7 @@ public void closePage(String pageId, String clientIp,String mid) {
     boolean flag = pi.close(clientIp, pageId);
     if (flag) {
 		this.pageMap.remove(pageId);
-    	redisUtil.deletehash("pageMap", mid+"_"+pageId);
+    	redisUtil.deletehash("pageMap", clientIp+"_"+mid+"_"+pageId);
 	} 
   }
   
@@ -124,11 +124,11 @@ public void closePage(String pageId, String clientIp,String mid) {
 public void addPageSession(Session session, String clientip, String pageid,String mid) {
     synchronized (this.pageMap) {
 //      PageImpl pi = this.pageMap.get(pageid);
-    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", mid+"_"+pageid);
+    	PageImpl pi = (PageImpl) redisUtil.getHash("pageMap", clientip+"_"+mid+"_"+pageid);
       if (pi == null) {
         pi = new PageImpl(redisUtil);
         pi.setPageid(pageid);
-        redisUtil.setHash("pageMap", mid+"_"+pageid, pi);
+        redisUtil.setHash("pageMap", clientip+"_"+mid+"_"+pageid, pi);
       } 
       pi.putClientSession(clientip, session, pageid);
       pi.setRedisUtil(redisUtil);

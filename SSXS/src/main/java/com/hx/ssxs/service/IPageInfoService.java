@@ -13,7 +13,7 @@ public interface IPageInfoService {
   
   SxGuding getPageOfGD(int paramString);
   
-  String getPageFile(int paramString, int paramInt, boolean paramBoolean);
+  String getPageFile(int paramString, int paramInt, boolean paramBoolean,String clientip);
   
   Boolean checkOutFile(int paramString);
   

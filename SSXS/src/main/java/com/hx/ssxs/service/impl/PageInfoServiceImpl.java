@@ -167,11 +167,11 @@ public SxGuding getPageOfGD(int id) {
   }
   
   @Override
-public String getPageFile(int proId, int mid, boolean readOnly) {
+public String getPageFile(int proId, int mid, boolean readOnly,String clientip) {
 	  SxFile pageInfo = sxFileMapper.getPageFile(proId);
     if (pageInfo != null) {
       String data = pageInfo.getData();
-      addPageConCache(data, proId, mid);
+      addPageConCache(data, proId, mid,clientip);
       return data;
     } 
     return null;
@@ -219,7 +219,7 @@ public String getParamInfo(String mid) {
     return JSONArray.toJSONString(map);
   }
   
-  private void addPageConCache(String data, int proId, int mid) {
+  private void addPageConCache(String data, int proId, int mid,String clientip) {
     Object obj = JSON.parse(data);
     Map<String, Object> map = (Map<String, Object>)obj;
     obj = map.get("graphs");
@@ -291,7 +291,7 @@ public String getParamInfo(String mid) {
     synchronized (PageCache.simMap) {
       SatInfoManager sim = (SatInfoManager)PageCache.simMap.get(Integer.valueOf(mid));
       if (sim != null) {
-        sim.getPmi().openPage(page,mid);
+        sim.getPmi().openPage(page,mid,clientip);
       } else if (log.isErrorEnabled()) {
         log.error("[mid=" + mid + "的航天器未配置网络接口！]");
       } 

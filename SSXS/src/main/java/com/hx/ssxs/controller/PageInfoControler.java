@@ -69,11 +69,12 @@ public class PageInfoControler {
   
   @RequestMapping({"/getPageFile"})
   @ResponseBody
-  public String getPageFile(int proId, int mid, boolean readOnly) {
+  public String getPageFile(int proId, int mid, boolean readOnly, HttpServletRequest request) {
     if (log.isDebugEnabled()) {
 		log.debug("[获取页面信息，proId=" + proId + ",readOnly=" + readOnly + "]");
 	} 
-    return this.iPageInfoService.getPageFile(proId, mid, readOnly);
+    String clientIp = PageTools.getLocalIp(request);
+    return this.iPageInfoService.getPageFile(proId, mid, readOnly,clientIp);
   }
   
   @RequestMapping({"/checkOutFile"})
