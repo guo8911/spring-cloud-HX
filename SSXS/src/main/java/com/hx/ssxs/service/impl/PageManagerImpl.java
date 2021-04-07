@@ -116,8 +116,8 @@ public void closePage(String pageId, String clientIp,String mid) {
     boolean flag = pi.close(clientIp, pageId);
     if (flag) {
 		this.pageMap.remove(pageId);
-    	redisUtil.deletehash("pageMap", clientIp+"_"+mid+"_"+pageId);
 	} 
+    redisUtil.deletehash("pageMap", clientIp+"_"+mid+"_"+pageId);
   }
   
   @Override
